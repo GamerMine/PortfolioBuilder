@@ -5,10 +5,10 @@ L'outil intègre aussi un système de connexion d'utilisateur et de création de
 
 ## Technologie utilisées :
 
-**- HTML/CSS**
-**- Javascript**
-**- PHP**
-**- Postgres SQL**
+**- HTML/CSS**<br>
+**- Javascript**<br>
+**- PHP**<br>
+**- Postgres SQL**<br>
 **- Twig**
 
 ## Collaboration
