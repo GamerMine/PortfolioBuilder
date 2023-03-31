@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="js/main.js"></script>
+	<script type="module" src="js/main.js"></script>
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<title>Portfolio Builder</title>
@@ -15,7 +15,7 @@
 	<header>
 		<h1>Portfolio Builder</h1>
 		<div id="btn-login">
-			<button id="login" type="button" onclick="loginForm()">Connexion</button>
+			<button id="login" type="button">Connexion</button>
 			<button class="button" id="register" type="button" onclick="registerForm()">S'inscrire</button>
 		</div>
 	</header>
@@ -64,7 +64,18 @@
 		Maxime SAVARY - Louis LE CLÉAC'H - Elie BRION - Léo LANGLOIS
 	</footer>
 
-	<script>
+	<script type="module">
+		import {requestVerifyConnection, loginForm, registerForm} from "./js/main.js";
+
+		// Event handling
+		document.getElementById("login").onclick = () => {
+			loginForm();
+		}
+
+		document.getElementById("register").onclick = () => {
+			registerForm();
+		}
+
 		const request = requestVerifyConnection();
 		request.onreadystatechange = function () {
 			if (request.readyState === 4) {
@@ -78,6 +89,9 @@
 
 						myAccountBtn.innerText = "Mon compte";
 						myAccountBtn.classList.add("button");
+						myAccountBtn.onclick = () => {
+
+						}
 
 						divConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
 						divConnectionBtn.appendChild(myAccountBtn);

@@ -1,10 +1,10 @@
-const URL_BASE = "http://localhost.iut.univ-lehavre.fr/~sm211563/PortfolioBuilder/";
+import {URL_BASE} from "./constants.js";
 
-function loginForm() {
+export function loginForm() {
     window.location.href = "session/loginForm.html";
 }
 
-function registerForm() {
+export function registerForm() {
     window.location.href = "session/registerForm.html";
 }
 
@@ -16,7 +16,7 @@ function createPortfolio() {
 
 }
 
-function requestVerifyConnection() {
+export function requestVerifyConnection() {
     const request = new XMLHttpRequest();
 
     request.open("GET", URL_BASE+"server/login.php?session=1", true);

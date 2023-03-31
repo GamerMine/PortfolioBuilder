@@ -1,4 +1,4 @@
-import {URL_BASE} from "./constants";
+import {URL_BASE} from "./constants.js";
 
 const form = document.getElementById("form");
 form.addEventListener("submit", (e) => {
