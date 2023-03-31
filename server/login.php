@@ -3,7 +3,6 @@
 include "Database.php";
 include "Utils.php";
 
-
 session_start();
 
 if (isset($_GET["session"])) {

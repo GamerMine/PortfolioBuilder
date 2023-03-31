@@ -1,4 +1,4 @@
-const URL_BASE = "http://localhost:63342/PortfolioBuilder/"
+const URL_BASE = "http://localhost.iut.univ-lehavre.fr/~sm211563/PortfolioBuilder/";
 
 const form = document.getElementById("form");
 form.addEventListener("submit", (e) => {
