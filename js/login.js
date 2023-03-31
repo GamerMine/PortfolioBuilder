@@ -3,6 +3,7 @@ import {URL_BASE} from "./constants";
 const form = document.getElementById("form");
 form.addEventListener("submit", (e) => {
     e.preventDefault();
+    login();
 });
 
 const addressField = document.getElementById("mail");
