@@ -4,9 +4,9 @@ class Database
 {
     const PORT   = 5432;
     const HOST   = "localhost";
-    const DBNAME = "sm211563";
-    const LOGIN  = "sm211563";
-    const PASS   = "pompier50";
+    const DBNAME = "ll211074";
+    const LOGIN  = "ll211074";
+    const PASS   = "patate";
 
     private static ?Database $instance = null;
     private ?PDO $connection = null;
@@ -40,6 +40,13 @@ class Database
         $stmt->execute([$mail]);
 
         return $stmt->fetch()[0];
+    }
+
+    public function addAccount($mail, $pass)
+    {
+        $stmt = $this->connection->prepare(" INSERT INTO account(mail,pass) VALUES(?,?)");
+        $values = array($mail,$pass);
+        $stmt->execute($values);
     }
 
     public function close() {
