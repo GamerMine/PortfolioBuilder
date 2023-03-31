@@ -25,6 +25,11 @@ header{
 	border-bottom: solid gray 2px ;
 }
 
+header h1{
+	display: flex;
+	align-items: center;
+}
+
 #btn-login{
 	display: grid;
 	grid-template-columns: 1fr 1fr ;
@@ -41,30 +46,44 @@ footer{
 	border-top: solid gray 2px;
 	position: absolute;
 	bottom: 0;
+	height: 100px;
 	width: 100%;
-	height: 50px;
 }
 
 footer p{
 	display: flex;
 	align-items: center;
+	gap: 10px
+}
+
+footer ul{
+	list-style: none;
+	display: flex;
+	gap: 20px;
 }
 /*----------*/
 /*---MAIN---*/
 /*----------*/
 main{
+	min-height: 100%;
+	padding-bottom: 120px;
 	margin: 0 10px 0 10px;
 	position: relative;
-	min-height: 100vh;
 }
 
 /*----------*/
 /*---DIV----*/
 /*----------*/
-.right-position{
+/* .right-position{
 	display: flex;
 	justify-content: right;
 	padding: 10px 0 10px 0;
+} */
+
+.title{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 /*----------*/
@@ -104,11 +123,15 @@ button:hover{
 	background-color: blueviolet;
 }
 
+#btn-account{
+	
+}
 
 
 /*-----------------*/
 /*--LISTPORTFOLIO--*/
 /*-----------------*/
+
 
 section#list-portfolio{
 	background-color: gainsboro ;
@@ -118,7 +141,6 @@ section#list-portfolio{
 	grid-template-columns: repeat(auto-fit, minmax(300px, 300px));
 	gap: 10px;
 	justify-content: center;
-
 }
 
 .card-portfolio {
@@ -132,7 +154,7 @@ section#list-portfolio{
 .card-portfolio div{
 	height: 100px;
 	background-color: white;
-	padding: 2em 2em 2em 2em;
+	padding: 2em;
 }
 
 
@@ -143,5 +165,17 @@ section#list-portfolio{
 @media (max-width: 600px){
 	#btn-login { 
 		grid-template-columns: 1fr;
+	}
+	section#list-portfolio{
+		grid-template-columns: repeat(auto-fit, minmax(0px, 300px));
+	}
+	footer ul{
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px
+	}
+	footer p{
+		flex-direction: column;
+		gap: 2px;
 	}
 }

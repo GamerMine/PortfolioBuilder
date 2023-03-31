@@ -13,7 +13,7 @@
 
 <body>
 	<header>
-		<h1>Portfolio Builder</h1>
+		<h1><img src="picture/favicon.ico"/>Portfolio Builder</h1>
 		<div id="btn-login">
 			<button id="login" type="button" onclick="loginForm()">Connexion</button>
 			<button class="button" id="register" type="button" onclick="registerForm()">S'inscrire</button>
@@ -22,7 +22,10 @@
 
 
 	<main>
-		<h3>Liste des portfolio</h3>
+		<div class="title">
+			<h3>Liste des portfolio</h3>
+			<button id="create-portfolio" type="button" class="button">Mon portfolio</button>
+		</div>
 		<section id="list-portfolio">
 
 			<article class="card-portfolio">
@@ -51,9 +54,6 @@
 			</article>
 			
 		</section>
-		<div class="right-position">
-			<button id="create-portfolio" type="button" class="button">Créer votre portfolio</button>
-		</div>
 	</main>
 
 	<footer>
@@ -61,7 +61,12 @@
 			<img src="picture/Cc_by-nd_icon.svg"/>
 			CD BY-ND
 		</p>
-		Maxime SAVARY - Louis LE CLÉAC'H - Elie BRION - Léo LANGLOIS
+		<ul>
+			<li>Maxime SAVARY</li>
+			<li>Louis LE CLÉAC'H</li>
+			<li>Elie BRION</li>
+			<li>Léo LANGLOIS</li>
+		</ul>
 	</footer>
 
 	<script>
@@ -78,6 +83,7 @@
 
 						myAccountBtn.innerText = "Mon compte";
 						myAccountBtn.classList.add("button");
+						myAccountBtn.id = "btn-account";
 
 						divConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
 						divConnectionBtn.appendChild(myAccountBtn);
