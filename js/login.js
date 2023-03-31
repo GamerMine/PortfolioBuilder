@@ -1,15 +1,34 @@
-const URL_BASE = "http://localhost:63342/PortfolioBuilder/"
+const URL_BASE = "http://localhost.iut.univ-lehavre.fr/~sm211563/PortfolioBuilder/";
 
 const form = document.getElementById("form");
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 });
 
+const addressField = document.getElementById("mail");
+const passField = document.getElementById("pass");
+
+addressField.addEventListener("input", () => {
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value)) {
+        addressField.style.backgroundColor = "rgba(234,89,89,0.45)";
+    } else {
+        addressField.style.backgroundColor = "rgba(108,234,89,0.45)";
+    }
+});
+
+passField;addEventListener("input", () => {
+   if (passField.value === "") {
+       passField.style.backgroundColor = "rgba(234,89,89,0.45)";
+   } else {
+       passField.style.backgroundColor = "rgba(108,234,89,0.45)";
+   }
+});
+
 async function login() {
-    console.log("COUCOU");
-    const request = new XMLHttpRequest();
-    let addressField = document.getElementById("mail");
-    const passField    = document.getElementById("pass");
+    const request   = new XMLHttpRequest();
+
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value)) return;
+    if (passField.value === "") return;
 
     await request.open("POST", URL_BASE+"server/login.php?mail="+addressField.value+"&pass="+passField.value, true);
     await request.send();
@@ -24,9 +43,11 @@ async function login() {
                     window.location.href = "../index.html";
                 } else {
                     // TODO: Wrong mail or password popup
+                    alert("Addresse mail ou mot de passe incorrect");
                 }
             } catch (e) {
                 // TODO: Server communication error popup
+                alert("Connexion au serveur impossible, retentez plus tard");
                 console.log("Connexion impossible, rententez plus tard");
             }
         }

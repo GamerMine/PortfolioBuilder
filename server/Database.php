@@ -3,7 +3,7 @@
 class Database
 {
     const PORT   = 5432;
-    const HOST   = "localhost";
+    const HOST   = "woody";
     const DBNAME = "ll211074";
     const LOGIN  = "ll211074";
     const PASS   = "patate";

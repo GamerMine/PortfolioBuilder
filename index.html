@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script src="js/main.js"></script>
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<title>Portfolio Builder</title>
 </head>
 
@@ -32,6 +33,29 @@
 
 
 	</footer>
+
+	<script>
+		const request = requestVerifyConnection();
+		request.onreadystatechange = function () {
+			if (request.readyState === 4) {
+				try {
+					console.log("TEST");
+					const response = JSON.parse(request.response);
+					if (response.connected) {
+						console.log(response.connected);
+						const divConnectionBtn = document.getElementById("btn-login");
+						const myAccountBtn = document.createElement("button");
+
+						myAccountBtn.innerText = "Mon compte";
+						myAccountBtn.classList.add("button");
+
+						divConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
+						divConnectionBtn.appendChild(myAccountBtn);
+					}
+				} catch (e) {}
+			}
+		}
+	</script>
 </body>
 
 </html>
