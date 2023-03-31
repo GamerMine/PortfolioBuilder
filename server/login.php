@@ -32,6 +32,7 @@ if (isset($_GET["session"])) {
 
     $db->close();
 }
+
 echo json_encode($data);
 
 exit();
