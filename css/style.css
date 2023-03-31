@@ -1,19 +1,28 @@
-
+html{
+	height: 100%;
+}
 /*----------*/
 /*---BODY---*/
 /*----------*/
 body{
+	margin: 0;
+	position: relative;
+	min-height: 100%;
 	font-family: Arial, Helvetica, sans-serif;
+	background-color:whitesmoke;
 }
 
 /*----------*/
 /*--HEADER--*/
 /*----------*/
 header{
+	background-color: white;
+	padding: 0 10px 0 10px;
 	width: auto;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	border-bottom: solid gray 2px ;
 }
 
 #btn-login{
@@ -21,8 +30,41 @@ header{
 	grid-template-columns: 1fr 1fr ;
 }
 
-@media (max-width: 600px){
-	#btn-login { grid-template-columns: 1fr;}
+/*----------*/
+/*--FOOTER--*/
+/*----------*/
+footer{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	background-color: white;
+	border-top: solid gray 2px;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 50px;
+}
+
+footer p{
+	display: flex;
+	align-items: center;
+}
+/*----------*/
+/*---MAIN---*/
+/*----------*/
+main{
+	margin: 0 10px 0 10px;
+	position: relative;
+	min-height: 100vh;
+}
+
+/*----------*/
+/*---DIV----*/
+/*----------*/
+.right-position{
+	display: flex;
+	justify-content: right;
+	padding: 10px 0 10px 0;
 }
 
 /*----------*/
@@ -30,19 +72,24 @@ header{
 /*----------*/
 button{
 	font-family: inherit;
+	font-weight: bold;
 	padding: 0.8em;
 	transition: .2s;
+}
+
+button:hover{
+	cursor: pointer;
 }
 
 .button{
 	background-color: blueviolet;
 	color: white;
-	border: solid rgb(138, 43, 226) 1px;
+	border: solid blueviolet 1px;
 	border-radius: 0.6em;
 }
 
 .button:hover{
-	background-color: rgb(95, 0, 183);
+	background-color: rgb(98, 27, 165);
 }
 
 #login{
@@ -55,4 +102,46 @@ button{
 #login:hover{
 	color: white;
 	background-color: blueviolet;
+}
+
+
+
+/*-----------------*/
+/*--LISTPORTFOLIO--*/
+/*-----------------*/
+
+section#list-portfolio{
+	background-color: gainsboro ;
+	border: solid gray 3px;
+	padding: 10px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 300px));
+	gap: 10px;
+	justify-content: center;
+
+}
+
+.card-portfolio {
+}
+
+.card-portfolio h5{
+	font-style: normal;
+	margin: 0;
+}
+
+.card-portfolio div{
+	height: 100px;
+	background-color: white;
+	padding: 2em 2em 2em 2em;
+}
+
+
+
+/*----------*/
+/*MEDIAQUERY*/
+/*----------*/
+@media (max-width: 600px){
+	#btn-login { 
+		grid-template-columns: 1fr;
+	}
 }
