@@ -8,7 +8,7 @@ body{
 	margin: 0;
 	position: relative;
 	min-height: 100%;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family:Arial, Helvetica, sans-serif;
 	background-color:whitesmoke;
 }
 
@@ -33,6 +33,7 @@ header h1{
 #btn-login{
 	display: grid;
 	grid-template-columns: 1fr 1fr ;
+	gap: 2px;
 }
 
 /*----------*/
@@ -46,11 +47,11 @@ footer{
 	border-top: solid gray 2px;
 	position: absolute;
 	bottom: 0;
-	height: 100px;
 	width: 100%;
 }
 
 footer p{
+	margin: 0;
 	display: flex;
 	align-items: center;
 	gap: 10px
@@ -120,7 +121,7 @@ button:hover{
 
 #login:hover{
 	color: white;
-	background-color: blueviolet;
+	background-color: rgb(98, 27, 165);
 }
 
 #btn-account{
@@ -134,6 +135,7 @@ button:hover{
 
 
 section#list-portfolio{
+	border-radius:8px;
 	background-color: gainsboro ;
 	border: solid gray 3px;
 	padding: 10px;
@@ -155,6 +157,7 @@ section#list-portfolio{
 	height: 100px;
 	background-color: white;
 	padding: 2em;
+	border-radius:8px;
 }
 
 
