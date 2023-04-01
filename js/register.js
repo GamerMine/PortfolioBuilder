@@ -1,8 +1,9 @@
-const URL_BASE = "http://localhost:63342/PortfolioBuilder/"
+import {URL_BASE} from "./constants.js";
 
 const form = document.getElementById("form");
 form.addEventListener("submit", (e) => {
     e.preventDefault();
+    register();
 });
 
 async function register() {

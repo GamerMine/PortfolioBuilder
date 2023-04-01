@@ -42,6 +42,14 @@ class Database
         return $stmt->fetch()[0];
     }
 
+    public function getAllUserHome(): array
+    {
+        $stmt = $this->connection->prepare("SELECT homecontent FROM info JOIN account a on a.mail = info.mail");
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
     public function addAccount($mail, $pass)
     {
         $stmt = $this->connection->prepare(" INSERT INTO account(mail,pass) VALUES(?,?)");

@@ -1,0 +1,1 @@
+export const URL_BASE = "http://localhost.iut.univ-lehavre.fr/~sm211563/PortfolioBuilder/";

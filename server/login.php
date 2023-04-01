@@ -3,7 +3,6 @@
 include "Database.php";
 include "Utils.php";
 
-
 session_start();
 
 if (isset($_GET["session"])) {
@@ -33,6 +32,7 @@ if (isset($_GET["session"])) {
 
     $db->close();
 }
+
 echo json_encode($data);
 
 exit();
