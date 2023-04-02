@@ -3,10 +3,10 @@
 class Database
 {
     const PORT   = 5432;
-    const HOST   = "woody";
-    const DBNAME = "ll211074";
-    const LOGIN  = "ll211074";
-    const PASS   = "patate";
+    const HOST   = "localhost";
+    const DBNAME = "sm211563";
+    const LOGIN  = "sm211563";
+    const PASS   = "pompier50";
 
     private static ?Database $instance = null;
     private ?PDO $connection = null;

@@ -26,7 +26,20 @@ export function requestVerifyConnection() {
 }
 
 export function showAllPortfolio() {
-    const TEST = "<body>\n" +
+    const TEST = "<!DOCTYPE html>\n" +
+        "<html lang=\"fr\">\n" +
+        "\n" +
+        "<head>\n" +
+        "\t<meta charset=\"UTF-8\">\n" +
+        "\t<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n" +
+        "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+        "\t<script type=\"module\" src=\"js/main.js\"></script>\n" +
+        "\t<link rel=\"stylesheet\" href=\"css/style.css\">\n" +
+        "\t<link rel=\"shortcut icon\" href=\"favicon.ico\" type=\"image/x-icon\">\n" +
+        "\t<title>Portfolio Builder</title>\n" +
+        "</head>\n" +
+        "\n" +
+        "<body>\n" +
         "\t<header>\n" +
         "\t\t<h1>Portfolio Builder</h1>\n" +
         "\t\t<div id=\"btn-login\">\n" +
@@ -78,7 +91,9 @@ export function showAllPortfolio() {
         "\t\t</p>\n" +
         "\t\tMaxime SAVARY - Louis LE CLÉAC'H - Elie BRION - Léo LANGLOIS\n" +
         "\t</footer>\n" +
-        "</body>"
+        "</body>\n" +
+        "\n" +
+        "</html>";
     const request = new XMLHttpRequest();
     const portfolioList = document.getElementById("list-portfolio");
 
@@ -99,12 +114,15 @@ export function showAllPortfolio() {
     const article = document.createElement("article");
     const h5 = document.createElement("h5");
     const div = document.createElement("div");
+    const embed = document.createElement("iframe");
 
     article.classList.add("card-portfolio");
     h5.innerText = "Test";
-    div.innerHTML = TEST;
+    embed.srcdoc = TEST;
+    embed.scrolling = "no";
     article.appendChild(h5);
     article.appendChild(div);
+    div.appendChild(embed);
     portfolioList.appendChild(article);
 
 }
