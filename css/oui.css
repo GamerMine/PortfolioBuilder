@@ -1,9 +1,28 @@
-#center {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15%;
+*{
+    font-family:Arial, Helvetica, sans-serif;
 }
+
+
+body{
+    background-color: lightgray;
+}
+
+label{
+    font-size: 0.9rem;
+    line-height: 2rem;
+}
+
+#center {
+    width: auto;
+    height: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+}
+
+
 
 .form {
     background-color: #fff;
@@ -35,7 +54,6 @@
 .input-container input {
     background-color: #fff;
     padding: 1rem;
-    padding-right: 3rem;
     font-size: 0.875rem;
     line-height: 1.25rem;
     width: 300px;
@@ -66,14 +84,16 @@
     padding-bottom: 0.75rem;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
-    background-color: #4F46E5;
+    background-color: blueviolet;
     color: #ffffff;
     font-size: 0.875rem;
     line-height: 1.25rem;
     font-weight: 500;
-    width: 100%;
+    width: 60%;
     border-radius: 0.5rem;
     text-transform: uppercase;
+    position: relative;
+    left: 22%;
 }
 
 .signup-link {

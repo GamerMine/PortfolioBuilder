@@ -10,6 +10,7 @@ body{
 	min-height: 100%;
 	font-family:Arial, Helvetica, sans-serif;
 	background-color:whitesmoke;
+	overflow-x: hidden;
 }
 
 /*----------*/
@@ -191,19 +192,32 @@ section#list-portfolio{
 }
 
 .card-portfolio div{
-	height: 100px;
+	height: 150px;
 	background-color: white;
 	border-radius:8px;
+	cursor: pointer;
+}
+
+.card-portfolio h5 {
+	cursor: pointer;
 }
 
 .card-portfolio div iframe{
-	zoom: 2;
-	-moz-transform: scale(0.5);
-	-moz-transform-origin: 0 0;
-	-o-transform: scale(0.5);
-	-o-transform-origin: 0 0;
-	-webkit-transform: scale(0.5);
-	-webkit-transform-origin: 0 0;
+	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
+	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
+	pointer-events: none;
+	border: none;
+	overflow: hidden;
+	width:1200px;
+	height: 600px;
+	-webkit-transform:scale(.25);
+	-ms-transform:scale(.5);
+	transform:scale(.25);
+	-webkit-transform-origin:0 0;
+	-ms-transform-origin:0 0;
+	transform-origin:0 0;
+	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
+	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
 }
 
 
