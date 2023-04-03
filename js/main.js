@@ -116,9 +116,14 @@ export function showAllPortfolio() {
     const div = document.createElement("div");
     const embed = document.createElement("iframe");
 
+    div.onclick = () => {
+        // TODO: Load view only if current connected user is the owner
+        window.location.href = "#";
+    }
+
     article.classList.add("card-portfolio");
     h5.innerText = "Test";
-    embed.srcdoc = TEST;
+    embed.src = "index.html";
     embed.scrolling = "no";
     article.appendChild(h5);
     article.appendChild(div);
