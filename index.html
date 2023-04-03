@@ -13,23 +13,22 @@
 
 <body>
 	<header>
-		<h1><img src="picture/favicon.ico"/>Portfolio Builder</h1>
-		<div id="btn-login">
-			<!-- <button id="login" type="button">Connexion</button> -->
-			<button class="button" id="btn-account" type="button">Mon Compte</button>
-			<!-- <ul>
-				<li>Déconnexion</li>
-				<li></li>
-			</ul> -->
-			<button class="button" id="register" type="button" onclick="registerForm()">S'inscrire</button>
-		</div>
+		<h1><img src="picture/favicon.ico" />Portfolio Builder</h1>
+		<ul id="btn-login">
+			<li>
+				<button id="login" type="button">Connexion</button>
+			</li>
+			<li>
+				<button class="button" id="register" type="button" onclick="registerForm()">S'inscrire</button>
+			</li>
+		</ul>
 	</header>
 
 
 	<main>
 		<div class="title">
 			<h3>Liste des portfolio</h3>
-			<button id="create-portfolio" type="button" class="button">Mon portfolio</button>
+			<button class="create-portfolio" type="button" class="button">Mon portfolio</button>
 		</div>
 		<section id="list-portfolio">
 
@@ -57,14 +56,14 @@
 				<h5>Portfolio de X</h5>
 				<div></div>
 			</article>
-			
+
 		</section>
 	</main>
 
 	<footer>
 		<p>
-			<img src="picture/Cc_by-nd_icon.svg"/>
-			CD BY-ND
+			<img src="picture/Cc_by-nd_icon.svg" />
+			CC BY-ND
 		</p>
 		<ul>
 			<li>Maxime SAVARY</li>
@@ -75,10 +74,10 @@
 	</footer>
 
 	<script type="module">
-		import {requestVerifyConnection, loginForm, registerForm, showAllPortfolio} from "./js/main.js";
+		import { requestVerifyConnection, loginForm, registerForm, showAllPortfolio } from "./js/main.js";
 
 		// Event handling
-		document.getElementById("btn-account").onclick = () => {
+		document.getElementById("login").onclick = () => {
 			loginForm();
 		}
 
@@ -93,17 +92,54 @@
 					const response = JSON.parse(request.response);
 					if (response.connected) {
 						console.log(response.connected);
-						const divConnectionBtn = document.getElementById("btn-login");
+						const ulConnectionBtn = document.getElementById("btn-login");
+						const liConnectionBtn = document.createElement("li");
+						const ulActionList = document.createElement("ul");
+						const liBtn1 = document.createElement("li");
+						const liBtn2 = document.createElement("li");
+
 						const myAccountBtn = document.createElement("button");
+						const btnPortfolio = document.createElement("button");
+						const btnLogout = document.createElement("button");
 
 						myAccountBtn.innerText = "Mon compte ▼";
 						myAccountBtn.classList.add("button");
 						myAccountBtn.id = "btn-account";
+						myAccountBtn.type = "button";
 
-						divConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
-						divConnectionBtn.appendChild(myAccountBtn);
+						btnPortfolio.innerText = "Mon portfolio";
+						btnPortfolio.classList.add("create-portfolio");
+
+						btnLogout.innerText = "Déconnexion";
+						btnLogout.id = "btn-logout";
+
+						liBtn1.appendChild(btnPortfolio);
+						liBtn2.appendChild(btnLogout);
+
+						ulActionList.appendChild(liBtn1);
+						ulActionList.appendChild(liBtn2);
+
+						liConnectionBtn.appendChild(myAccountBtn);
+						liConnectionBtn.appendChild(ulActionList);
+
+						ulActionList.appendChild(liConnectionBtn);
+
+
+
+			//<li>
+			// 	<button class="button" id="btn-account" type="button">Mon Compte</button>
+			// 	<ul>
+			// 		<li><button>Mon portfolio</button></li>
+			// 		<li><button>Déconnexion</button></li>
+			// 	</ul>
+			//</li>
+
+						ulConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
+						ulConnectionBtn.appendChild();
+
+						ulConnectionBtn.appendChild(myAccountBtn);
 					}
-				} catch (e) {}
+				} catch (e) { }
 			}
 		}
 
