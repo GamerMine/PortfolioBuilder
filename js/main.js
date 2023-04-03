@@ -8,14 +8,6 @@ export function registerForm() {
     window.location.href = "session/registerForm.html";
 }
 
-function register() {
-
-}
-
-function createPortfolio() {
-
-}
-
 export function requestVerifyConnection() {
     const request = new XMLHttpRequest();
 
@@ -81,6 +73,24 @@ function createPortfolioPreviewElement(name, surname, mail, homeContent) {
     div.appendChild(embed);
 
     return article;
+}
+
+export function editPortfolio() {
+    const request = requestVerifyConnection();
+    request.onreadystatechange = () => {
+        if (request.readyState === 4) {
+            try {
+                const response = JSON.parse(request.response);
+                if (response.connected) {
+                    window.location.href = "session/editor.html";
+                } else {
+                    loginForm();
+                }
+            } catch (e) {
+
+            }
+        }
+    }
 }
 
 export function disconnect() {

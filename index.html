@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script type="module" src="js/main.js"></script>
 	<link rel="stylesheet" href="css/style.css">
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="picture/favicon.ico" type="image/x-icon">
 	<title>Portfolio Builder</title>
 </head>
 
@@ -28,35 +28,9 @@
 	<main>
 		<div class="title">
 			<h3>Liste des portfolio</h3>
-			<button type="button" class="button create-portfolio">Mon portfolio</button>
+			<button type="button" class="button" id="create-portfolio">Mon portfolio</button>
 		</div>
 		<section id="list-portfolio">
-
-			<article class="card-portfolio">
-				<h5>Portfolio de X</h5>
-				<div></div>
-			</article>
-
-			<article class="card-portfolio">
-				<h5>Portfolio de X</h5>
-				<div></div>
-			</article>
-
-			<article class="card-portfolio">
-				<h5>Portfolio de X</h5>
-				<div></div>
-			</article>
-
-			<article class="card-portfolio">
-				<h5>Portfolio de X</h5>
-				<div></div>
-			</article>
-
-			<article class="card-portfolio">
-				<h5>Portfolio de X</h5>
-				<div></div>
-			</article>
-
 		</section>
 	</main>
 
@@ -74,7 +48,7 @@
 	</footer>
 
 	<script type="module">
-		import { requestVerifyConnection, loginForm, registerForm, showAllPortfolio, disconnect } from "./js/main.js";
+		import { requestVerifyConnection, loginForm, registerForm, showAllPortfolio, disconnect, editPortfolio } from "./js/main.js";
 
 		// Event handling
 		document.getElementById("login").onclick = () => {
@@ -83,6 +57,10 @@
 
 		document.getElementById("register").onclick = () => {
 			registerForm();
+		}
+
+		document.getElementById("create-portfolio").onclick = () => {
+			editPortfolio();
 		}
 
 		const request = requestVerifyConnection();
@@ -109,6 +87,10 @@
 
 						btnPortfolio.innerText = "Mon portfolio";
 						btnPortfolio.classList.add("create-portfolio");
+
+						btnPortfolio.onclick = () => {
+							editPortfolio();
+						}
 
 						btnLogout.innerText = "Déconnexion";
 
