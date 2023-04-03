@@ -3,9 +3,9 @@ export class HTMLPage{
         this.objectList = [];         // Type : HTMLObject
     }
 
-    set addObject(object)
+    set addObject(get_object)
     {
-        this.objectList.push(object);
+        this.objectList.push(get_object);
     }
 
     removeObject(object)
