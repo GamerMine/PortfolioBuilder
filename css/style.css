@@ -244,13 +244,13 @@ enTete{
 	align-items: center;
 }
 .arianne{
-	background-color: lightpink;
+	background-color: rgb(252, 223, 228);
 }
 
 
 .tools{
 	border: solid black 1px;
-	background-color: rgb(214, 240, 248);
+	background-color: rgb(189, 193, 194);
 	margin-left: auto;
     margin-right: auto;
 	width: 15%;
@@ -274,7 +274,12 @@ enTete{
 
 }
 .bottom{
+	display: flex;
 	justify-content: center;
+	align-items: center;
+	position: relative;
+	top: 50%;
+
 }
 
 
