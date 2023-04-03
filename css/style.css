@@ -73,6 +73,7 @@ main{
 	position: relative;
 }
 
+
 /*----------*/
 /*---DIV----*/
 /*----------*/
@@ -87,6 +88,7 @@ main{
 	justify-content: space-between;
 	align-items: center;
 }
+
 
 /*----------*/
 /*--BUTTON--*/
@@ -182,6 +184,67 @@ section#list-portfolio{
 	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
 	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
 }
+
+/*--------------*/
+/*----EDITOR----*/
+/*--------------*/
+
+.separator{
+	display: flex;
+	justify-content: space-between;
+}
+
+.contenu{
+	width: 85%;
+}
+
+enTete{
+	display: flex;
+	justify-content: space-between;
+	border: solid gray 1px;
+	background-color: gainsboro;
+}
+.nom{
+	align-items: center;
+}
+.nav{
+	display: flex;
+	align-items: center;
+}
+.arianne{
+	background-color: lightpink;
+}
+
+
+.tools{
+	border: solid black 1px;
+	background-color: rgb(214, 240, 248);
+	margin-left: auto;
+    margin-right: auto;
+	width: 15%;
+	height: 100vh;
+
+}
+.top{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+
+}
+#btnselect div{
+	text-align: center;
+}
+#btnselect{
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 20px;
+	padding: 10% 10%;
+
+}
+.bottom{
+	justify-content: center;
+}
+
 
 
 
