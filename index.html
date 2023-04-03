@@ -28,7 +28,7 @@
 	<main>
 		<div class="title">
 			<h3>Liste des portfolio</h3>
-			<button class="create-portfolio" type="button" class="button">Mon portfolio</button>
+			<button type="button" class="button create-portfolio">Mon portfolio</button>
 		</div>
 		<section id="list-portfolio">
 
@@ -74,7 +74,7 @@
 	</footer>
 
 	<script type="module">
-		import { requestVerifyConnection, loginForm, registerForm, showAllPortfolio } from "./js/main.js";
+		import { requestVerifyConnection, loginForm, registerForm, showAllPortfolio, disconnect } from "./js/main.js";
 
 		// Event handling
 		document.getElementById("login").onclick = () => {
@@ -102,7 +102,7 @@
 						const btnPortfolio = document.createElement("button");
 						const btnLogout = document.createElement("button");
 
-						myAccountBtn.innerText = "Mon compte ▼";
+						myAccountBtn.innerText = "Mon compte";
 						myAccountBtn.classList.add("button");
 						myAccountBtn.id = "btn-account";
 						myAccountBtn.type = "button";
@@ -111,33 +111,23 @@
 						btnPortfolio.classList.add("create-portfolio");
 
 						btnLogout.innerText = "Déconnexion";
-						btnLogout.id = "btn-logout";
+
+						btnLogout.onclick = () => {
+							disconnect();
+						}
+
+						ulConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
 
 						liBtn1.appendChild(btnPortfolio);
 						liBtn2.appendChild(btnLogout);
-
 						ulActionList.appendChild(liBtn1);
-						ulActionList.appendChild(liBtn2);
 
+						ulActionList.appendChild(liBtn2);
 						liConnectionBtn.appendChild(myAccountBtn);
+
 						liConnectionBtn.appendChild(ulActionList);
 
-						ulActionList.appendChild(liConnectionBtn);
-
-
-
-			//<li>
-			// 	<button class="button" id="btn-account" type="button">Mon Compte</button>
-			// 	<ul>
-			// 		<li><button>Mon portfolio</button></li>
-			// 		<li><button>Déconnexion</button></li>
-			// 	</ul>
-			//</li>
-
-						ulConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
-						ulConnectionBtn.appendChild();
-
-						ulConnectionBtn.appendChild(myAccountBtn);
+						ulConnectionBtn.appendChild(liConnectionBtn);
 					}
 				} catch (e) { }
 			}

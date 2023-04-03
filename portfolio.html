@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script type="module">
+    import {URL_BASE} from "./js/constants.js";
+
+    const request = new XMLHttpRequest();
+
+    request.open("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
+    request.send();
+
+    request.onreadystatechange = () => {
+
+        if (request.readyState === 4) {
+            try {
+                const response = JSON.parse(request.response);
+                const result = response.result.split("IN");
+
+                const dataRequest = new XMLHttpRequest();
+                dataRequest.open("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name="+result[0]+"&mail="+result[1]);
+                dataRequest.send();
+
+                dataRequest.onreadystatechange = () => {
+                    if (dataRequest.readyState === 4) {
+                        const dataResponse = JSON.parse(dataRequest.response);
+                        document.write(dataResponse.content);
+                    }
+                }
+
+            } catch (e) {
+
+            }
+        }
+    }
+</script>
+</body>
+</html>

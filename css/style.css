@@ -10,7 +10,6 @@ body{
 	min-height: 100%;
 	font-family:Arial, Helvetica, sans-serif;
 	background-color:whitesmoke;
-	overflow-x: hidden;
 }
 
 /*----------*/
@@ -205,6 +204,8 @@ section#list-portfolio{
 .card-portfolio div iframe{
 	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
 	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
+	background-color: white;
+	border-radius:20px;
 	pointer-events: none;
 	border: none;
 	overflow: hidden;
