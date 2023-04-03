@@ -202,23 +202,17 @@ section#list-portfolio{
 }
 
 .card-portfolio div iframe{
-	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
-	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
 	background-color: white;
 	border-radius:20px;
 	pointer-events: none;
 	border: none;
 	overflow: hidden;
-	width:1200px;
-	height: 600px;
 	-webkit-transform:scale(.25);
 	-ms-transform:scale(.5);
 	transform:scale(.25);
 	-webkit-transform-origin:0 0;
 	-ms-transform-origin:0 0;
 	transform-origin:0 0;
-	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
-	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
 }
 
 
