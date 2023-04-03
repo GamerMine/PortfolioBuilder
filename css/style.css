@@ -161,6 +161,10 @@ section#list-portfolio{
 	cursor: pointer;
 }
 
+.card-portfolio h5 {
+	cursor: pointer;
+}
+
 .card-portfolio div iframe{
 	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
 	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/

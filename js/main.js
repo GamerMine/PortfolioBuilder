@@ -116,6 +116,11 @@ export function showAllPortfolio() {
     const div = document.createElement("div");
     const embed = document.createElement("iframe");
 
+    h5.onclick = () => {
+        // TODO: Load view only if current connected user is the owner
+        window.location.href = "#";
+    }
+
     div.onclick = () => {
         // TODO: Load view only if current connected user is the owner
         window.location.href = "#";
