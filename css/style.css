@@ -1,4 +1,4 @@
-html{
+ html{
 	height: 100%;
 }
 /*----------*/
@@ -10,7 +10,6 @@ body{
 	min-height: 100%;
 	font-family:Arial, Helvetica, sans-serif;
 	background-color:whitesmoke;
-	overflow-x: hidden;
 }
 
 /*----------*/
@@ -30,13 +29,52 @@ header h1{
 	display: flex;
 	align-items: center;
 }
-
-#btn-login{
+header ul {
 	display: grid;
-	grid-template-columns: 1fr 1fr ;
+	grid-template-columns: 1fr 1fr;
 	gap: 2px;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	min-width: 122px;
 }
 
+header ul li button{
+	width: 100%;
+}
+
+header ul li ul{
+	display: none;
+	position: absolute;
+	max-width: 122px;
+}
+
+header ul li:hover ul{
+	background-color: gainsboro;
+	display: grid;
+	justify-content: center;
+	padding: 3px 0;
+	gap: 4px;
+	grid-template-columns: 115px;
+	z-index: 10;
+}
+
+
+header ul li:hover #btn-account{
+	border-radius: 0.6em 0.6em 0 0;
+}
+
+header ul li ul li button{
+	background-color: white;
+	text-align: left;
+	border: none;
+}
+
+header ul li ul li button:hover{
+	background-color: blueviolet;
+	color: white;
+	transition: .5s;
+}
 /*----------*/
 /*--FOOTER--*/
 /*----------*/
@@ -63,6 +101,7 @@ footer ul{
 	display: flex;
 	gap: 20px;
 }
+
 /*----------*/
 /*---MAIN---*/
 /*----------*/
@@ -71,7 +110,9 @@ main{
 	padding-bottom: 120px;
 	margin: 0 10px 0 10px;
 	position: relative;
+	z-index: 1;
 }
+
 
 /*----------*/
 /*---DIV----*/
@@ -81,12 +122,12 @@ main{
 	justify-content: right;
 	padding: 10px 0 10px 0;
 } */
-
 .title{
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
+
 
 /*----------*/
 /*--BUTTON--*/
@@ -107,6 +148,7 @@ button:hover{
 	color: white;
 	border: solid blueviolet 1px;
 	border-radius: 0.6em;
+	padding: 10px 20px;
 }
 
 .button:hover{
@@ -123,10 +165,6 @@ button:hover{
 #login:hover{
 	color: white;
 	background-color: rgb(98, 27, 165);
-}
-
-#btn-account{
-	
 }
 
 
@@ -166,22 +204,84 @@ section#list-portfolio{
 }
 
 .card-portfolio div iframe{
-	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
-	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
+	background-color: white;
+	border-radius:20px;
 	pointer-events: none;
 	border: none;
 	overflow: hidden;
-	width:1200px;
-	height: 600px;
 	-webkit-transform:scale(.25);
 	-ms-transform:scale(.5);
 	transform:scale(.25);
 	-webkit-transform-origin:0 0;
 	-ms-transform-origin:0 0;
 	transform-origin:0 0;
-	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
-	/*IL NE FAUT PAS REGARDER LE CSS ELIE*/
 }
+
+/*--------------*/
+/*----EDITOR----*/
+/*--------------*/
+
+.separator{
+	display: flex;
+	justify-content: space-between;
+}
+
+.contenu{
+	width: 85%;
+}
+
+enTete{
+	display: flex;
+	justify-content: space-between;
+	border: solid gray 1px;
+	background-color: gainsboro;
+}
+.nom{
+	align-items: center;
+}
+.nav{
+	display: flex;
+	align-items: center;
+}
+.arianne{
+	background-color: rgb(252, 223, 228);
+}
+
+
+.tools{
+	border: solid black 1px;
+	background-color: rgb(189, 193, 194);
+	margin-left: auto;
+    margin-right: auto;
+	width: 15%;
+	height: 100vh;
+
+}
+.top{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+
+}
+#btnselect div{
+	text-align: center;
+}
+#btnselect{
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 20px;
+	padding: 10% 10%;
+
+}
+.bottom{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	top: 50%;
+
+}
+
 
 
 
@@ -189,9 +289,10 @@ section#list-portfolio{
 /*MEDIAQUERY*/
 /*----------*/
 @media (max-width: 600px){
-	#btn-login { 
+	header ul { 
 		grid-template-columns: 1fr;
 	}
+
 	section#list-portfolio{
 		grid-template-columns: repeat(auto-fit, minmax(0px, 300px));
 	}
@@ -203,5 +304,9 @@ section#list-portfolio{
 	footer p{
 		flex-direction: column;
 		gap: 2px;
+	}
+	
+	.button{
+		padding: 0.8em;
 	}
 }

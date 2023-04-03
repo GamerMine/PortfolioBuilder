@@ -3,7 +3,7 @@
 class Database
 {
     const PORT   = 5432;
-    const HOST   = "localhost";
+    const HOST   = "woody";
     const DBNAME = "sm211563";
     const LOGIN  = "sm211563";
     const PASS   = "pompier50";
@@ -44,7 +44,7 @@ class Database
 
     public function getAllUserHome(): array
     {
-        $stmt = $this->connection->prepare("SELECT homecontent FROM info JOIN account a on a.mail = info.mail");
+        $stmt = $this->connection->prepare("SELECT homecontent, info.mail, name, surname  FROM info JOIN account a on a.mail = info.mail");
         $stmt->execute();
 
         return $stmt->fetchAll();
@@ -59,5 +59,22 @@ class Database
 
     public function close() {
         $this->connection = null;
+    }
+
+    public function getUserHome($mail)
+    {
+        $stmt = $this->connection->prepare("SELECT homecontent  FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+
+        return $stmt->fetch();
+    }
+
+    public function getHomeContent($mail)
+    {
+        $stmt = $this->connection->prepare("SELECT homecontent FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+
+        $stmt->execute([$mail]);
+
+        return $stmt->fetch()[0];
     }
 }
