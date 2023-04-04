@@ -6,6 +6,9 @@ form.addEventListener("submit", (e) => {
     login();
 });
 
+var warn = document.createElement("p");
+warn.style = "border:solid 1px red; background-color:lightcoral;";
+
 const addressField = document.getElementById("mail");
 const passField = document.getElementById("pass");
 
@@ -43,11 +46,13 @@ async function login() {
                     console.log("Redirection");
                     window.location.href = "../index.html";
                 } else {
-                    // TODO: Wrong mail or password popup
+                    warn.textContent = "Identifiant ou mot de passe incorrect !";
+                    document.getElementById("form-title").after(warn);
                     alert("Addresse mail ou mot de passe incorrect");
                 }
             } catch (e) {
-                // TODO: Server communication error popup
+                warn.textContent = "Un problème est survenu du coté serveur !";
+                document.getElementById("form-title").after(warn);
                 alert("Connexion au serveur impossible, retentez plus tard");
                 console.log("Connexion impossible, rententez plus tard");
             }
