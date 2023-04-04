@@ -1,4 +1,4 @@
-import {HTMLObject} from "./utils.js"
+import {HTMLObject} from "./htmlObject.js"
 export class Button extends HTMLObject
 {
     constructor(c_text)

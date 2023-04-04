@@ -1,15 +1,10 @@
-export class HTMLObject{
-    constructor(id) {
-        this.identifier = id;         // De type String
-        this.properties = [];     // De type String
-        this.styleList = [] ;     // De type Style
-    }
-
-    get getIdentifier() { return this.identifier; }
-    get getProperties() { return this.properties; }
-    get getStyleList() { return this.styleList; }
-    set addStyleStyle(style) { this.styleList.push(style); }
-}
+import {HTMLPage} from "./htmlPage.js";
+import {Title} from "./title.js";
+import {Paragraph} from "./paragraph.js";
+import {Link} from "./link.js";
+import {Picture} from "./image.js";
+import {Button} from "./button.js";
+import {PDFView} from "./pdfView.js";
 
 export function jsonToHTML(json_content, container) {
 
@@ -61,7 +56,7 @@ export function jsonToHTML(json_content, container) {
     }
 }
 
-export function testJson() 
+export function testJson()
 {
     let page = new HTMLPage();
 
