@@ -31,7 +31,7 @@ header h1{
 	align-items: center;
 }
 
-header ul.btn-login {
+header ul#btn-login {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 2px;
@@ -303,17 +303,26 @@ enTete{
 	align-items: center;
 	position: relative;
 	top: 50%;
-
 }
 
+#portfolio-preview-container {
+	overflow: scroll;
+	width: 100vw;
+	height: 100vh;
+}
 
-
+#portfolio-preview {
+	height: 94.4vh;
+	width: 87vw;
+	pointer-events: none;
+	border: none;
+}
 
 /*----------*/
 /*MEDIAQUERY*/
 /*----------*/
 @media (max-width: 600px){
-	header ul.btn-login { 
+	header ul#btn-login {
 		grid-template-columns: 1fr;
 	}
 
