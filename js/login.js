@@ -44,20 +44,15 @@ async function login() {
         if (request.readyState === 4) {
             try {
                 const response = JSON.parse(request.response);
-                console.log(response);
                 if (response.authenticate) {
-                    console.log("Redirection");
                     window.location.href = "../index.html";
                 } else {
                     warn.innerText = "Identifiant ou mot de passe incorrect !";
                     document.getElementById("form").firstChild.after(warn);
                 }
             } catch (e) {
-                console.log(e);
-                warn.innerText = "Un problème est survenu du coté serveur !";
+                warn.innerText = "Une erreur serveur est survenu !\nVeuillez rééssayer plus tard !";
                 document.getElementById("form").firstChild.after(warn);
-                alert("Connexion au serveur impossible, retentez plus tard");
-                console.log("Connexion impossible, rententez plus tard");
             }
         }
     };

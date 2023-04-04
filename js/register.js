@@ -18,12 +18,7 @@ async function register() {
     warn.classList.add("warn");
     warn.id = "warn";
 
-
-    console.log(document.getElementById("pass").innerText);
-    console.log(document.getElementById("verifPass").innerText);
-
     if(document.getElementById("pass").value !== document.getElementById("verifPass").value) {
-        console.log('ça marche');
         warn.innerText = "Les mots de passe ne correspondent pas !";
         document.getElementById("form").firstChild.after(warn);
         return;
@@ -36,18 +31,15 @@ async function register() {
         if (request.readyState === 4) {
             try {
                 const response = JSON.parse(request.response);
-                console.log(response);
                 if (response.authenticate) {
-                    console.log("Redirection");
                     window.location.href = "../index.html";
                 } else {
                     warn.innerText = "Il existe déjà un compte associé à cette adresse mail !";
                     document.getElementById("form").firstChild.after(warn);
                 }
             } catch (e) {
-                warn.innerText = "Un problème est survenu du coté serveur !";
+                warn.innerText = "Une erreur serveur est survenu !\nVeuillez rééssayer plus tard !";
                 document.getElementById("form").firstChild.after(warn);
-                console.log("Connexion impossible, rententez plus tard");
             }
         }
     };
