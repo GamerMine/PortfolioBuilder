@@ -311,8 +311,7 @@ img{
 
 #portfolio-preview {
 	height: 94.4vh;
-	width: 87vw;
-	pointer-events: none;
+	width: 85vw;
 	border: none;
 }
 
