@@ -16,6 +16,7 @@ body{
 /*--HEADER--*/
 /*----------*/
 header{
+	position: relative;
 	background-color: white;
 	padding: 0 10px 0 10px;
 	width: auto;
@@ -29,7 +30,8 @@ header h1{
 	display: flex;
 	align-items: center;
 }
-header ul {
+
+header ul.btn-login {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 2px;
@@ -39,8 +41,26 @@ header ul {
 	min-width: 122px;
 }
 
+header ul.nav {
+	display: grid;
+	grid-template-columns: repeat(4,1fr);
+	list-style-type: none;
+	text-align: center;
+	gap:30px;
+	margin: 0;
+	padding: 0;
+}
+
 header ul li button{
 	width: 100%;
+}
+header ul li a{
+	color: black;
+	text-decoration: none;
+}
+header ul li a:hover{
+	border-bottom: solid 3px;
+	border-color: currentColor;
 }
 
 header ul li ul{
@@ -74,6 +94,10 @@ header ul li ul li button:hover{
 	background-color: blueviolet;
 	color: white;
 	transition: .5s;
+}
+
+#burger-menu{
+	display: none;
 }
 /*----------*/
 /*--FOOTER--*/
@@ -289,18 +313,47 @@ enTete{
 /*MEDIAQUERY*/
 /*----------*/
 @media (max-width: 600px){
-	header ul { 
+	header ul.btn-login { 
 		grid-template-columns: 1fr;
+	}
+
+	input#burger-menu{
+		display: block;
+	}
+
+	input#burger-menu:checked + ul.nav {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+	}
+
+	header ul.nav {
+		position: absolute;
+		right: 0;
+		display: none;
+		bottom: -100px;
+		background-color: gainsboro;
+		border: solid 3px gainsboro;
+		z-index: 10;
+	}
+
+	header ul.nav li{
+		background-color: white;
+		padding: 10px 0;
+		width: 100%;
+		
 	}
 
 	section#list-portfolio{
 		grid-template-columns: repeat(auto-fit, minmax(0px, 300px));
 	}
+
 	footer ul{
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 10px
 	}
+
 	footer p{
 		flex-direction: column;
 		gap: 2px;
