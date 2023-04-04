@@ -19,11 +19,10 @@
 				<button id="login" type="button">Connexion</button>
 			</li>
 			<li>
-				<button class="button" id="register" type="button" onclick="registerForm()">S'inscrire</button>
+				<button class="button" id="register" type="button">S'inscrire</button>
 			</li>
 		</ul>
 	</header>
-
 
 	<main>
 		<div class="title">
@@ -69,7 +68,6 @@
 				try {
 					const response = JSON.parse(request.response);
 					if (response.connected) {
-						console.log(response.connected);
 						const ulConnectionBtn = document.getElementById("btn-login");
 						const liConnectionBtn = document.createElement("li");
 						const ulActionList = document.createElement("ul");
@@ -102,13 +100,13 @@
 
 						liBtn1.appendChild(btnPortfolio);
 						liBtn2.appendChild(btnLogout);
-						ulActionList.appendChild(liBtn1);
 
+						ulActionList.appendChild(liBtn1);
 						ulActionList.appendChild(liBtn2);
+
 						liConnectionBtn.appendChild(myAccountBtn);
 
 						liConnectionBtn.appendChild(ulActionList);
-
 						ulConnectionBtn.appendChild(liConnectionBtn);
 					}
 				} catch (e) { }
