@@ -1,5 +1,7 @@
 <?php
 
+ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
+
 class Database
 {
     const PORT   = 5432;
@@ -63,7 +65,7 @@ class Database
 
     public function getUserHome($mail)
     {
-        $stmt = $this->connection->prepare("SELECT homecontent  FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt = $this->connection->prepare("SELECT homecontent FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
 
         return $stmt->fetch();
@@ -76,5 +78,21 @@ class Database
         $stmt->execute([$mail]);
 
         return $stmt->fetch()[0];
+    }
+
+    public function checkIfPortfolioExist($mail) {
+        $stmt = $this->connection->prepare("SELECT * FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) == 0) return true;
+
+        $stmt = $this->connection->prepare("SELECT * FROM skill JOIN account a on a.mail = skill.mail = a.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) == 0) return true;
+
+        $stmt = $this->connection->prepare("SELECT * FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) == 0) return true;
+
+        return false;
     }
 }
