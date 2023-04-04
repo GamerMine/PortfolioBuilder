@@ -106,3 +106,10 @@ label{
 .signup-link a {
     text-decoration: underline;
 }
+
+.warn{
+    background-color: rgba(234,89,89,0.45);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+}
