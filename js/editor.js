@@ -1,4 +1,68 @@
+import {URL_BASE} from "./constants.js";
+import {jsonToHTML} from "./elements/utils.js";
 
+loadPortfolio()
+
+function loadPortfolio() {
+    const request = new XMLHttpRequest();
+
+    request.open("GET", URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
+    request.send();
+
+    request.onreadystatechange = () => {
+        if (request.readyState === 4) {
+            try {
+                const response = JSON.parse(request.response);
+
+                if (!response.connected) window.location.href = "../index.html";
+
+                if (response.exist) {
+                    showPortfolioHome();
+                } else {
+                    // TODO: Popup to ask for user informations
+                }
+            } catch (e) {
+                window.location.href = "../index.html";
+            }
+        }
+    }
+}
+
+function showPortfolioHome() {
+    const request = new XMLHttpRequest();
+
+    request.open("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+    request.send();
+
+    console.log(URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+
+    request.onreadystatechange = () => {
+        if (request.readyState === 4) {
+            try {
+                console.log(request.response);
+                const response = JSON.parse(request.response);
+
+                if (!response.connected) window.location.href = "../index.html";
+
+                document.getElementById("portfolio-preview").src = "../template.html";
+                console.log("oui");
+                const h1 = document.createElement("h1");
+                h1.innerText = "BONJOUR A TOUS";
+
+                const iframe = document.getElementById("portfolio-preview");
+
+                iframe.onload = () => {
+                    iframe.contentWindow.document.getElementById("content").appendChild(h1);
+                }
+
+                //jsonToHTML(response.content, iframe.contentWindow.document.getElementsByName("main"));
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }
+}
 
 /*
 <div>Titre</div>

@@ -71,6 +71,7 @@ header ul li a:hover{
 header ul li ul{
 	display: none;
 	position: absolute;
+	list-style-type: none;
 	max-width: 122px;
 }
 
@@ -81,6 +82,7 @@ header ul li:hover ul{
 	padding: 3px 0;
 	gap: 4px;
 	grid-template-columns: 115px;
+	
 	z-index: 10;
 }
 
@@ -290,8 +292,14 @@ section#list-portfolio{
 	align-items: center;
 	position: relative;
 	top: 30%;
+
 }
 
+#portfolio-preview-container {
+	overflow: scroll;
+	width: 100vw;
+	height: 100vh;
+}
 img{
 	padding-top: 5px;
 	width: 35px;
@@ -301,6 +309,12 @@ img{
 }
 
 
+#portfolio-preview {
+	height: 94.4vh;
+	width: 87vw;
+	pointer-events: none;
+	border: none;
+}
 
 /*----------*/
 /*MEDIAQUERY*/
@@ -312,7 +326,7 @@ img{
 }
 
 @media (max-width: 600px){
-	header ul#btn-login { 
+	header ul#btn-login {
 		grid-template-columns: 1fr;
 	}
 
