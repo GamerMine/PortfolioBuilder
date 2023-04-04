@@ -31,6 +31,11 @@ header h1{
 	align-items: center;
 }
 
+header label{
+	display: none;
+	font-size: x-large;
+}
+
 header ul#btn-login {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -254,24 +259,6 @@ section#list-portfolio{
 	width: 85%;
 }
 
-enTete{
-	display: flex;
-	justify-content: space-between;
-	border: solid gray 1px;
-	background-color: gainsboro;
-}
-.nom{
-	align-items: center;
-}
-.nav{
-	display: flex;
-	align-items: center;
-}
-.arianne{
-	background-color: rgb(252, 223, 228);
-}
-
-
 .tools{
 	border: solid black 1px;
 	background-color: rgb(189, 193, 194);
@@ -310,6 +297,14 @@ enTete{
 	width: 100vw;
 	height: 100vh;
 }
+img{
+	padding-top: 5px;
+	width: 35px;
+}
+#img-tools{
+	width: 55px;
+}
+
 
 #portfolio-preview {
 	height: 94.4vh;
@@ -321,12 +316,18 @@ enTete{
 /*----------*/
 /*MEDIAQUERY*/
 /*----------*/
+@media (max-width: 900px){
+	header ul.nav{
+		gap:0;
+	}
+}
+
 @media (max-width: 600px){
 	header ul#btn-login {
 		grid-template-columns: 1fr;
 	}
 
-	input#burger-menu{
+	header label{
 		display: block;
 	}
 
@@ -340,17 +341,21 @@ enTete{
 		position: absolute;
 		right: 0;
 		display: none;
-		bottom: -100px;
-		background-color: gainsboro;
-		border: solid 3px gainsboro;
+		bottom: -168px;
+		background-color: gray;
+		border-bottom: solid 3px gray;
+		width: fit-content;
 		z-index: 10;
 	}
 
 	header ul.nav li{
 		background-color: white;
-		padding: 10px 0;
+		padding: 10px 5px;
 		width: 100%;
-		
+	}
+
+	header ul.nav li a{
+		width: 100%;
 	}
 
 	section#list-portfolio{
