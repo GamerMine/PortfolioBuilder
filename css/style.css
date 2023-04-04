@@ -71,6 +71,7 @@ header ul li a:hover{
 header ul li ul{
 	display: none;
 	position: absolute;
+	list-style-type: none;
 	max-width: 122px;
 }
 
@@ -81,6 +82,7 @@ header ul li:hover ul{
 	padding: 3px 0;
 	gap: 4px;
 	grid-template-columns: 115px;
+	
 	z-index: 10;
 }
 
