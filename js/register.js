@@ -18,11 +18,29 @@ async function register() {
     warn.classList.add("warn");
     warn.id = "warn";
 
-    if(document.getElementById("pass").value !== document.getElementById("verifPass").value) {
+    // Vérification du mail
+    if((!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value)))
+    {
+        warn.innerText = "Le mail ne correspond pas";
+        document.getElementById("form").firstChild.after(warn);
+        return;
+    }
+
+    // Vérification du mot de passe non vide
+    if(passField.length===0 || passField.value === " ")
+    {
+        warn.innerText = "Le mot de passe doit contenir au moins un caractère";
+        document.getElementById("form").firstChild.after(warn);
+        return;
+    }
+
+    // Vérification des deux mots de passes différents
+    if(passField.value !== passField.value) {
         warn.innerText = "Les mots de passe ne correspondent pas !";
         document.getElementById("form").firstChild.after(warn);
         return;
     }
+
 
     await request.open("POST", URL_BASE+"server/register.php?mail="+addressField.value+"&pass="+passField.value+"&verifPass=" +verifPassField.value, true);
     await request.send();
