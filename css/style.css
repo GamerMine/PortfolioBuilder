@@ -284,7 +284,7 @@ section#list-portfolio{
 	padding: 10% 10%;
 
 }
-.bottom{
+#bottom{
 	display: flex;
 	justify-content: center;
 	align-items: center;
