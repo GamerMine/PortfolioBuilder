@@ -1,5 +1,6 @@
 import {URL_BASE} from "./constants.js";
 import {jsonToHTML} from "./elements/utils.js";
+import {testJson} from "./elements/test.js";
 
 loadPortfolio()
 
@@ -39,27 +40,19 @@ function showPortfolioHome() {
     request.onreadystatechange = () => {
         if (request.readyState === 4) {
             try {
-                console.log(request.response);
                 const response = JSON.parse(request.response);
 
                 if (!response.connected) window.location.href = "../index.html";
 
                 document.getElementById("portfolio-preview").src = "../template.html";
-                console.log("oui");
-                const h1 = document.createElement("h1");
-                h1.innerText = "BONJOUR A TOUS";
 
                 const iframe = document.getElementById("portfolio-preview");
 
+                console.log(response.content);
                 iframe.onload = () => {
-                    iframe.contentWindow.document.getElementById("content").appendChild(h1);
+                    jsonToHTML(response.content, iframe.contentWindow.document.getElementById("content"));
                 }
-
-                //jsonToHTML(response.content, iframe.contentWindow.document.getElementsByName("main"));
-
-            } catch (e) {
-                console.log(e);
-            }
+            } catch (e) {}
         }
     }
 }
