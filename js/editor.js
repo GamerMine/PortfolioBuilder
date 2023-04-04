@@ -133,6 +133,7 @@ btnRetour.setAttribute("id", "btn-back");
 btnRetour.setAttribute("type", "button");
 btnRetour.innerHTML = "Retour";
 
+
 function modifTools()
 {
 
@@ -157,7 +158,69 @@ function modifTools()
 
     btnRetour.addEventListener("click", toolsBase, false);
 
+    btnTxt .addEventListener("click", toolsText , false);
+    btnImg .addEventListener("click", toolsImage, false);
+    btnLink.addEventListener("click", toolsLien , false);
+    btnCv  .addEventListener("click", toolsCV   , false);
 
 }
 
-window.addEventListener("load", toolsBase, false);
+
+
+function toolsText()
+{
+    var divSelect  = document.getElementById("btnselect");
+    var divBottom  = document.getElementById("bottom");
+
+    while (divSelect.firstChild)
+    {
+        divSelect.removeChild(divSelect.firstChild);
+    }
+
+    divBottom.removeChild(divBottom.firstChild);
+}
+
+
+
+function toolsImage()
+{
+    var divSelect  = document.getElementById("btnselect");
+    var divBottom  = document.getElementById("bottom");
+
+    while (divSelect.firstChild)
+    {
+        divSelect.removeChild(divSelect.firstChild);
+    }
+
+    divBottom.removeChild(divBottom.firstChild);
+}
+
+
+
+function toolsLien()
+{
+    var divSelect  = document.getElementById("btnselect");
+    var divBottom  = document.getElementById("bottom");
+
+    while (divSelect.firstChild)
+    {
+        divSelect.removeChild(divSelect.firstChild);
+    }
+
+    divBottom.removeChild(divBottom.firstChild);
+}
+
+
+
+function toolsCV()
+{
+    var divSelect  = document.getElementById("btnselect");
+    var divBottom  = document.getElementById("bottom");
+
+    while (divSelect.firstChild)
+    {
+        divSelect.removeChild(divSelect.firstChild);
+    }
+
+    divBottom.removeChild(divBottom.firstChild);
+}
