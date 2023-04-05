@@ -24,11 +24,37 @@ switch ($requestedData) {
         break;
     }
     case "GET_CONTENT": {
+        $mail = null;
+
+        if ($_GET["visibility"] == "editor") {
+            if (!isset($_SESSION["mail"])) {
+                $data = array("connected" => false);
+                break;
+            }
+            $mail = $_SESSION["mail"];
+        } else {
+            $mail = $_GET["mail"];
+        }
+
         if (strtolower($_GET["name"]) == "homecontent") {
-            $data = array("content" => $db->getHomeContent($_GET["mail"]));
+            $data = array("connected" => (isset($_SESSION["mail"])), "content" => $db->getHomeContent($mail));
         }
         break;
     }
+    case "PORTFOLIO_EXIST": {
+        if (!isset($_SESSION["mail"])) {
+            $data = array("connected" => false);
+            break;
+        }
+
+        if ($db->checkIfPortfolioExist($_SESSION["mail"])) {
+            $data = array("connected" => true, "exist" => true);
+        } else {
+            $data = array("connected" => true, "exist" => false);
+        }
+        break;
+    }
+
 }
 
 $db->close();

@@ -1,6 +1,5 @@
 import {URL_BASE} from "./constants.js";
 import {jsonToHTML} from "./elements/utils.js";
-import {testJson} from "./elements/test.js";
 
 loadPortfolio()
 
@@ -9,8 +8,6 @@ function loadPortfolio() {
 
     request.open("GET", URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
     request.send();
-
-console.log(URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
 
     request.onreadystatechange = () => {
         if (request.readyState === 4) {
@@ -25,7 +22,7 @@ console.log(URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
                     // TODO: Popup to ask for user informations
                 }
             } catch (e) {
-                //window.location.href = "../index.html";
+                window.location.href = "../index.html";
                 console.log(e);
             }
         }
