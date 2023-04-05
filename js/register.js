@@ -12,6 +12,36 @@ async function register() {
     const passField    = document.getElementById("pass");
     const verifPassField = document.getElementById("verifPass");
 
+    if(document.getElementById("warn") != null) document.getElementById("warn").remove();
+
+    const warn = document.createElement("p");
+    warn.classList.add("warn");
+    warn.id = "warn";
+
+    // Vérification du mail
+    if((!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value)))
+    {
+        warn.innerText = "Le mail ne correspond pas";
+        document.getElementById("form").firstChild.after(warn);
+        return;
+    }
+
+    // Vérification du mot de passe non vide
+    if(passField.length===0 || passField.value === " ")
+    {
+        warn.innerText = "Le mot de passe doit contenir au moins un caractère";
+        document.getElementById("form").firstChild.after(warn);
+        return;
+    }
+
+    // Vérification des deux mots de passes différents
+    if(passField.value !== passField.value) {
+        warn.innerText = "Les mots de passe ne correspondent pas !";
+        document.getElementById("form").firstChild.after(warn);
+        return;
+    }
+
+
     await request.open("POST", URL_BASE+"server/register.php?mail="+addressField.value+"&pass="+passField.value+"&verifPass=" +verifPassField.value, true);
     await request.send();
 
@@ -19,16 +49,15 @@ async function register() {
         if (request.readyState === 4) {
             try {
                 const response = JSON.parse(request.response);
-                console.log(response);
                 if (response.authenticate) {
-                    console.log("Redirection");
                     window.location.href = "../index.html";
                 } else {
-                    // TODO: Wrong mail or password popup
+                    warn.innerText = "Il existe déjà un compte associé à cette adresse mail !";
+                    document.getElementById("form").firstChild.after(warn);
                 }
             } catch (e) {
-                // TODO: Server communication error popup
-                console.log("Connexion impossible, rententez plus tard");
+                warn.innerText = "Une erreur serveur est survenu !\nVeuillez rééssayer plus tard !";
+                document.getElementById("form").firstChild.after(warn);
             }
         }
     };

@@ -6,9 +6,6 @@ form.addEventListener("submit", (e) => {
     login();
 });
 
-var warn = document.createElement("p");
-warn.style = "border:solid 1px red; background-color:lightcoral;";
-
 const addressField = document.getElementById("mail");
 const passField = document.getElementById("pass");
 
@@ -31,6 +28,12 @@ passField;addEventListener("input", () => {
 async function login() {
     const request   = new XMLHttpRequest();
 
+    if(document.getElementById("warn") != null) document.getElementById("warn").remove();
+
+    const warn = document.createElement("p");
+    warn.classList.add("warn");
+    warn.id = "warn";
+
     if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value)) return;
     if (passField.value === "") return;
 
@@ -41,20 +44,15 @@ async function login() {
         if (request.readyState === 4) {
             try {
                 const response = JSON.parse(request.response);
-                console.log(response);
                 if (response.authenticate) {
-                    console.log("Redirection");
                     window.location.href = "../index.html";
                 } else {
-                    warn.textContent = "Identifiant ou mot de passe incorrect !";
-                    document.getElementById("form-title").after(warn);
-                    alert("Addresse mail ou mot de passe incorrect");
+                    warn.innerText = "Identifiant ou mot de passe incorrect !";
+                    document.getElementById("form").firstChild.after(warn);
                 }
             } catch (e) {
-                warn.textContent = "Un problème est survenu du coté serveur !";
-                document.getElementById("form-title").after(warn);
-                alert("Connexion au serveur impossible, retentez plus tard");
-                console.log("Connexion impossible, rententez plus tard");
+                warn.innerText = "Une erreur serveur est survenu !\nVeuillez rééssayer plus tard !";
+                document.getElementById("form").firstChild.after(warn);
             }
         }
     };
