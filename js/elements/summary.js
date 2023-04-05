@@ -1,4 +1,4 @@
-import {HTMLObject} from "./htmlObject.js"
+import {HTMLObject} from "./utils.js"
 export class Summary extends HTMLObject
 {
     constructor(title) {
