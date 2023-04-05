@@ -235,6 +235,8 @@ section#list-portfolio{
 }
 
 .card-portfolio div iframe{
+	height: 80vh;
+	width: 60vw;
 	background-color: white;
 	border-radius:20px;
 	pointer-events: none;

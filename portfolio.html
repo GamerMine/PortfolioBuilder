@@ -8,6 +8,7 @@
 
 <script type="module">
     import {URL_BASE} from "./js/constants.js";
+    import {jsonToHTML} from "./js/elements/utils.js";
 
     const request = new XMLHttpRequest();
 
@@ -28,7 +29,17 @@
                 dataRequest.onreadystatechange = () => {
                     if (dataRequest.readyState === 4) {
                         const dataResponse = JSON.parse(dataRequest.response);
-                        document.write(dataResponse.content);
+                        const templateData = new XMLHttpRequest();
+
+                        templateData.open("GET", "template.html");
+                        templateData.send();
+
+                        templateData.onreadystatechange = () => {
+                            if (templateData.readyState === 4) {
+                                document.getElementsByName("body")[0].innerHTML = templateData.responseText;
+                                jsonToHTML(document.getElementById("content"), dataResponse.content);
+                            }
+                        }
                     }
                 }
 

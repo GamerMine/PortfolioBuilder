@@ -1,4 +1,5 @@
 import {URL_BASE} from "./constants.js";
+import {jsonToHTML} from "./elements/utils.js";
 
 export function loginForm() {
     window.location.href = "session/loginForm.html";
@@ -65,8 +66,12 @@ function createPortfolioPreviewElement(name, surname, mail, homeContent) {
 
     article.classList.add("card-portfolio");
     h5.innerText = name + " " + surname;
-    embed.srcdoc = homeContent;
+    embed.src = "template.html";
     embed.scrolling = "no";
+
+    embed.onload = () => {
+        jsonToHTML(homeContent, embed.contentWindow.document.getElementById("content"));
+    }
 
     article.appendChild(h5);
     article.appendChild(div);
