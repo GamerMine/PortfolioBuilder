@@ -1,4 +1,4 @@
-import {URL_BASE} from "./constants.js";
+import { URL_BASE } from "./constants.js";
 
 const form = document.getElementById("form");
 form.addEventListener("submit", (e) => {
@@ -9,40 +9,38 @@ form.addEventListener("submit", (e) => {
 async function register() {
     const request = new XMLHttpRequest();
     let addressField = document.getElementById("mail");
-    const passField    = document.getElementById("pass");
+    const passField = document.getElementById("pass");
     const verifPassField = document.getElementById("verifPass");
 
-    if(document.getElementById("warn") != null) document.getElementById("warn").remove();
+    if (document.getElementById("warn") != null) document.getElementById("warn").remove();
 
     const warn = document.createElement("p");
     warn.classList.add("warn");
     warn.id = "warn";
 
     // Vérification du mail
-    if((!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value)))
-    {
+    if ((!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value))) {
         warn.innerText = "Le mail ne correspond pas";
         document.getElementById("form").firstChild.after(warn);
         return;
     }
 
     // Vérification du mot de passe non vide
-    if(passField.length===0 || passField.value === " ")
-    {
+    if (passField.length === 0 || passField.value === " ") {
         warn.innerText = "Le mot de passe doit contenir au moins un caractère";
         document.getElementById("form").firstChild.after(warn);
         return;
     }
 
     // Vérification des deux mots de passes différents
-    if(passField.value !== passField.value) {
+    if (passField.value !== passField.value) {
         warn.innerText = "Les mots de passe ne correspondent pas !";
         document.getElementById("form").firstChild.after(warn);
         return;
     }
 
 
-    await request.open("POST", URL_BASE+"server/register.php?mail="+addressField.value+"&pass="+passField.value+"&verifPass=" +verifPassField.value, true);
+    await request.open("POST", URL_BASE + "server/register.php?mail=" + addressField.value + "&pass=" + passField.value + "&verifPass=" + verifPassField.value, true);
     await request.send();
 
     request.onreadystatechange = await function () {
@@ -61,4 +59,27 @@ async function register() {
             }
         }
     };
+}
+
+document.getElementById("btn-vision").onclick = vision;
+document.getElementById("btn-vision2").onclick = vision2;
+
+function vision() {
+    const pass = document.getElementById("pass");
+    console.log("visible");
+    if (pass.type === "password") {
+        pass.type = "text";
+    } else {
+        pass.type = "password";
+    }
+}
+
+function vision2() {
+    const pass = document.getElementById("verifPass");
+    console.log("visible");
+    if (pass.type === "password") {
+        pass.type = "text";
+    } else {
+        pass.type = "password";
+    }
 }

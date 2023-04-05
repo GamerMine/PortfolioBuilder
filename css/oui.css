@@ -113,3 +113,11 @@ label{
     border-radius: 0.5rem;
     text-align: center;
 }
+
+#btn-vision{
+    display: none;
+}
+
+#btn-vision2{
+    display: none;
+}
