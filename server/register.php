@@ -1,7 +1,7 @@
 <?php
 
 include "Database.php";
-include "Utils.php";
+include "utils.php";
 
 $mail = $_GET["mail"];
 $pass = $_GET["pass"];

@@ -1,7 +1,7 @@
 <?php
 
 include "Database.php";
-include "Utils.php";
+include "utils.php";
 
 session_start();
 

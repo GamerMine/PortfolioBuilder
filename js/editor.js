@@ -402,20 +402,6 @@ function toolsText()
 
 }
 
-
-
-
-/*
-<label for="image">Choissisez une image :</label>
-
-<input type="file" id="choose_img" name="choose_img" accept="image/png, image/jpeg">
-
-<label for="alt">Texte alternatif :</label>
-
-<input type="text" id="alt" name="alt">
-
-<button class="button" id="btn-add" type="button">Ajouter</button>
-*/
 function toolsImage()
 {
     let divSelect  = document.getElementById("btnselect");
@@ -443,6 +429,9 @@ function toolsImage()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
+    btnAjout.addEventListener("click", () => {
+
+    }, false)
 }
 
 
@@ -622,5 +611,12 @@ function toolsCV()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
+    btnAjout.addEventListener("click", () => {
+         const formData = new FormData();
+         formData.append("file", document.getElementById("choose-cv").files[0]);
 
+         const request = new XMLHttpRequest();
+         request.open("POST", URL_BASE+"server/sendData.php?command=SAVE_FILE");
+         request.send(formData);
+    },false);
 }

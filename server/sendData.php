@@ -22,6 +22,10 @@ switch ($sentCommand) {
         $data = array("connected" => true);
         $db->setUserInfo($_GET["title"], $_GET["name"], $_GET["surname"], $_SESSION["mail"]);
     }
+    case "SAVE_FILE":{
+        $file = move_uploaded_file($_FILES["file"]["tmp_name"], "./uploads/".$_SESSION["mail"]."/".$_FILES["file"]["name"]);
+        break;
+    }
 }
 
 $db->close();
