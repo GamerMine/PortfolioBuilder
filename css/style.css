@@ -323,6 +323,18 @@ section#list-portfolio{
 	border: none;
 }
 
+
+/*----------------*/
+/*----SETTINGS----*/
+/*----------------*/
+
+hr{
+	width: 100%;
+}
+
+
+
+
 /*----------*/
 /*MEDIAQUERY*/
 /*----------*/
