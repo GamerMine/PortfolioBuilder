@@ -263,6 +263,13 @@ section#list-portfolio{
 	width: 85%;
 }
 
+.content{
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+}
+
 .tools{
 	border: solid black 1px;
 	background-color: rgb(189, 193, 194);
