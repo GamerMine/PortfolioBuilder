@@ -26,7 +26,7 @@ switch ($requestedData) {
     case "GET_CONTENT": {
         $mail = null;
 
-        if ($_GET["visibility"] == "editor") {
+        if (isset($_GET["visibility"]) && $_GET["visibility"] == "editor") {
             if (!isset($_SESSION["mail"])) {
                 $data = array("connected" => false);
                 break;

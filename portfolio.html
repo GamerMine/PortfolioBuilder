@@ -36,8 +36,9 @@
 
                         templateData.onreadystatechange = () => {
                             if (templateData.readyState === 4) {
-                                document.getElementsByName("body")[0].innerHTML = templateData.responseText;
-                                jsonToHTML(document.getElementById("content"), dataResponse.content);
+                                document.querySelector("body").innerHTML = templateData.responseText;
+                                jsonToHTML(dataResponse.content, document.getElementById("content"));
+
                             }
                         }
                     }

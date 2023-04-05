@@ -35,8 +35,6 @@ function showPortfolioHome() {
     request.open("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
     request.send();
 
-    console.log(URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
-
     request.onreadystatechange = () => {
         if (request.readyState === 4) {
             try {
