@@ -21,6 +21,12 @@ export async function showAllPortfolio() {
     for (const userHome of response.result) {
         portfolioList.appendChild(await createPortfolioPreviewElement(userHome.name, userHome.surname, userHome.mail, userHome.homecontent));
     }
+
+    if (portfolioList.firstChild == null){
+        const message = document.createElement("h2");
+        message.textContent = "Il n'y a aucun portfolio !";
+        portfolioList.appendChild(message);
+    }
 }
 
 async function moveToPortfolioView(mail) {
