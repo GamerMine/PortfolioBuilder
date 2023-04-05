@@ -1,58 +1,43 @@
 import {URL_BASE} from "./constants.js";
-import {jsonToHTML} from "./elements/utils.js";
+import {jsonToHTML, request} from "./elements/utils.js";
 
 loadPortfolio()
 
-function loadPortfolio() {
-    const request = new XMLHttpRequest();
+async function loadPortfolio() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
 
-    request.open("GET", URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
-    request.send();
+    try {
+        const response = JSON.parse(resp);
 
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            try {
-                const response = JSON.parse(request.response);
+        if (!response.connected) window.location.href = "../index.html";
 
-                if (!response.connected) window.location.href = "../index.html";
-
-                if (response.exist) {
-                    showPortfolioHome();
-                } else {
-                    // TODO: Popup to ask for user informations
-                }
-            } catch (e) {
-                window.location.href = "../index.html";
-                console.log(e);
-            }
+        if (response.exist) {
+            showPortfolioHome();
+        } else {
+            // TODO: Popup to ask for user informations
         }
+    } catch (e) {
+        window.location.href = "../index.html";
+        console.log(e);
     }
 }
 
-function showPortfolioHome() {
-    const request = new XMLHttpRequest();
+async function showPortfolioHome() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+    try {
+        const response = JSON.parse(resp);
 
-    request.open("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
-    request.send();
+        if (!response.connected) window.location.href = "../index.html";
 
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            try {
-                const response = JSON.parse(request.response);
+        document.getElementById("portfolio-preview").src = "../template.html";
 
-                if (!response.connected) window.location.href = "../index.html";
+        const iframe = document.getElementById("portfolio-preview");
 
-                document.getElementById("portfolio-preview").src = "../template.html";
-
-                const iframe = document.getElementById("portfolio-preview");
-
-                console.log(response.content);
-                iframe.onload = () => {
-                    jsonToHTML(response.content, iframe.contentWindow.document.getElementById("content"));
-                }
-            } catch (e) {}
+        console.log(response.content);
+        iframe.onload = () => {
+            jsonToHTML(response.content, iframe.contentWindow.document.getElementById("content"));
         }
-    }
+    } catch (e) {}
 }
 
 /*
