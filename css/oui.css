@@ -1,13 +1,21 @@
-*{
-    font-family:Arial, Helvetica, sans-serif;
+* {
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 
-body{
-    background-color: lightgray;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
-label{
+body {
+    background-color: floralwhite;
+    position: relative;
+}
+
+label {
     font-size: 0.9rem;
     line-height: 2rem;
 }
@@ -20,6 +28,22 @@ label{
     top: 50%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
+}
+
+#back{
+    background-color: blueviolet;
+    border: none;
+    color: #ffffff;
+    border-radius: .5em;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding:10px 20px ;
+}
+
+#back:hover{
+    background: rgb(98, 27, 165);
+    transition: .3s;
 }
 
 
@@ -45,7 +69,8 @@ label{
     position: relative;
 }
 
-.input-container input, .form button {
+.input-container input,
+.form button {
     outline: none;
     border: 1px solid #e5e7eb;
     margin: 8px 0;
@@ -96,6 +121,12 @@ label{
     left: 22%;
 }
 
+.submit:hover {
+    cursor: pointer;
+    background-color: rgb(98, 27, 165);
+    transition: .3s;
+}
+
 .signup-link {
     color: #6B7280;
     font-size: 0.875rem;
@@ -107,17 +138,49 @@ label{
     text-decoration: underline;
 }
 
-.warn{
-    background-color: rgba(234,89,89,0.45);
+.warn {
+    background-color: rgba(234, 89, 89, 0.45);
     padding: 1rem;
     border-radius: 0.5rem;
     text-align: center;
 }
 
-#btn-vision{
+#btn-vision {
     display: none;
 }
 
-#btn-vision2{
+#btn-vision2 {
     display: none;
+}
+
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.wave2 {
+    position: absolute;
+    background: transparent url(/picture/wave2.png) repeat 0 0;
+    bottom: 0;
+    height: 560px;
+    width: 100%;
+    -webkit-animation: slide 100s linear infinite;
+}
+
+.wave1 {
+    background: transparent url(/picture/wave1.png) repeat 0 0;
+    height: 560px;
+    -webkit-animation: slide 40s linear infinite;
+}
+
+
+@-webkit-keyframes slide {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -1440px 0;
+    }
 }
