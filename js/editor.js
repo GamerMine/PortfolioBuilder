@@ -35,6 +35,8 @@ function showPortfolioHome() {
     request.open("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
     request.send();
 
+    console.log(URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+
     request.onreadystatechange = () => {
         if (request.readyState === 4) {
             try {
@@ -367,8 +369,8 @@ function toolsImage()
     let lblImage   = document.createElement("div");
     let inputImage = document.createElement("input");
 
+    lblImage.setAttribute("class", "lblImage")
     lblImage.textContent = "Choissisez une image :";
-    lblAlt.textContent   = "Texte alternatif :";
 
     inputImage.setAttribute("type", "file");
     inputImage.setAttribute("id", "choose_img");
@@ -379,17 +381,31 @@ function toolsImage()
     let lblAlt     = document.createElement("div");
     let inputAlt   = document.createElement("input");
 
+    lblAlt.setAttribute("class", "lblImage")
+
+
+    lblAlt.textContent   = "Texte alternatif :";
+
     inputAlt.setAttribute("type", "text");
     inputAlt.setAttribute("id", "alt");
     inputAlt.setAttribute("name", "alt");
 
 
+    let div1 = document.createElement("div");
+    let div2 = document.createElement("div");
 
-    divSelect.appendChild(lblImage);
-    divSelect.appendChild(inputImage);
+    div1.setAttribute("class", "divImage");
+    div2.setAttribute("class", "divImage");
 
-    divSelect.appendChild(lblAlt);
-    divSelect.appendChild(inputAlt);
+    div1.appendChild(lblImage);
+    div1.appendChild(inputImage);
+
+    div2.appendChild(lblAlt);
+    div2.appendChild(inputAlt);
+
+    divSelect.appendChild(div1);
+    divSelect.appendChild(div2);
+
 
 
     let btnAjouter = document.createElement("button");
@@ -401,8 +417,9 @@ function toolsImage()
     
 
     divBottom.appendChild(btnAjouter);
+    divBottom.appendChild(btnRetour);
 
-
+    btnRetour.addEventListener("click", modifTools, false);
 
 
 }

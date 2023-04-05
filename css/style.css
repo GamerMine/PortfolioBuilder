@@ -309,6 +309,12 @@ img{
 #img-tools{
 	width: 55px;
 }
+.divImage{
+	padding-top: 20px;
+}
+.lblImage{
+	padding-bottom: 10px;
+}
 
 
 #portfolio-preview {
