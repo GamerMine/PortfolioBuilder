@@ -1,60 +1,43 @@
 import {URL_BASE} from "./constants.js";
-import {jsonToHTML} from "./elements/utils.js";
+import {jsonToHTML, request} from "./elements/utils.js";
 
 loadPortfolio()
 
-function loadPortfolio() {
-    const request = new XMLHttpRequest();
+async function loadPortfolio() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
 
-    request.open("GET", URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
-    request.send();
+    try {
+        const response = JSON.parse(resp);
 
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            try {
-                const response = JSON.parse(request.response);
+        if (!response.connected) window.location.href = "../index.html";
 
-                if (!response.connected) window.location.href = "../index.html";
-
-                if (response.exist) {
-                    showPortfolioHome();
-                } else {
-                    // TODO: Popup to ask for user informations
-                }
-            } catch (e) {
-                window.location.href = "../index.html";
-                console.log(e);
-            }
+        if (response.exist) {
+            showPortfolioHome();
+        } else {
+            // TODO: Popup to ask for user informations
         }
+    } catch (e) {
+        window.location.href = "../index.html";
+        console.log(e);
     }
 }
 
-function showPortfolioHome() {
-    const request = new XMLHttpRequest();
+async function showPortfolioHome() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+    try {
+        const response = JSON.parse(resp);
 
-    request.open("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
-    request.send();
+        if (!response.connected) window.location.href = "../index.html";
 
-    console.log(URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+        document.getElementById("portfolio-preview").src = "../template.html";
 
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            try {
-                const response = JSON.parse(request.response);
+        const iframe = document.getElementById("portfolio-preview");
 
-                if (!response.connected) window.location.href = "../index.html";
-
-                document.getElementById("portfolio-preview").src = "../template.html";
-
-                const iframe = document.getElementById("portfolio-preview");
-
-                console.log(response.content);
-                iframe.onload = () => {
-                    jsonToHTML(response.content, iframe.contentWindow.document.getElementById("content"));
-                }
-            } catch (e) {}
+        console.log(response.content);
+        iframe.onload = () => {
+            jsonToHTML(response.content, iframe.contentWindow.document.getElementById("content"));
         }
-    }
+    } catch (e) {}
 }
 
 /*
@@ -244,6 +227,65 @@ function modifTools()
     <option value="paragraphe">Paragraphe</option>
 </select>
 */
+
+
+let lblType = document.createElement("div");
+
+let select      = document.createElement("select");
+let titre       = document.createElement("option");
+let titre1      = document.createElement("option");
+let titre2      = document.createElement("option");
+let titre3      = document.createElement("option");
+let titre4      = document.createElement("option");
+let titre5      = document.createElement("option");
+let paragraphe  = document.createElement("option");
+
+lblType.innerText = "Sélectionner un élément à ajouter :";
+
+select.setAttribute("name", "text");
+select.setAttribute("id", "text-select");
+
+titre.setAttribute("value", "titre");
+titre.innerHTML = "Titre";
+
+titre1.setAttribute("value", "titre1");
+titre1.innerHTML = "Titre 1";
+
+titre2.setAttribute("value", "titre2");
+titre2.innerHTML = "Titre 2";
+
+titre3.setAttribute("value", "titre3");
+titre3.innerHTML = "Titre 3";
+
+titre4.setAttribute("value", "titre4");
+titre4.innerHTML = "Titre 4";
+
+titre5.setAttribute("value", "titre5");
+titre5.innerHTML = "Titre 5";
+
+paragraphe.setAttribute("value", "paragraphe");
+paragraphe.innerHTML = "Paragraphe";
+
+let lblTexte = document.createElement("div");
+let inputTexte = document.createElement("textarea");
+
+inputTexte.setAttribute("id", "text-input");
+inputTexte.setAttribute("name", "text-input");
+inputTexte.setAttribute("rows", "10");
+inputTexte.setAttribute("style", "resize: none;");
+
+lblTexte.innerText = "Texte :";
+
+
+let btnAjout = document.createElement("button");
+
+btnAjout.setAttribute("class", "button");
+btnAjout.setAttribute("id", "btn-add");
+btnAjout.setAttribute("type", "button");
+btnAjout.innerHTML = "Ajouter";
+
+
+
 function toolsText()
 {
     let divSelect  = document.getElementById("btnselect");
@@ -254,66 +296,44 @@ function toolsText()
         divSelect.removeChild(divSelect.firstChild);
     }
 
-    divBottom.removeChild(divBottom.firstChild);
+    while (divBottom.firstChild)
+    {
+        divBottom.removeChild(divBottom.firstChild);
+    }
 
-    let lblTexte = document.createElement("div");
+    select.appendChild(titre);
+    select.appendChild(titre1);
+    select.appendChild(titre2);
+    select.appendChild(titre3);
+    select.appendChild(titre4);
+    select.appendChild(titre5);
+    select.appendChild(paragraphe);
 
-    let select      = document.createElement("select");
-    let titre       = document.createElement("option");
-    let titre1      = document.createElement("option");
-    let titre2      = document.createElement("option");
-    let titre3      = document.createElement("option");
-    let titre4      = document.createElement("option");
-    let titre5      = document.createElement("option");
-    let paragraphe  = document.createElement("option");
-
-    lblTexte.textContent = "Sélectionner un élément à ajouter :";
-
-    select.setAttribute("name", "text");
-    select.setAttribute("id", "text-select");
-
-    option1.setAttribute("value", "");
-    option1.innerHTML = "--Choisissez une option--";
-
-    option2.setAttribute("value", "titre");
-    option2.innerHTML = "Titre";
-
-    option3.setAttribute("value", "titre1");
-    option3.innerHTML = "Titre 1";
-
-    option4.setAttribute("value", "titre2");
-    option4.innerHTML = "Titre 2";
-
-    option5.setAttribute("value", "titre3");
-    option5.innerHTML = "Titre 3";
-
-    option6.setAttribute("value", "titre4");
-    option6.innerHTML = "Titre 4";
-
-    option7.setAttribute("value", "titre5");
-    option7.innerHTML = "Titre 5";
-
-
-    divSelect.appendChild(lblTexte);
+    divSelect.appendChild(lblType);
     divSelect.appendChild(select);
+    divSelect.appendChild(lblTexte);
+    divSelect.appendChild(inputTexte);
 
-    select.appendChild(option1);
-    select.appendChild(option2);
-    select.appendChild(option3);
-    select.appendChild(option4);
-    select.appendChild(option5);
-    select.appendChild(option6);
-    select.appendChild(option7);
+    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnRetour);
 
-
-
-
+    btnRetour.addEventListener("click", modifTools, false);
 
 
 }
 
 
+/*
+<label for="image">Choissisez une image :</label>
 
+<input type="file" id="choose_img" name="choose_img" accept="image/png, image/jpeg">
+
+<label for="alt">Texte alternatif :</label>
+
+<input type="text" id="alt" name="alt">
+
+<button class="button" id="btn-add" type="button">Ajouter</button>
+*/
 function toolsImage()
 {
     let divSelect  = document.getElementById("btnselect");
@@ -324,7 +344,67 @@ function toolsImage()
         divSelect.removeChild(divSelect.firstChild);
     }
 
-    divBottom.removeChild(divBottom.firstChild);
+    while (divBottom.firstChild)
+    {
+        divBottom.removeChild(divBottom.firstChild);
+    }
+
+    let lblImage   = document.createElement("div");
+    let inputImage = document.createElement("input");
+
+    lblImage.setAttribute("class", "lblImage")
+    lblImage.textContent = "Choissisez une image :";
+
+    inputImage.setAttribute("type", "file");
+    inputImage.setAttribute("id", "choose_img");
+    inputImage.setAttribute("name", "choose_img");
+    inputImage.setAttribute("accept", "image/png, image/jpeg");
+
+
+    let lblAlt     = document.createElement("div");
+    let inputAlt   = document.createElement("input");
+
+    lblAlt.setAttribute("class", "lblImage")
+
+
+    lblAlt.textContent   = "Texte alternatif :";
+
+    inputAlt.setAttribute("type", "text");
+    inputAlt.setAttribute("id", "alt");
+    inputAlt.setAttribute("name", "alt");
+
+
+    let div1 = document.createElement("div");
+    let div2 = document.createElement("div");
+
+    div1.setAttribute("class", "divImage");
+    div2.setAttribute("class", "divImage");
+
+    div1.appendChild(lblImage);
+    div1.appendChild(inputImage);
+
+    div2.appendChild(lblAlt);
+    div2.appendChild(inputAlt);
+
+    divSelect.appendChild(div1);
+    divSelect.appendChild(div2);
+
+
+
+    let btnAjouter = document.createElement("button");
+
+    btnAjouter.setAttribute("class", "button");
+    btnAjouter.setAttribute("id", "btn-add");
+    btnAjouter.setAttribute("type", "button");
+    btnAjouter.textContent = "Ajouter";
+
+
+    divBottom.appendChild(btnAjouter);
+    divBottom.appendChild(btnRetour);
+
+    btnRetour.addEventListener("click", modifTools, false);
+
+
 }
 
 
@@ -339,7 +419,14 @@ function toolsLien()
         divSelect.removeChild(divSelect.firstChild);
     }
 
-    divBottom.removeChild(divBottom.firstChild);
+    while (divBottom.firstChild)
+    {
+        divBottom.removeChild(divBottom.firstChild);
+    }
+
+
+
+
 }
 
 
@@ -354,5 +441,13 @@ function toolsCV()
         divSelect.removeChild(divSelect.firstChild);
     }
 
-    divBottom.removeChild(divBottom.firstChild);
+
+    while (divBottom.firstChild)
+    {
+        divBottom.removeChild(divBottom.firstChild);
+    }
+
+
+
+
 }

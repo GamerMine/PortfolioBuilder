@@ -1,5 +1,5 @@
 import {URL_BASE} from "./constants.js";
-import {jsonToHTML} from "./elements/utils.js";
+import {jsonToHTML, request} from "./elements/utils.js";
 
 export function loginForm() {
     window.location.href = "session/loginForm.html";
@@ -9,59 +9,39 @@ export function registerForm() {
     window.location.href = "session/registerForm.html";
 }
 
-export function requestVerifyConnection() {
-    const request = new XMLHttpRequest();
-
-    request.open("GET", URL_BASE+"server/login.php?session=1", true);
-    request.send();
-
-    return request;
+export async function requestVerifyConnection() {
+    return await request("GET", URL_BASE + "server/login.php?session=1", true);
 }
 
-export function showAllPortfolio() {
-    const request = new XMLHttpRequest();
+export async function showAllPortfolio() {
     const portfolioList = document.getElementById("list-portfolio");
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=ALL_USER_PORTFOLIO");
+    const response = JSON.parse(resp);
 
-    request.open("GET", URL_BASE+"server/requestData.php?command=ALL_USER_PORTFOLIO");
-    request.send();
-
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            const response = JSON.parse(request.response);
-
-            for (const userHome of response.result) {
-                portfolioList.appendChild(createPortfolioPreviewElement(userHome.name, userHome.surname, userHome.mail, userHome.homecontent));
-            }
-        }
-    }
-
-}
-
-function moveToPortfolioView(mail) {
-    const request = new XMLHttpRequest();
-    request.open("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=homeContentIN"+mail);
-    request.send();
-
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            window.location.href = "portfolio.html";
-        }
+    for (const userHome of response.result) {
+        portfolioList.appendChild(await createPortfolioPreviewElement(userHome.name, userHome.surname, userHome.mail, userHome.homecontent));
     }
 }
 
-function createPortfolioPreviewElement(name, surname, mail, homeContent) {
+async function moveToPortfolioView(mail) {
+    await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=homeContentIN"+mail);
+
+    window.location.href = "portfolio.html";
+}
+
+async function createPortfolioPreviewElement(name, surname, mail, homeContent) {
     const article = document.createElement("article");
     const h5 = document.createElement("h5");
     const div = document.createElement("div");
     const embed = document.createElement("iframe");
 
-    h5.onclick = () => {
-        moveToPortfolioView(mail);
+    h5.onclick = async () => {
+        await moveToPortfolioView(mail);
 
     }
 
-    div.onclick = () => {
-        moveToPortfolioView(mail);
+    div.onclick = async () => {
+        await moveToPortfolioView(mail);
     }
 
     article.classList.add("card-portfolio");
@@ -70,6 +50,8 @@ function createPortfolioPreviewElement(name, surname, mail, homeContent) {
     embed.scrolling = "no";
 
     embed.onload = () => {
+        embed.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+        embed.contentWindow.document.getElementById("mail").innerText = mail;
         jsonToHTML(homeContent, embed.contentWindow.document.getElementById("content"));
     }
 
@@ -80,32 +62,20 @@ function createPortfolioPreviewElement(name, surname, mail, homeContent) {
     return article;
 }
 
-export function editPortfolio() {
-    const request = requestVerifyConnection();
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            try {
-                const response = JSON.parse(request.response);
-                if (response.connected) {
-                    window.location.href = "session/editor.html";
-                } else {
-                    loginForm();
-                }
-            } catch (e) {
-
-            }
+export async function editPortfolio() {
+    const resp = await requestVerifyConnection();
+    try {
+        const response = JSON.parse(resp);
+        if (response.connected) {
+            window.location.href = "session/editor.html";
+        } else {
+            loginForm();
         }
-    }
+    } catch (e) {}
 }
 
-export function disconnect() {
-    const request = new XMLHttpRequest();
-    request.open("GET", URL_BASE+"server/disconnect.php");
-    request.send();
+export async function disconnect() {
+    await request("GET", URL_BASE+"server/disconnect.php");
 
-    request.onreadystatechange = () => {
-        if (request.readyState === 4) {
-            window.location.href = "index.html";
-        }
-    }
+    window.location.href = "index.html";
 }

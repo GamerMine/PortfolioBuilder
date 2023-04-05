@@ -48,7 +48,7 @@
 	</footer>
 
 	<script type="module">
-		import { requestVerifyConnection, loginForm, registerForm, showAllPortfolio, disconnect, editPortfolio } from "./js/main.js";
+		import { loginForm, registerForm, showAllPortfolio, disconnect, editPortfolio, requestVerifyConnection } from "./js/main.js";
 
 		// Event handling
 		document.getElementById("login").onclick = () => {
@@ -63,56 +63,52 @@
 			editPortfolio();
 		}
 
-		const request = requestVerifyConnection();
-		request.onreadystatechange = function () {
-			if (request.readyState === 4) {
-				try {
-					const response = JSON.parse(request.response);
-					if (response.connected) {
-						const ulConnectionBtn = document.getElementById("btn-login");
-						const liConnectionBtn = document.createElement("li");
-						const ulActionList = document.createElement("ul");
-						const liBtn1 = document.createElement("li");
-						const liBtn2 = document.createElement("li");
+		const resp = await requestVerifyConnection();
+		try {
+			const response = JSON.parse(resp);
+			if (response.connected) {
+				const ulConnectionBtn = document.getElementById("btn-login");
+				const liConnectionBtn = document.createElement("li");
+				const ulActionList = document.createElement("ul");
+				const liBtn1 = document.createElement("li");
+				const liBtn2 = document.createElement("li");
 
-						const myAccountBtn = document.createElement("button");
-						const btnPortfolio = document.createElement("button");
-						const btnLogout = document.createElement("button");
+				const myAccountBtn = document.createElement("button");
+				const btnPortfolio = document.createElement("button");
+				const btnLogout = document.createElement("button");
 
-						myAccountBtn.innerText = "Mon compte";
-						myAccountBtn.classList.add("button");
-						myAccountBtn.id = "btn-account";
-						myAccountBtn.type = "button";
+				myAccountBtn.innerText = "Mon compte";
+				myAccountBtn.classList.add("button");
+				myAccountBtn.id = "btn-account";
+				myAccountBtn.type = "button";
 
-						btnPortfolio.innerText = "Mon portfolio";
-						btnPortfolio.classList.add("create-portfolio");
+				btnPortfolio.innerText = "Mon portfolio";
+				btnPortfolio.classList.add("create-portfolio");
 
-						btnPortfolio.onclick = () => {
-							editPortfolio();
-						}
+				btnPortfolio.onclick = () => {
+					editPortfolio();
+				}
 
-						btnLogout.innerText = "Déconnexion";
+				btnLogout.innerText = "Déconnexion";
 
-						btnLogout.onclick = () => {
-							disconnect();
-						}
+				btnLogout.onclick = () => {
+					disconnect();
+				}
 
-						ulConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
+				ulConnectionBtn.querySelectorAll("button").forEach(elt => elt.remove());
 
-						liBtn1.appendChild(btnPortfolio);
-						liBtn2.appendChild(btnLogout);
-						ulActionList.appendChild(liBtn1);
+				liBtn1.appendChild(btnPortfolio);
+				liBtn2.appendChild(btnLogout);
+				ulActionList.appendChild(liBtn1);
 
-						ulActionList.appendChild(liBtn2);
-						liConnectionBtn.appendChild(myAccountBtn);
+				ulActionList.appendChild(liBtn2);
+				liConnectionBtn.appendChild(myAccountBtn);
 
-						liConnectionBtn.appendChild(ulActionList);
+				liConnectionBtn.appendChild(ulActionList);
 
-						ulConnectionBtn.appendChild(liConnectionBtn);
-					}
-				} catch (e) { }
+				ulConnectionBtn.appendChild(liConnectionBtn);
 			}
-		}
+		} catch (e) { }
 
 		// Setup portfolio view
 		showAllPortfolio();

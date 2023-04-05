@@ -6,47 +6,26 @@
 </head>
 <body>
 
-<script type="module">
+<script async type="module">
     import {URL_BASE} from "./js/constants.js";
-    import {jsonToHTML} from "./js/elements/utils.js";
+    import {jsonToHTML, request, requestText } from "./js/elements/utils.js";
 
-    const request = new XMLHttpRequest();
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
+    try {
+        const response = JSON.parse(resp);
+        const result = response.result.split("IN");
 
-    request.open("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
-    request.send();
+        const dataResp = await request("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name="+result[0]+"&mail="+result[1]);
 
-    request.onreadystatechange = () => {
+        const dataResponse = JSON.parse(dataResp);
 
-        if (request.readyState === 4) {
-            try {
-                const response = JSON.parse(request.response);
-                const result = response.result.split("IN");
+        const templateResp = await requestText("GET", "template.html");
 
-                const dataRequest = new XMLHttpRequest();
-                dataRequest.open("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name="+result[0]+"&mail="+result[1]);
-                dataRequest.send();
+        document.querySelector("body").innerHTML = templateResp;
+        jsonToHTML(dataResponse.content, document.getElementById("content"));
 
-                dataRequest.onreadystatechange = () => {
-                    if (dataRequest.readyState === 4) {
-                        const dataResponse = JSON.parse(dataRequest.response);
-                        const templateData = new XMLHttpRequest();
-
-                        templateData.open("GET", "template.html");
-                        templateData.send();
-
-                        templateData.onreadystatechange = () => {
-                            if (templateData.readyState === 4) {
-                                document.getElementsByName("body")[0].innerHTML = templateData.responseText;
-                                jsonToHTML(document.getElementById("content"), dataResponse.content);
-                            }
-                        }
-                    }
-                }
-
-            } catch (e) {
-
-            }
-        }
+    } catch (e) {
+        console.log(e);
     }
 </script>
 </body>
