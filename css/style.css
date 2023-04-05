@@ -290,7 +290,7 @@ section#list-portfolio{
 }
 #bottom{
 	display: flex;
-	justify-content: center;
+	justify-content: space-around;
 	align-items: center;
 	position: relative;
 	top: 30%;
