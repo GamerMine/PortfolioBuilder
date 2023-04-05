@@ -290,7 +290,7 @@ section#list-portfolio{
 }
 #bottom{
 	display: flex;
-	justify-content: center;
+	justify-content: space-around;
 	align-items: center;
 	position: relative;
 	top: 30%;
@@ -308,6 +308,12 @@ img{
 }
 #img-tools{
 	width: 55px;
+}
+.divImage{
+	padding-top: 20px;
+}
+.lblImage{
+	padding-bottom: 10px;
 }
 
 
