@@ -4,6 +4,7 @@ include "Database.php";
 
 $sentCommand = $_GET["command"];
 $db = Database::getInstance();
+$data = array("connected" => false);
 
 session_start();
 
@@ -12,8 +13,19 @@ switch ($sentCommand) {
         $_SESSION["location"] = $_GET["location"];
         break;
     }
+    case "SEND_INFO": {
+        if (!isset($_SESSION["mail"])) {
+            $data = array("connected" => false);
+            break;
+        }
+
+        $data = array("connected" => true);
+        $db->setUserInfo($_GET["title"], $_GET["name"], $_GET["surname"], $_SESSION["mail"]);
+    }
 }
 
 $db->close();
+
+echo json_encode($data);
 
 exit();
