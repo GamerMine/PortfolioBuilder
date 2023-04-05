@@ -80,6 +80,14 @@ class Database
         return $stmt->fetch()[0];
     }
 
+    public function getUserInfo($mail) : array
+    {
+        $stmt = $this->connection->prepare("SELECT name, surname, mail  FROM info WHERE mail=?");
+        $stmt->execute([$mail]);
+
+        return $stmt->fetchAll();
+    }
+
     public function checkIfPortfolioExist($mail) {
         $stmt = $this->connection->prepare("SELECT * FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
