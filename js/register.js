@@ -26,6 +26,7 @@ passField.addEventListener("input", () => {
         verifPassField.style.backgroundColor = "rgba(234,89,89,0.45)";
     } else {
         passField.style.backgroundColor = "rgba(108,234,89,0.45)";
+        verifPassField.style.backgroundColor = "rgba(108,234,89,0.45)";
     }
 });
 
