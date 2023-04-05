@@ -302,7 +302,7 @@ section#list-portfolio{
 	width: 100vw;
 	height: 100vh;
 }
-img{
+.top div img{
 	padding-top: 5px;
 	width: 35px;
 }
@@ -312,7 +312,7 @@ img{
 .divImage{
 	padding-top: 20px;
 }
-.lblImage{
+.lbl{
 	padding-bottom: 10px;
 }
 
