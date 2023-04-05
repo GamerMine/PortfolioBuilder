@@ -338,67 +338,6 @@ hr{
 	width: 100%;
 }
 
-
-
-
-#popup-container {
-	position: absolute;
-	display: none;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(74,73,75,0.72);
-	z-index: 50;
-}
-
-#popup {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	-webkit-transform: translate(-50%, -50%);
-	background-color: #fff;
-	max-width: 350px;
-	border-radius: 0.5em;
-	padding: 1rem;
-
-	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-}
-
-#popup form h1 {
-	font-size: 1.25rem;
-	line-height: 1.75rem;
-	font-weight: 600;
-	text-align: center;
-	color: #000;
-}
-
-#popup form input:not(#submit) {
-	outline: none;
-	border: 1px solid #e5e7eb;
-	margin: 8px 0;
-	background-color: #fff;
-	padding: 1rem;
-	font-size: 0.875rem;
-	line-height: 1.25rem;
-	width: 315px;
-	border-radius: 0.5rem;
-	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
-#submit {
-	position: relative;
-	display: block;
-	padding: 0.75rem 1.25rem;
-	background-color: blueviolet;
-	color: #ffffff;
-	font-size: 0.875rem;
-	line-height: 1.25rem;
-	font-weight: 500;
-	border-radius: 0.5rem;
-	text-transform: uppercase;
-	margin: auto;
-}
-
 /*----------*/
 /*MEDIAQUERY*/
 /*----------*/
