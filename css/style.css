@@ -262,6 +262,12 @@ section#list-portfolio{
 .contenu{
 	width: 85%;
 }
+ .content{
+	 display: -webkit-box;
+	 overflow: hidden;
+	 -webkit-line-clamp: 3;
+	 -webkit-box-orient: vertical;
+ }
 
 .tools{
 	border: solid black 1px;

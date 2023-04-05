@@ -24,6 +24,15 @@
         document.querySelector("body").innerHTML = templateResp;
         jsonToHTML(dataResponse.content, document.getElementById("content"));
 
+        const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+        const user_info_json = JSON.parse(user_info);
+
+        const surname = user_info_json.info[0].surname;     //Get user's surname
+        const name = user_info_json.info[0].name;           //Get user's name
+        const mail = user_info_json.info[0].mail;           //Get user's mail
+
+        document.getElementById("name").innerText = name + " " + surname;
+        document.getElementById("mail").innerText = mail;
     } catch (e) {
         console.log(e);
     }
