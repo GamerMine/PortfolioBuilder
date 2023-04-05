@@ -94,7 +94,7 @@ class Database
         $stmt->execute([$mail]);
         if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0) return true;
 
-        $stmt = $this->connection->prepare("SELECT * FROM skill JOIN account a on a.mail = skill.mail = a.mail WHERE a.mail = ?");
+        $stmt = $this->connection->prepare("SELECT * FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
         if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0) return true;
 
