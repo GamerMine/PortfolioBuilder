@@ -54,7 +54,21 @@ switch ($requestedData) {
         }
         break;
     }
-
+    case "GET_USER_INFO":{
+        if (!isset($_SESSION["mail"])) {
+            $data = array("connected" => false);
+            break;
+        }
+        if (!isset($_GET["mail"]))
+        {
+            $data = array( "connected" => true, "info" => $db->getUserInfo($_SESSION["mail"]));
+            break;
+        }
+        else
+        {
+            $data = array( "connected" => true, "info" => $db->getUserInfo($_GET["mail"]));
+        }
+    }
 }
 
 $db->close();

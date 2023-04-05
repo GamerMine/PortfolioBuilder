@@ -1,5 +1,11 @@
 import {URL_BASE} from "./constants.js";
+import {HTMLPage} from "./elements/htmlPage.js";
 import {jsonToHTML, request} from "./elements/utils.js";
+import {Paragraph} from "./elements/paragraph.js";
+import {Title} from "./elements/title.js";
+
+let page = new HTMLPage();
+const iframe = document.getElementById("portfolio-preview");
 
 loadPortfolio()
 
@@ -12,9 +18,9 @@ async function loadPortfolio() {
         if (!response.connected) window.location.href = "../index.html";
 
         if (response.exist) {
-            showPortfolioHome();
+            await showPortfolioHome();
         } else {
-            // TODO: Popup to ask for user informations
+            showInfoPopup();
         }
     } catch (e) {
         window.location.href = "../index.html";
@@ -22,8 +28,36 @@ async function loadPortfolio() {
     }
 }
 
+function showInfoPopup() {
+    const popupContainer = document.getElementById("popup-container");
+    const form = popupContainer.querySelector("form");
+
+    popupContainer.style.display = "block";
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        await submitInformation();
+        popupContainer.style.display = "none";
+        await showPortfolioHome();
+    }
+}
+
+async function submitInformation() {
+    const titleField = document.getElementById("title-field");
+    const nameField = document.getElementById("name-field");
+    const surnameField = document.getElementById("surname-field");
+
+    if (titleField.value === "" || nameField.value === "" | surnameField.value === "") {
+        // TODO: Popup field not filled
+        return;
+    }
+
+    await request("GET", URL_BASE+"server/sendData.php?command=SEND_INFO&title="+titleField.value+"&name="+nameField.value+"&surname="+surnameField.value);
+    console.log(URL_BASE+"server/sendData.php?command=SEND_INFO&title="+titleField.value+"&name="+nameField.value+"&surname="+surnameField.value);
+}
+
 async function showPortfolioHome() {
-    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+    const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
     try {
         const response = JSON.parse(resp);
 
@@ -31,13 +65,22 @@ async function showPortfolioHome() {
 
         document.getElementById("portfolio-preview").src = "../template.html";
 
-        const iframe = document.getElementById("portfolio-preview");
+        iframe.onload = async () => {
+            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+            const user_info_json = JSON.parse(user_info);
 
-        console.log(response.content);
-        iframe.onload = () => {
+            const surname = user_info_json.info[0].surname;     //Get user's surname
+            const name = user_info_json.info[0].name;           //Get user's name
+            const mail = user_info_json.info[0].mail;           //Get user's mail
+
+            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
             jsonToHTML(response.content, iframe.contentWindow.document.getElementById("content"));
         }
-    } catch (e) {}
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 /*
@@ -181,7 +224,7 @@ btnRetour.innerHTML = "Retour";
 
 function modifTools()
 {
-
+    inputTexte.value="";
     let divBtnSelect  = document.getElementById("btnselect");
     let divBottom     = document.getElementById("bottom");
 
@@ -245,23 +288,23 @@ lblType.innerText = "Sélectionner un élément à ajouter :";
 select.setAttribute("name", "text");
 select.setAttribute("id", "text-select");
 
-titre.setAttribute("value", "titre");
+titre.setAttribute("value", "1");
 titre.innerHTML = "Titre";
 
-titre1.setAttribute("value", "titre1");
+titre1.setAttribute("value", "2");
 titre1.innerHTML = "Titre 1";
 
-titre2.setAttribute("value", "titre2");
+titre2.setAttribute("value", "3");
 titre2.innerHTML = "Titre 2";
 
-titre3.setAttribute("value", "titre3");
+titre3.setAttribute("value", "4");
 titre3.innerHTML = "Titre 3";
 
-titre4.setAttribute("value", "titre4");
+titre4.setAttribute("value", "5");
 titre4.innerHTML = "Titre 4";
 
-titre5.setAttribute("value", "titre5");
-titre5.innerHTML = "Titre 5";
+titre5.setAttribute("value", "6");
+titre5.innerHTML= "Titre 5";
 
 paragraphe.setAttribute("value", "paragraphe");
 paragraphe.innerHTML = "Paragraphe";
@@ -284,6 +327,12 @@ btnAjout.setAttribute("id", "btn-add");
 btnAjout.setAttribute("type", "button");
 btnAjout.innerHTML = "Ajouter";
 
+let btnRetour2 = document.createElement("button");
+
+btnRetour2.setAttribute("class", "button");
+btnRetour2.setAttribute("id", "btn-back");
+btnRetour2.setAttribute("type", "button");
+btnRetour2.innerHTML = "Retour";
 
 
 function toolsText()
@@ -318,9 +367,42 @@ function toolsText()
     divBottom.appendChild(btnRetour);
 
     btnRetour.addEventListener("click", modifTools, false);
+    btnAjout.addEventListener("click",() =>
+    {
+        page.empty();
+        if(select.value === "paragraphe")
+        {
+            page.addObject = new Paragraph(inputTexte.value);
+            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+            inputTexte.value="";
+        }
+        else
+        {
+            page.addObject = new Title(inputTexte.value,select.value);
+            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+            inputTexte.value="";
+        }
+    },false);
+    btnRetour2.addEventListener("click", modifTools, false);
+    btnAjout.addEventListener("click",() =>
+    {
+        page.empty();
+        if(select.value === "paragraphe")
+        {
+            page.addObject = new Paragraph(inputTexte.value);
+            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+        }
+        else
+        {
+            page.addObject = new Title(inputTexte.value,select.value);
+            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+        }
+    },false);
 
 
 }
+
+
 
 
 /*
@@ -349,71 +431,96 @@ function toolsImage()
         divBottom.removeChild(divBottom.firstChild);
     }
 
-    let lblImage   = document.createElement("div");
-    let inputImage = document.createElement("input");
-
-    lblImage.setAttribute("class", "lblImage")
-    lblImage.textContent = "Choissisez une image :";
-
-    inputImage.setAttribute("type", "file");
-    inputImage.setAttribute("id", "choose_img");
-    inputImage.setAttribute("name", "choose_img");
-    inputImage.setAttribute("accept", "image/png, image/jpeg");
-
-
-    let lblAlt     = document.createElement("div");
-    let inputAlt   = document.createElement("input");
-
-    lblAlt.setAttribute("class", "lblImage")
-
-
-    lblAlt.textContent   = "Texte alternatif :";
-
-    inputAlt.setAttribute("type", "text");
-    inputAlt.setAttribute("id", "alt");
-    inputAlt.setAttribute("name", "alt");
-
-
-    let div1 = document.createElement("div");
-    let div2 = document.createElement("div");
-
-    div1.setAttribute("class", "divImage");
-    div2.setAttribute("class", "divImage");
-
-    div1.appendChild(lblImage);
+    div1.appendChild(lbl);
     div1.appendChild(inputImage);
-
     div2.appendChild(lblAlt);
     div2.appendChild(inputAlt);
 
     divSelect.appendChild(div1);
     divSelect.appendChild(div2);
 
+    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnRetour2);
 
-
-    let btnAjouter = document.createElement("button");
-
-    btnAjouter.setAttribute("class", "button");
-    btnAjouter.setAttribute("id", "btn-add");
-    btnAjouter.setAttribute("type", "button");
-    btnAjouter.textContent = "Ajouter";
-
-
-    divBottom.appendChild(btnAjouter);
-    divBottom.appendChild(btnRetour);
-
-    btnRetour.addEventListener("click", modifTools, false);
-
-
+    btnRetour2.addEventListener("click", modifTools, false);
 }
 
 
+
+
+let lblLien = document.createElement("div");
+
+lblLien.setAttribute("class", "lbl")
+lblLien.textContent = "Lien :";
+
+
+let selectLien = document.createElement("select");
+
+selectLien.setAttribute("id", "choose-link");
+selectLien.setAttribute("name", "choose-link");
+
+let optValue     = document.createElement("option");
+let optInternet  = document.createElement("option");
+let optPortfolio = document.createElement("option");
+
+optValue.setAttribute("value", "");
+optValue.innerHTML = "";
+
+optInternet.setAttribute("value", "internet");
+optInternet.innerHTML = "Internet";
+
+optPortfolio.setAttribute("value", "portfolio");
+optPortfolio.innerHTML = "Portfolio";
+
+// input si Internet --------------------
+let inputInternet = document.createElement("input");
+
+inputInternet.setAttribute("type", "text");
+inputInternet.setAttribute("id", "lien");
+inputInternet.setAttribute("name", "lien");
+inputInternet.setAttribute("placeholder", "http://");
+// --------------------------------------
+
+// select si Portfolio ------------------
+let selectPortfolio = document.createElement("select");
+let value = document.createElement("option");
+let comp1 = document.createElement("option");
+let comp2 = document.createElement("option");
+let proj1 = document.createElement("option");
+let proj2 = document.createElement("option");
+let proj3 = document.createElement("option");
+
+selectPortfolio.setAttribute("name", "text");
+selectPortfolio.setAttribute("id", "text-select");
+
+value.setAttribute("value", "value");
+value.innerHTML = "----Value----";
+
+comp1.setAttribute("value", "comp1");
+comp1.innerHTML = "Compétence 1";
+
+comp2.setAttribute("value", "comp2");
+comp2.innerHTML = "Compétence 2";
+
+proj1.setAttribute("value", "proj1");
+proj1.innerHTML = "Projet 1";
+
+proj2.setAttribute("value", "proj2");
+proj2.innerHTML = "Projet 2";
+
+proj3.setAttribute("value", "proj3");
+proj3.innerHTML = "Projet 3";
+// --------------------------------------
+
+let divChoose = document.createElement("div");
+
+divChoose.setAttribute("id", "divChoose");
 
 function toolsLien()
 {
     let divSelect  = document.getElementById("btnselect");
     let divBottom  = document.getElementById("bottom");
-
+    
     while (divSelect.firstChild)
     {
         divSelect.removeChild(divSelect.firstChild);
@@ -424,12 +531,73 @@ function toolsLien()
         divBottom.removeChild(divBottom.firstChild);
     }
 
+    selectLien.appendChild(optValue);
+    selectLien.appendChild(optInternet);
+    selectLien.appendChild(optPortfolio);
 
+    divSelect.appendChild(lblLien);
+    divSelect.appendChild(selectLien);
 
+    const selectElement = document.getElementById("choose-link");
 
+    console.log("avant la fonction");
+
+    selectElement.addEventListener('change', (event) => 
+    {
+        console.log("dans la fonction");
+
+        divSelect.appendChild(divChoose);
+    
+        while(divChoose.firstChild)
+        {
+            divChoose.removeChild(divChoose.firstChild);
+        }
+      
+        selectPortfolio.appendChild(value);
+        selectPortfolio.appendChild(comp1);
+        selectPortfolio.appendChild(comp2);
+        selectPortfolio.appendChild(proj1);
+        selectPortfolio.appendChild(proj2);
+        selectPortfolio.appendChild(proj3);
+        
+        let text = selectElement.options[selectElement.selectedIndex].text;
+        
+        if (text === "Internet")
+        {
+            divChoose.appendChild(inputInternet);
+        }
+        else if (text === "Portfolio")
+        {
+            divChoose.appendChild(selectPortfolio);
+        }
+
+        divSelect.appendChild(lblTexte);
+        divSelect.appendChild(inputTexte);
+    
+    });
+
+  
+    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnRetour2);
+
+    btnRetour2.addEventListener("click", modifTools, false);
 }
 
+let lblCV = document.createElement("div");
+let inputCV = document.createElement("input");
 
+lblCV.setAttribute("class", "lbl")
+lblCV.textContent = "Ajouter un CV :";
+
+/*
+<input type="file"
+       id="choose-cv" name="choose-cv"
+       accept="application/pdf">
+*/
+inputCV.setAttribute("type", "file");
+inputCV.setAttribute("id", "choose-cv");
+inputCV.setAttribute("name", "choose-cv");
+inputCV.setAttribute("accept", "application/pdf");
 
 function toolsCV()
 {
@@ -447,7 +615,12 @@ function toolsCV()
         divBottom.removeChild(divBottom.firstChild);
     }
 
+    divSelect.appendChild(lblCV);
+    divSelect.appendChild(inputCV);
 
+    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnRetour2);
 
+    btnRetour2.addEventListener("click", modifTools, false);
 
 }

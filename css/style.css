@@ -250,6 +250,155 @@ section#list-portfolio{
 	transform-origin:0 0;
 }
 
+/*--------------*/
+/*----EDITOR----*/
+/*--------------*/
+
+.separator{
+	display: flex;
+	justify-content: space-between;
+}
+
+.contenu{
+	width: 85%;
+}
+ .content{
+	 display: -webkit-box;
+	 overflow: hidden;
+	 -webkit-line-clamp: 3;
+	 -webkit-box-orient: vertical;
+ }
+
+.tools{
+	border: solid black 1px;
+	background-color: rgb(189, 193, 194);
+	margin-left: auto;
+    margin-right: auto;
+	width: 15%;
+	height: 100vh;
+
+}
+.top{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+
+}
+#btnselect div{
+	text-align: center;
+}
+#btnselect{
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 20px;
+	padding: 10% 10%;
+
+}
+#bottom{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	position: relative;
+	top: 30%;
+
+}
+
+#portfolio-preview-container {
+	overflow: scroll;
+	width: 100vw;
+	height: 100vh;
+}
+.top div img{
+	padding-top: 5px;
+	width: 35px;
+}
+#img-tools{
+	width: 55px;
+}
+.divImage{
+	padding-top: 20px;
+}
+.lbl{
+	padding-bottom: 10px;
+}
+
+
+#portfolio-preview {
+	height: 94.4vh;
+	width: 85vw;
+	border: none;
+}
+
+
+/*----------------*/
+/*----SETTINGS----*/
+/*----------------*/
+
+hr{
+	width: 100%;
+}
+
+
+
+
+#popup-container {
+	position: absolute;
+	display: none;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(74,73,75,0.72);
+	z-index: 50;
+}
+
+#popup {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	background-color: #fff;
+	max-width: 350px;
+	border-radius: 0.5em;
+	padding: 1rem;
+
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+#popup form h1 {
+	font-size: 1.25rem;
+	line-height: 1.75rem;
+	font-weight: 600;
+	text-align: center;
+	color: #000;
+}
+
+#popup form input:not(#submit) {
+	outline: none;
+	border: 1px solid #e5e7eb;
+	margin: 8px 0;
+	background-color: #fff;
+	padding: 1rem;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	width: 315px;
+	border-radius: 0.5rem;
+	box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+#submit {
+	position: relative;
+	display: block;
+	padding: 0.75rem 1.25rem;
+	background-color: blueviolet;
+	color: #ffffff;
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	font-weight: 500;
+	border-radius: 0.5rem;
+	text-transform: uppercase;
+	margin: auto;
+}
+
 /*----------*/
 /*MEDIAQUERY*/
 /*----------*/

@@ -11,9 +11,24 @@
     </head>
 
     <body id="tool-page">
-        
-        <main class="separator">
 
+        <div id="popup-container">
+            <div id="popup">
+                <form>
+                    <h1>Informations</h1>
+                    <label for="title-field">Titre</label>
+                    <input required type="text" name="title-field" id="title-field">
+                    <br>
+                    <label for="name-field">Prénom</label>
+                    <input required type="text" name="name-field" id="name-field">
+                    <br>
+                    <label for="surname-field">Nom de famille</label>
+                    <input required type="text" name="surname-field" id="surname-field">
+                    <input type="submit" value="Confirmer" id="submit">
+                </form>
+            </div>
+        </div>
+        <main class="separator">
             <section class="contenu">
                 <div id="portfolio-preview-container">
                     <iframe id="portfolio-preview"></iframe>
@@ -32,6 +47,7 @@
                 </div>
 
                 <script src="../js/editor.js" type="module"></script>
+                <script src="../js/settings.js" type="module"></script>
 
                 <div id="btnselect">
 
