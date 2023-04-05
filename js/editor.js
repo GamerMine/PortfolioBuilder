@@ -197,7 +197,7 @@ btnRetour.innerHTML = "Retour";
 
 function modifTools()
 {
-
+    inputTexte.value="";
     let divBtnSelect  = document.getElementById("btnselect");
     let divBottom     = document.getElementById("bottom");
 
@@ -360,7 +360,6 @@ function toolsText()
     btnAjout.addEventListener("click",() =>
     {
         page.empty();
-        console.log(page.objectList.length);
         if(select.value === "paragraphe")
         {
             page.addObject = new Paragraph(inputTexte.value);
