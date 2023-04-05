@@ -80,47 +80,61 @@ export function testJson()
 export function request(method, url) {
     return new Promise(function (resolve, reject) {
         const request = new XMLHttpRequest();
-        request.open(method, url);
-        request.onload = () => {
-            if (request.status >= 200 && request.status < 300) {
-                resolve(request.response);
-            } else {
+        try {
+            request.open(method, url);
+            request.onload = () => {
+                if (request.status >= 200 && request.status < 300) {
+                    resolve(request.response);
+                } else {
+                    reject({
+                        status: request.status,
+                        statusText: request.statusText
+                    });
+                }
+            }
+            request.onerror = () => {
                 reject({
                     status: request.status,
                     statusText: request.statusText
                 });
             }
-        }
-        request.onerror = () => {
+            request.send();
+        } catch (e) {
             reject({
                 status: request.status,
                 statusText: request.statusText
-            })
+            });
         }
-        request.send();
     })
 }
 
 export function requestText(method, url) {
     return new Promise(function (resolve, reject) {
         const request = new XMLHttpRequest();
-        request.open(method, url);
-        request.onload = () => {
-            if (request.status >= 200 && request.status < 300) {
-                resolve(request.responseText);
-            } else {
+        try {
+            request.open(method, url);
+            request.onload = () => {
+                if (request.status >= 200 && request.status < 300) {
+                    resolve(request.responseText);
+                } else {
+                    reject({
+                        status: request.status,
+                        statusText: request.statusText
+                    });
+                }
+            }
+            request.onerror = () => {
                 reject({
                     status: request.status,
                     statusText: request.statusText
                 });
             }
-        }
-        request.onerror = () => {
+            request.send();
+        } catch (e) {
             reject({
                 status: request.status,
                 statusText: request.statusText
-            })
+            });
         }
-        request.send();
     })
 }

@@ -18,14 +18,42 @@ async function loadPortfolio() {
         if (!response.connected) window.location.href = "../index.html";
 
         if (response.exist) {
-            showPortfolioHome();
+            await showPortfolioHome();
         } else {
-            // TODO: Popup to ask for user informations
+            showInfoPopup();
         }
     } catch (e) {
         window.location.href = "../index.html";
         console.log(e);
     }
+}
+
+function showInfoPopup() {
+    const popupContainer = document.getElementById("popup-container");
+    const form = popupContainer.querySelector("form");
+
+    popupContainer.style.display = "block";
+
+    form.onsubmit = async (e) => {
+        e.preventDefault();
+        await submitInformation();
+        popupContainer.style.display = "none";
+        await showPortfolioHome();
+    }
+}
+
+async function submitInformation() {
+    const titleField = document.getElementById("title-field");
+    const nameField = document.getElementById("name-field");
+    const surnameField = document.getElementById("surname-field");
+
+    if (titleField.value === "" || nameField.value === "" | surnameField.value === "") {
+        // TODO: Popup field not filled
+        return;
+    }
+
+    await request("GET", URL_BASE+"server/sendData.php?command=SEND_INFO&title="+titleField.value+"&name="+nameField.value+"&surname="+surnameField.value);
+    console.log(URL_BASE+"server/sendData.php?command=SEND_INFO&title="+titleField.value+"&name="+nameField.value+"&surname="+surnameField.value);
 }
 
 async function showPortfolioHome() {
@@ -37,11 +65,10 @@ async function showPortfolioHome() {
 
         document.getElementById("portfolio-preview").src = "../template.html";
 
+        iframe.onload = async () => {
+            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+            const user_info_json = JSON.parse(user_info);
 
-        const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
-        const user_info_json = JSON.parse(user_info);
-
-        iframe.onload = () => {
             const surname = user_info_json.info[0].surname;     //Get user's surname
             const name = user_info_json.info[0].name;           //Get user's name
             const mail = user_info_json.info[0].mail;           //Get user's mail
@@ -375,6 +402,8 @@ function toolsText()
 
 
 }
+
+
 
 
 /*

@@ -88,19 +88,33 @@ class Database
         return $stmt->fetch()[0];
     }
 
-    public function checkIfPortfolioExist($mail) {
+    public function checkIfPortfolioExist($mail): bool
+    {
         $stmt = $this->connection->prepare("SELECT * FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
-        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) == 0) return true;
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0) return true;
 
         $stmt = $this->connection->prepare("SELECT * FROM skill JOIN account a on a.mail = skill.mail = a.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
-        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) == 0) return true;
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0) return true;
 
         $stmt = $this->connection->prepare("SELECT * FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
-        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) == 0) return true;
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0) return true;
 
         return false;
+    }
+
+    public function setUserInfo($title, $name, $surname, $mail): void
+    {
+        $stmt = $this->connection->prepare("SELECT a.mail FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+        if (!sizeof($stmt->fetchAll(PDO::FETCH_ASSOC))) {
+            $stmt = $this->connection->prepare("INSERT INTO info(mail, content, homecontent, license, cv, name, surname) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$mail, "null", "null", "null", "null", $name, $surname]);
+        } else {
+            $stmt = $this->connection->prepare("UPDATE info SET name = ?, surname = ? WHERE mail = ?");
+            $stmt->execute([$name, $surname, $mail]);
+        }
     }
 }
