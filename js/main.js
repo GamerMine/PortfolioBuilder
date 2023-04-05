@@ -70,6 +70,8 @@ function createPortfolioPreviewElement(name, surname, mail, homeContent) {
     embed.scrolling = "no";
 
     embed.onload = () => {
+        embed.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+        embed.contentWindow.document.getElementById("mail").innerText = mail;
         jsonToHTML(homeContent, embed.contentWindow.document.getElementById("content"));
     }
 
