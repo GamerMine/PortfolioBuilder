@@ -59,10 +59,16 @@ switch ($requestedData) {
             $data = array("connected" => false);
             break;
         }
-        $data = array( "connected" => true, "info" => $db->getUserInfo($_SESSION["mail"]));
-        break;
+        if (!isset($_GET["mail"]))
+        {
+            $data = array( "connected" => true, "info" => $db->getUserInfo($_SESSION["mail"]));
+            break;
+        }
+        else
+        {
+            $data = array( "connected" => true, "info" => $db->getUserInfo($_GET["mail"]));
+        }
     }
-
 }
 
 $db->close();
