@@ -85,6 +85,7 @@ async function register() {
             document.getElementById("form").firstChild.after(warn);
         }
     } catch (e) {
+        console.log("uio");
         warn.innerText = "Une erreur serveur est survenu !\nVeuillez rééssayer plus tard !";
         document.getElementById("form").firstChild.after(warn);
     }
