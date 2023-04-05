@@ -6,41 +6,75 @@ form.addEventListener("submit", (e) => {
     register();
 });
 
-async function register() {
-    const request = new XMLHttpRequest();
-    let addressField = document.getElementById("mail");
-    const passField = document.getElementById("pass");
-    const verifPassField = document.getElementById("verifPass");
+const request = new XMLHttpRequest();
+let addressField = document.getElementById("mail");
+const passField    = document.getElementById("pass");
+const verifPassField = document.getElementById("verifPass");
 
-    if (document.getElementById("warn") != null) document.getElementById("warn").remove();
+
+addressField.addEventListener("input", () => {
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value)) {
+        addressField.style.backgroundColor = "rgba(234,89,89,0.45)";
+    } else {
+        addressField.style.backgroundColor = "rgba(108,234,89,0.45)";
+    }
+});
+
+passField.addEventListener("input", () => {
+    if (passField.value === "" || passField.value !== verifPassField.value) {
+        passField.style.backgroundColor = "rgba(234,89,89,0.45)";
+        verifPassField.style.backgroundColor = "rgba(234,89,89,0.45)";
+    } else {
+        passField.style.backgroundColor = "rgba(108,234,89,0.45)";
+    }
+});
+
+verifPassField.addEventListener("input",() => {
+    if (verifPassField.value === "" || passField.value !== verifPassField.value) {
+        verifPassField.style.backgroundColor = "rgba(234,89,89,0.45)";
+    } else {
+        verifPassField.style.backgroundColor = "rgba(108,234,89,0.45)";
+        passField.style.backgroundColor = "rgba(108,234,89,0.45)";
+    }
+})
+
+async function register() {
+
+    if(document.getElementById("warn") != null) document.getElementById("warn").remove();
 
     const warn = document.createElement("p");
     warn.classList.add("warn");
     warn.id = "warn";
 
     // Vérification du mail
-    if ((!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value))) {
+    if((!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(addressField.value)))
+    {
+        if(document.getElementById("warn") != null) document.getElementById("warn").remove();
         warn.innerText = "Le mail ne correspond pas";
         document.getElementById("form").firstChild.after(warn);
         return;
     }
 
     // Vérification du mot de passe non vide
-    if (passField.length === 0 || passField.value === " ") {
+    if(passField.length===0 || passField.value === " ")
+    {
+        if(document.getElementById("warn") != null) document.getElementById("warn").remove();
+
         warn.innerText = "Le mot de passe doit contenir au moins un caractère";
         document.getElementById("form").firstChild.after(warn);
         return;
     }
 
     // Vérification des deux mots de passes différents
-    if (passField.value !== passField.value) {
+    if(passField.value !== verifPassField.value) {
+        if(document.getElementById("warn") != null) document.getElementById("warn").remove();
         warn.innerText = "Les mots de passe ne correspondent pas !";
         document.getElementById("form").firstChild.after(warn);
         return;
     }
 
 
-    await request.open("POST", URL_BASE + "server/register.php?mail=" + addressField.value + "&pass=" + passField.value + "&verifPass=" + verifPassField.value, true);
+    await request.open("POST", URL_BASE+"server/register.php?mail="+addressField.value+"&pass="+passField.value+"&verifPass=" +verifPassField.value, true);
     await request.send();
 
     request.onreadystatechange = await function () {

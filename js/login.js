@@ -17,7 +17,7 @@ addressField.addEventListener("input", () => {
     }
 });
 
-passField;addEventListener("input", () => {
+passField.addEventListener("input", () => {
    if (passField.value === "") {
        passField.style.backgroundColor = "rgba(234,89,89,0.45)";
    } else {
