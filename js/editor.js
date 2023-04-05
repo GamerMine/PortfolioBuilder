@@ -1,5 +1,12 @@
 import {URL_BASE} from "./constants.js";
+import {HTMLPage} from "./elements/htmlPage.js";
 import {jsonToHTML, request} from "./elements/utils.js";
+import {Paragraph} from "./elements/paragraph.js";
+import {Title} from "./elements/title.js";
+import {Picture} from "./elements/image.js";
+
+let page = new HTMLPage();
+const iframe = document.getElementById("portfolio-preview");
 
 loadPortfolio()
 
@@ -23,7 +30,7 @@ async function loadPortfolio() {
 }
 
 async function showPortfolioHome() {
-    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+    const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
     try {
         const response = JSON.parse(resp);
 
@@ -31,13 +38,22 @@ async function showPortfolioHome() {
 
         document.getElementById("portfolio-preview").src = "../template.html";
 
-        const iframe = document.getElementById("portfolio-preview");
+        const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+        const user_info_json = JSON.parse(user_info);
 
-        console.log(response.content);
         iframe.onload = () => {
+            const surname = user_info_json.info[0].surname;     //Get user's surname
+            const name = user_info_json.info[0].name;           //Get user's name
+            const mail = user_info_json.info[0].mail;           //Get user's mail
+
+            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
             jsonToHTML(response.content, iframe.contentWindow.document.getElementById("content"));
         }
-    } catch (e) {}
+    } catch (e) {
+        console.log(e)
+    }
 }
 
 /*
@@ -245,22 +261,22 @@ lblType.innerText = "Sélectionner un élément à ajouter :";
 select.setAttribute("name", "text");
 select.setAttribute("id", "text-select");
 
-titre.setAttribute("value", "titre");
+titre.setAttribute("value", "1");
 titre.innerHTML = "Titre";
 
-titre1.setAttribute("value", "titre1");
+titre1.setAttribute("value", "2");
 titre1.innerHTML = "Titre 1";
 
-titre2.setAttribute("value", "titre2");
+titre2.setAttribute("value", "3");
 titre2.innerHTML = "Titre 2";
 
-titre3.setAttribute("value", "titre3");
+titre3.setAttribute("value", "4");
 titre3.innerHTML = "Titre 3";
 
-titre4.setAttribute("value", "titre4");
+titre4.setAttribute("value", "5");
 titre4.innerHTML = "Titre 4";
 
-titre5.setAttribute("value", "titre5");
+titre5.setAttribute("value", "6");
 titre5.innerHTML = "Titre 5";
 
 paragraphe.setAttribute("value", "paragraphe");
@@ -299,7 +315,7 @@ function toolsText()
     while (divBottom.firstChild)
     {
         divBottom.removeChild(divBottom.firstChild);
-    }
+    }   
 
     select.appendChild(titre);
     select.appendChild(titre1);
@@ -318,10 +334,23 @@ function toolsText()
     divBottom.appendChild(btnRetour);
 
     btnRetour.addEventListener("click", modifTools, false);
-
-
+    btnAjout.addEventListener("click",() =>
+    {
+        page.empty();
+        if(select.value === "paragraphe")
+        {
+            page.addObject = new Paragraph(inputTexte.value);
+            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+            inputTexte.value="";
+        }
+        else
+        {
+            page.addObject = new Title(inputTexte.value,select.value);
+            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+            inputTexte.value="";
+        }
+    },false);
 }
-
 
 /*
 <label for="image">Choissisez une image :</label>
@@ -347,7 +376,7 @@ function toolsImage()
     while (divBottom.firstChild)
     {
         divBottom.removeChild(divBottom.firstChild);
-    }
+    }   
 
     let lblImage   = document.createElement("div");
     let inputImage = document.createElement("input");
@@ -397,12 +426,35 @@ function toolsImage()
     btnAjouter.setAttribute("id", "btn-add");
     btnAjouter.setAttribute("type", "button");
     btnAjouter.textContent = "Ajouter";
-
+    
 
     divBottom.appendChild(btnAjouter);
     divBottom.appendChild(btnRetour);
 
     btnRetour.addEventListener("click", modifTools, false);
+    btnAjouter.addEventListener("click", async () => {
+        page.empty();
+
+        var fd = new FormData();
+        fd.append("img", inputImage.value);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'saveFile.php', true);
+        xhr.send(fd);
+
+        xhr.onload = function() {
+            if (this.status == 200) {
+                var resp = JSON.parse(this.response);
+
+                console.log('Server got:', resp);
+
+                var image = document.createElement('img');
+                image.src = resp.dataUrl;
+                document.body.appendChild(image);
+            }
+            ;
+        }
+    }, false);
 
 
 }
@@ -422,7 +474,7 @@ function toolsLien()
     while (divBottom.firstChild)
     {
         divBottom.removeChild(divBottom.firstChild);
-    }
+    }   
 
 
 
@@ -445,7 +497,7 @@ function toolsCV()
     while (divBottom.firstChild)
     {
         divBottom.removeChild(divBottom.firstChild);
-    }
+    }   
 
 
 

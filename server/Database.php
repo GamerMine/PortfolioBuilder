@@ -71,6 +71,14 @@ class Database
         return $stmt->fetch();
     }
 
+    public function getUserInfo($mail) : array
+    {
+        $stmt = $this->connection->prepare("SELECT name, surname, mail  FROM info WHERE mail=?");
+        $stmt->execute([$mail]);
+
+        return $stmt->fetchAll();
+    }
+
     public function getHomeContent($mail)
     {
         $stmt = $this->connection->prepare("SELECT homecontent FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");

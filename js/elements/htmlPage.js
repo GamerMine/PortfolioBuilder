@@ -10,6 +10,14 @@ export class HTMLPage{
 
     removeObject(object)
     {
-        this.objectList.splice(this.objectList.length,1);
+        {
+            this.objectList.splice(this.objectList.length,1);
+            this.objectList.splice(this.objectList.length,1);
+        }
+    }
+
+    empty()
+    {
+        this.objectList = [];
     }
 }
