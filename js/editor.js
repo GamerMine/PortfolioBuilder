@@ -171,10 +171,24 @@ function toolsBase()
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
 
-    btnProject.addEventListener("click", () => 
+    btnHome.addEventListener("click", () =>
+    {
+        document.getElementById("portfolio-preview").src = "../template.html";
+    });
+    btnProject.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateProject.html";
-    }, false);
+    });
+
+    btnSkill.addEventListener("click", () =>
+    {
+        document.getElementById("portfolio-preview").src = "../templateSkill.html";
+    });
+
+    btnApropos.addEventListener("click", () =>
+    {
+        document.getElementById("portfolio-preview").src = "../templateAPropos.html";
+    });
 }
 
 /*
@@ -371,9 +385,9 @@ function toolsText()
     divSelect.appendChild(inputTexte);
 
     divBottom.appendChild(btnAjout);
-    divBottom.appendChild(btnRetour);
+    divBottom.appendChild(btnRetour2);
 
-    btnRetour.addEventListener("click", modifTools, false);
+    btnRetour2.addEventListener("click", modifTools, false);
     btnAjout.addEventListener("click",() =>
     {
         page.empty();
@@ -567,7 +581,7 @@ function toolsLien()
     console.log("avant la fonction");
 
     let text = "";
-    selectElement.addEventListener('change', (event) => 
+    selectElement.addEventListener('change', (event) =>
     {
         console.log("dans la fonction");
 
