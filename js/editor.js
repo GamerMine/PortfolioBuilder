@@ -152,6 +152,11 @@ document.getElementById("img-tools").onclick = toolsBase;
 
 function toolsBase()
 {
+    const cursor = document.getElementById("cursor");
+
+    cursor.style.left = "33px";
+    cursor.style.right = "";
+
     let divSelect  = document.getElementById("btnselect");
     let divBottom  = document.getElementById("bottom");
 
@@ -526,6 +531,15 @@ optInternet.innerHTML = "Internet";
 optPortfolio.setAttribute("value", "portfolio");
 optPortfolio.innerHTML = "Portfolio";
 
+
+let inputTexteLien = document.createElement("textarea");
+
+inputTexteLien.setAttribute("id", "text-link");
+inputTexteLien.setAttribute("name", "text-link");
+inputTexteLien.setAttribute("rows", "10");
+inputTexteLien.setAttribute("style", "resize: none;");
+
+
 // input si Internet --------------------
 let inputInternet = document.createElement("input");
 
@@ -594,13 +608,12 @@ function toolsLien()
 
     const selectElement = document.getElementById("choose-link");
 
-    console.log("avant la fonction");
-
     let text = "";
     selectElement.addEventListener('change', async (event) =>
     {
-        console.log("dans la fonction");
 
+        divSelect.appendChild(lblLien);
+        divSelect.appendChild(selectLien);
         divSelect.appendChild(divChoose);
     
         while(divChoose.firstChild)
@@ -609,8 +622,17 @@ function toolsLien()
         }
 
         selectPortfolio.querySelectorAll("option").forEach(o => o.remove());
-      
+
         selectPortfolio.appendChild(value);
+        selectPortfolio.appendChild(comp1);
+        selectPortfolio.appendChild(comp2);
+        selectPortfolio.appendChild(proj1);
+        selectPortfolio.appendChild(proj2);
+        selectPortfolio.appendChild(proj3);
+
+        divSelect.appendChild(lblTexte);
+        divSelect.appendChild(inputTexteLien);
+
         const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
 
         try {
@@ -644,13 +666,19 @@ function toolsLien()
         {
             divChoose.appendChild(selectPortfolio);
         }
-
-        divSelect.appendChild(lblTexte);
-        divSelect.appendChild(inputTexte);
-    
+        else if (text === "")
+        {
+            while (divSelect.firstChild)
+            {
+                divSelect.removeChild(divSelect.firstChild);
+            }
+            divSelect.appendChild(lblLien);
+            divSelect.appendChild(selectLien);
+        }
     });
 
-  
+
+
     divBottom.appendChild(btnAjout);
     divBottom.appendChild(btnRetour2);
 

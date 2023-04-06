@@ -1,23 +1,24 @@
-html{
+html {
 	height: 100%;
 }
+
 /*----------*/
 /*---BODY---*/
 /*----------*/
-body{
+body {
 	margin: 0;
 	min-height: 100vh;
-	font-family:Arial, Helvetica, sans-serif;
-	background-color:whitesmoke;
-    display:flex;
-    flex-direction: column;
-    justify-content: space-between;
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: whitesmoke;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 /*----------*/
 /*--FOOTER--*/
 /*----------*/
-footer{
+footer {
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
@@ -26,15 +27,15 @@ footer{
 	width: 100%;
 }
 
-footer p{
-    
+footer p {
+
 	margin: 0;
 	display: flex;
 	align-items: center;
 	gap: 10px
 }
 
-footer ul{
+footer ul {
 	list-style: none;
 	display: flex;
 	gap: 20px;
@@ -44,46 +45,70 @@ footer ul{
 /*----EDITOR----*/
 /*--------------*/
 
-.separator{
-    flex: 1;
-    min-width: 100%;
+.separator {
+	flex: 1;
+	min-width: 100%;
 	display: flex;
 }
 
-.contenu{
+.contenu {
 	width: 100%;
-	/* height: 100%; */
+	position: relative;
 }
 
-.tools{
-	border: solid black 1px;
+.tools {
+	border: solid gray 3px;
+	border-bottom: none;
 	background-color: rgb(189, 193, 194);
-	width: 250px;
-	/* height: 91vh; */
-
+	min-width: 250px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding-bottom: 20px;
+	transition: all 1s;
 }
-.top{
+
+.tools * {
+	transition: all 1s;
+}
+
+.top {
+	position: relative;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
+	border-bottom: solid gray 2px;
+	padding-bottom: 10px;
+}
+
+#cursor {
+	background-color: white;
+	position: absolute;
+	bottom: 0;
+	border: solid gray 3px;
+	border-radius: .5em;
+	width: 55px;
+	height: 5px;
 
 }
-#btnselect div{
+
+#btnselect div {
 	text-align: center;
 }
-#btnselect{
+
+#btnselect {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 20px;
 	padding: 10% 10%;
 
 }
-#bottom{
+
+#bottom {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
 	position: relative;
-	top: 30%;
 
 }
 
@@ -91,23 +116,26 @@ footer ul{
 	overflow: scroll;
 	height: 100%;
 }
-#img-tools, #img-settings{
-	padding-top: 5px;
+
+#img-settings {
 	width: 35px;
 }
-#img-tools{
+
+#img-tools {
 	width: 55px;
 }
-.divImage{
+
+.divImage {
 	padding-top: 20px;
 }
-.lblImage{
+
+.lblImage {
 	padding-bottom: 10px;
 }
 
 
 #portfolio-preview {
-    width: 100%;
+	width: 100%;
 	height: 100%;
 	border: none;
 }
@@ -121,7 +149,7 @@ footer ul{
 	display: none;
 	width: 100vw;
 	height: 100vh;
-	background-color: rgba(74,73,75,0.72);
+	background-color: rgba(74, 73, 75, 0.72);
 	z-index: 50;
 }
 
@@ -177,18 +205,18 @@ footer ul{
 /*----------*/
 /*--BUTTON--*/
 /*----------*/
-button{
+button {
 	font-family: inherit;
 	font-weight: bold;
 	padding: 0.8em;
 	transition: .2s;
 }
 
-button:hover{
+button:hover {
 	cursor: pointer;
 }
 
-.button{
+.button {
 	background-color: blueviolet;
 	color: white;
 	border: solid blueviolet 1px;
@@ -196,6 +224,95 @@ button:hover{
 	padding: 10px 20px;
 }
 
-.button:hover{
+.button:hover {
 	background-color: rgb(98, 27, 165);
+}
+
+/*----------*/
+/*-BTNTOOLS-*/
+/*----------*/
+
+#cb-reduce{
+	display: none;
+}
+
+#trapeze {
+	position: absolute;
+	right: 0;
+	top: 40%;
+	width: 50px;
+	height: 50px;
+	border: 3px solid gray;
+	border-color: transparent gray transparent transparent;
+	border-width: 20px;
+	display: none;
+	align-items: center;
+}
+
+#btn-reduce{
+	position: absolute;
+	right: -22px;
+	display: flex;
+	flex-direction: column;
+	gap: 7px;
+	cursor: pointer;
+}
+
+#btn-reduce div{
+	background-color: black;
+	width: 20px;
+	height: 5px;
+	transition: .2s;
+}
+
+#c-top{
+	rotate: 45deg;
+}
+#c-bottom{
+	rotate: -45deg;
+}
+
+
+
+/*----------*/
+/*MEDIAQUERY*/
+/*----------*/
+@media (max-width: 600px) {
+
+	footer ul {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px
+	}
+
+	footer p {
+		flex-direction: column;
+		gap: 2px;
+	}
+}
+
+@media (max-width: 800px) {
+
+	#trapeze{
+		display: flex;
+	}
+
+	#cb-reduce:checked + section div label #c-top{
+		rotate: -45deg;
+	}
+
+	#cb-reduce:checked + section div label #c-bottom{
+		rotate: 45deg;
+	}
+
+	#cb-reduce:checked + section + section.tools{
+		min-width: 0px;
+		width: 0px;
+	}
+
+	#cb-reduce:checked + section + section.tools *{
+		display: none;
+	}
+
+
 }

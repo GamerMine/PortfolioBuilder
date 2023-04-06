@@ -88,3 +88,11 @@ export async function disconnect() {
 
     window.location.href = "index.html";
 }
+
+
+document.getElementById("img-footer").onclick = showRights;
+
+
+function showRights(){
+    window.location.href = URL_BASE + "rights.html";
+}
