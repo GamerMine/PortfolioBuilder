@@ -95,6 +95,29 @@ main{
 }
 
 /*----------*/
+/*---LIST---*/
+/*----------*/
+.list{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 200px));
+    gap: 10px;
+    justify-content: center;
+}
+
+.list button{
+    border-radius: 0.6em;
+    transform: .3s;
+    height: 100px;
+}
+
+.list button:hover{
+    cursor: pointer;
+    filter: brightness(75%);
+}
+
+
+
+/*----------*/
 /*MEDIAQUERY*/
 /*----------*/
 @media (max-width: 900px){
@@ -134,6 +157,10 @@ main{
 	header ul.nav li a{
 		width: 100%;
 	}
+
+    .list{
+        grid-template-columns: repeat(auto-fit, minmax(0px, 200px));
+    }
 
 	footer p{
 		flex-direction: column;
