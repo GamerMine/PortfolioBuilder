@@ -132,3 +132,34 @@ export function requestText(method, url) {
         }
     })
 }
+
+export function sendFile(url, formData) {
+    return new Promise(function (resolve, reject) {
+        const request = new XMLHttpRequest();
+        try {
+            request.open("POST", url);
+            request.onload = () => {
+                if (request.status >= 200 && request.status < 300) {
+                    resolve(request.response);
+                } else {
+                    reject({
+                        status: request.status,
+                        statusText: request.statusText
+                    });
+                }
+            }
+            request.onerror = () => {
+                reject({
+                    status: request.status,
+                    statusText: request.statusText
+                });
+            }
+            request.send(formData);
+        } catch (e) {
+            reject({
+                status: request.status,
+                statusText: request.statusText
+            });
+        }
+    })
+}

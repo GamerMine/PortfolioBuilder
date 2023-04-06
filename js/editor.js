@@ -1,6 +1,6 @@
 import {URL_BASE} from "./constants.js";
 import {HTMLPage} from "./elements/htmlPage.js";
-import {jsonToHTML, request} from "./elements/utils.js";
+import {jsonToHTML, request, sendFile} from "./elements/utils.js";
 import {Paragraph} from "./elements/paragraph.js";
 import {Title} from "./elements/title.js";
 
@@ -171,8 +171,8 @@ function toolsBase()
 
     btnProject.addEventListener("click", () => 
     {
-        document.getElementById("portfolio-preview").src = "../templateProject.html", false;
-    });
+        document.getElementById("portfolio-preview").src = "../templateProject.html";
+    }, false);
 }
 
 /*
@@ -644,12 +644,19 @@ function toolsCV()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
+    btnAjout.addEventListener("click", async () => {
          const formData = new FormData();
          formData.append("file", document.getElementById("choose-cv").files[0]);
 
-         const request = new XMLHttpRequest();
-         request.open("POST", URL_BASE+"server/sendData.php?command=SAVE_FILE");
-         request.send(formData);
+         const resp = await sendFile(URL_BASE+"server/sendData.php?command=SAVE_FILE", formData);
+
+         try {
+             const response = JSON.parse(resp);
+             if (!response.connected) window.location.href = "index.html";
+
+             console.log(URL_BASE+"server/"+response.link);
+         } catch (e) {
+             console.log(e);
+         }
     },false);
 }
