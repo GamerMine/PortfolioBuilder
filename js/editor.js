@@ -538,6 +538,15 @@ optInternet.innerHTML = "Internet";
 optPortfolio.setAttribute("value", "portfolio");
 optPortfolio.innerHTML = "Portfolio";
 
+
+let inputTexteLien = document.createElement("textarea");
+
+inputTexteLien.setAttribute("id", "text-link");
+inputTexteLien.setAttribute("name", "text-link");
+inputTexteLien.setAttribute("rows", "10");
+inputTexteLien.setAttribute("style", "resize: none;");
+
+
 // input si Internet --------------------
 let inputInternet = document.createElement("input");
 
@@ -613,6 +622,8 @@ function toolsLien()
     {
         console.log("dans la fonction");
 
+        divSelect.appendChild(lblLien);
+        divSelect.appendChild(selectLien);
         divSelect.appendChild(divChoose);
     
         while(divChoose.firstChild)
@@ -626,6 +637,9 @@ function toolsLien()
         selectPortfolio.appendChild(proj1);
         selectPortfolio.appendChild(proj2);
         selectPortfolio.appendChild(proj3);
+
+        divSelect.appendChild(lblTexte);
+        divSelect.appendChild(inputTexteLien);
         
         text = selectElement.options[selectElement.selectedIndex].text;
         
@@ -637,12 +651,21 @@ function toolsLien()
         {
             divChoose.appendChild(selectPortfolio);
         }
+        else if (text === "")
+        {
+            while (divSelect.firstChild)
+            {
+                divSelect.removeChild(divSelect.firstChild);
+            }
+            divSelect.appendChild(lblLien);
+            divSelect.appendChild(selectLien);
+        }
 
-        divSelect.appendChild(lblTexte);
-        divSelect.appendChild(inputTexte);
+     
     
     });
 
+    
   
     divBottom.appendChild(btnAjout);
     divBottom.appendChild(btnRetour2);
