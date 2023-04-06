@@ -168,6 +168,11 @@ function toolsBase()
 
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
+
+    btnProject.addEventListener("click", () => 
+    {
+        document.getElementById("portfolio-preview").src = "../templateProject.html", false;
+    });
 }
 
 /*
@@ -402,6 +407,38 @@ function toolsText()
 
 }
 
+
+
+let lbl   = document.createElement("div");
+let inputImage = document.createElement("input");
+
+lbl.setAttribute("class", "lbl")
+lbl.textContent = "Choissisez une image :";
+
+inputImage.setAttribute("type", "file");
+inputImage.setAttribute("id", "choose_img");
+inputImage.setAttribute("name", "choose_img");
+inputImage.setAttribute("accept", "image/png, image/jpeg");
+
+
+let lblAlt     = document.createElement("div");
+let inputAlt   = document.createElement("input");
+
+lblAlt.setAttribute("class", "lbl")
+lblAlt.textContent   = "Texte alternatif :";
+
+inputAlt.setAttribute("type", "text");
+inputAlt.setAttribute("id", "alt");
+inputAlt.setAttribute("name", "alt");
+
+
+let div1 = document.createElement("div");
+let div2 = document.createElement("div");
+
+div1.setAttribute("class", "divImage");
+div2.setAttribute("class", "divImage");
+
+
 function toolsImage()
 {
     let divSelect  = document.getElementById("btnselect");
@@ -429,11 +466,7 @@ function toolsImage()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
-
-    }, false)
 }
-
 
 
 
