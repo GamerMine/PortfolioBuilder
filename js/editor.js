@@ -681,10 +681,6 @@ function toolsLien()
             divSelect.appendChild(lblLien);
             divSelect.appendChild(selectLien);
         }
-
-        divSelect.appendChild(lblTexte);
-        divSelect.appendChild(inputTexte);
-    
     });
 
 
