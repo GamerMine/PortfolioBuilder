@@ -169,9 +169,23 @@ function toolsBase()
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
 
+    btnHome.addEventListener("click", () => 
+    {
+        document.getElementById("portfolio-preview").src = "../template.html";
+    });
     btnProject.addEventListener("click", () => 
     {
-        document.getElementById("portfolio-preview").src = "../templateProject.html", false;
+        document.getElementById("portfolio-preview").src = "../templateProject.html";
+    });
+
+    btnSkill.addEventListener("click", () => 
+    {
+        document.getElementById("portfolio-preview").src = "../templateSkill.html";
+    });
+
+    btnApropos.addEventListener("click", () => 
+    {
+        document.getElementById("portfolio-preview").src = "../templateAPropos.html";
     });
 }
 
@@ -369,9 +383,9 @@ function toolsText()
     divSelect.appendChild(inputTexte);
 
     divBottom.appendChild(btnAjout);
-    divBottom.appendChild(btnRetour);
+    divBottom.appendChild(btnRetour2);
 
-    btnRetour.addEventListener("click", modifTools, false);
+    btnRetour2.addEventListener("click", modifTools, false);
     btnAjout.addEventListener("click",() =>
     {
         page.empty();
