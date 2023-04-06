@@ -1,8 +1,11 @@
 import {URL_BASE} from "./constants.js";
 import {HTMLPage} from "./elements/htmlPage.js";
-import {jsonToHTML, request} from "./elements/utils.js";
+import {jsonToHTML, request, sendFile} from "./elements/utils.js";
 import {Paragraph} from "./elements/paragraph.js";
 import {Title} from "./elements/title.js";
+import {Link} from "./elements/link.js";
+import {PDFView} from "./elements/pdfView.js";
+import {Picture} from "./elements/image.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
@@ -173,6 +176,25 @@ function toolsBase()
 
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
+
+    btnHome.addEventListener("click", () =>
+    {
+        document.getElementById("portfolio-preview").src = "../template.html";
+    });
+    btnProject.addEventListener("click", () =>
+    {
+        document.getElementById("portfolio-preview").src = "../templateProject.html";
+    });
+
+    btnSkill.addEventListener("click", () =>
+    {
+        document.getElementById("portfolio-preview").src = "../templateSkill.html";
+    });
+
+    btnApropos.addEventListener("click", () =>
+    {
+        document.getElementById("portfolio-preview").src = "../templateAPropos.html";
+    });
 }
 
 /*
@@ -340,8 +362,7 @@ btnRetour2.setAttribute("type", "button");
 btnRetour2.innerHTML = "Retour";
 
 
-function toolsText()
-{
+function toolsText() {
     let divSelect  = document.getElementById("btnselect");
     let divBottom  = document.getElementById("bottom");
 
@@ -369,9 +390,9 @@ function toolsText()
     divSelect.appendChild(inputTexte);
 
     divBottom.appendChild(btnAjout);
-    divBottom.appendChild(btnRetour);
+    divBottom.appendChild(btnRetour2);
 
-    btnRetour.addEventListener("click", modifTools, false);
+    btnRetour2.addEventListener("click", modifTools, false);
     btnAjout.addEventListener("click",() =>
     {
         page.empty();
@@ -406,6 +427,38 @@ function toolsText()
 
 
 }
+
+
+
+let lbl   = document.createElement("div");
+let inputImage = document.createElement("input");
+
+lbl.setAttribute("class", "lbl")
+lbl.textContent = "Choissisez une image :";
+
+inputImage.setAttribute("type", "file");
+inputImage.setAttribute("id", "choose_img");
+inputImage.setAttribute("name", "choose_img");
+inputImage.setAttribute("accept", "image/png, image/jpeg");
+
+
+let lblAlt     = document.createElement("div");
+let inputAlt   = document.createElement("input");
+
+lblAlt.setAttribute("class", "lbl")
+lblAlt.textContent   = "Texte alternatif :";
+
+inputAlt.setAttribute("type", "text");
+inputAlt.setAttribute("id", "alt");
+inputAlt.setAttribute("name", "alt");
+
+
+let div1 = document.createElement("div");
+let div2 = document.createElement("div");
+
+div1.setAttribute("class", "divImage");
+div2.setAttribute("class", "divImage");
+
 
 function toolsImage()
 {
@@ -434,11 +487,34 @@ function toolsImage()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
+    btnAjout.addEventListener("click", async ()=>{
+        if(!inputImage.value=="") {
+            const formData = new FormData();
+            formData.append("file", document.getElementById("choose_img").files[0]);
 
-    }, false)
+            const resp = await sendFile(URL_BASE + "server/sendData.php?command=SAVE_FILE", formData);
+
+            try {
+                console.log(resp);
+                const response = JSON.parse(resp);
+                if (!response.connected) window.location.href = "index.html";
+
+                page.empty();
+                page.addObject = new Picture(URL_BASE + "server/" + response.link, inputAlt.value);
+                console.log(URL_BASE + "server/" + response.link);
+                jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+                inputImage.value = "";
+                inputAlt.value = "";
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        else
+        {
+            console.warn("No file selected"); //TODO : an error message box
+        }
+    }, false);
 }
-
 
 
 
@@ -465,6 +541,15 @@ optInternet.innerHTML = "Internet";
 
 optPortfolio.setAttribute("value", "portfolio");
 optPortfolio.innerHTML = "Portfolio";
+
+
+let inputTexteLien = document.createElement("textarea");
+
+inputTexteLien.setAttribute("id", "text-link");
+inputTexteLien.setAttribute("name", "text-link");
+inputTexteLien.setAttribute("rows", "10");
+inputTexteLien.setAttribute("style", "resize: none;");
+
 
 // input si Internet --------------------
 let inputInternet = document.createElement("input");
@@ -534,27 +619,55 @@ function toolsLien()
 
     const selectElement = document.getElementById("choose-link");
 
-    console.log("avant la fonction");
-
-    selectElement.addEventListener('change', (event) => 
+    let text = "";
+    selectElement.addEventListener('change', async (event) =>
     {
-        console.log("dans la fonction");
 
+        divSelect.appendChild(lblLien);
+        divSelect.appendChild(selectLien);
         divSelect.appendChild(divChoose);
     
         while(divChoose.firstChild)
         {
             divChoose.removeChild(divChoose.firstChild);
         }
-      
+
+        selectPortfolio.querySelectorAll("option").forEach(o => o.remove());
+
         selectPortfolio.appendChild(value);
         selectPortfolio.appendChild(comp1);
         selectPortfolio.appendChild(comp2);
         selectPortfolio.appendChild(proj1);
         selectPortfolio.appendChild(proj2);
         selectPortfolio.appendChild(proj3);
-        
-        let text = selectElement.options[selectElement.selectedIndex].text;
+
+        divSelect.appendChild(lblTexte);
+        divSelect.appendChild(inputTexteLien);
+
+        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+
+        try {
+            const response = JSON.parse(resp);
+
+            if (!response.connected) window.location.href = "index.html";
+
+            for (const sk of response.skill) {
+                const option = document.createElement("option");
+                option.value = "Projet-"+sk[0];
+                option.innerText = "Projet-"+sk.id;
+                selectPortfolio.appendChild(option);
+            }
+            for (const pr of response.project) {
+                const option = document.createElement("option");
+                option.value = "Projet-"+pr[0];
+                option.innerText = "Projet-"+pr.id;
+                selectPortfolio.appendChild(option);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+        text = selectElement.options[selectElement.selectedIndex].text;
         
         if (text === "Internet")
         {
@@ -564,17 +677,37 @@ function toolsLien()
         {
             divChoose.appendChild(selectPortfolio);
         }
-
-        divSelect.appendChild(lblTexte);
-        divSelect.appendChild(inputTexte);
-    
+        else if (text === "")
+        {
+            while (divSelect.firstChild)
+            {
+                divSelect.removeChild(divSelect.firstChild);
+            }
+            divSelect.appendChild(lblLien);
+            divSelect.appendChild(selectLien);
+        }
     });
 
-  
+
+
     divBottom.appendChild(btnAjout);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
+    btnAjout.addEventListener("click",() => {
+        page.empty();
+        if (text ==="Internet")
+        {
+            page.addObject = new Link(inputTexte.value,inputInternet.value);
+            jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+            inputInternet.value="";
+            inputTexte.value="";
+        }
+        else if (text ==="Portfolio")
+        {
+            //TODO LIEN PORTFOLIO
+        }
+    }, false)
 }
 
 let lblCV = document.createElement("div");
@@ -616,12 +749,31 @@ function toolsCV()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
-         const formData = new FormData();
-         formData.append("file", document.getElementById("choose-cv").files[0]);
+    btnAjout.addEventListener("click", async () => {
+        if(!inputCV.value=="")
+        {
+            const formData = new FormData();
+            formData.append("file", document.getElementById("choose-cv").files[0]);
 
-         const request = new XMLHttpRequest();
-         request.open("POST", URL_BASE+"server/sendData.php?command=SAVE_FILE");
-         request.send(formData);
+            const resp = await sendFile(URL_BASE+"server/sendData.php?command=SAVE_FILE", formData);
+
+            try {
+                console.log(resp);
+                const response = JSON.parse(resp);
+                if (!response.connected) window.location.href = "index.html";
+
+                page.empty();
+                page.addObject = new PDFView(URL_BASE+"server/"+response.link);
+                console.log(URL_BASE+"server/"+response.link);
+                jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+                inputCV.value="";
+            } catch (e) {
+                console.log(e);
+            }
+        }
+         else
+        {
+            console.warn("No file selected"); //TODO: an error message popup
+        }
     },false);
 }

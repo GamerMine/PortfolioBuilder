@@ -62,6 +62,16 @@ switch ($requestedData) {
             $data = array( "connected" => isset($_SESSION["mail"]), "info" => $db->getUserInfo($_GET["mail"]));
         }
     }
+    case "GET_PAGE_LIST": {
+        if (!isset($_SESSION["mail"])) {
+            $data = array("connected" => false);
+            break;
+        }
+        $data = array("connected" => true);
+
+        $data["skill"] = $db->getSkillPagesList($_SESSION["mail"]);
+        $data["project"] = $db->getProjectPagesList($_SESSION["mail"]);
+    }
 }
 
 $db->close();

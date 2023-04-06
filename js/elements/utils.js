@@ -15,8 +15,11 @@ export function jsonToHTML(json_content, container) {
             case 'a' :
                 let node_link = document.createElement(object.identifier);
                 node_link.setAttribute("href", object.link);
+                node_link.setAttribute("target","_blank");
+                node_link.setAttribute("rel","noreferrer noopener");
                 node_link.textContent = object.text;
                 container.appendChild(node_link);
+                container.appendChild(document.createElement("br"));
                 break;
             case 'p' :
                 let node_paragraph = document.createElement(object.identifier);
@@ -33,18 +36,22 @@ export function jsonToHTML(json_content, container) {
                 node_img.setAttribute("src", object.imgLink);
                 node_img.setAttribute("alt", object.alt);
                 container.appendChild(node_img);
+                container.appendChild(document.createElement("br"));
                 break;
             case 'button' :
                 let node_button = document.createElement(object.identifier);
                 node_button.textContent = object.text;
                 container.appendChild(node_button);
+                container.appendChild(document.createElement("br"));
                 break;
             case 'pdfView' :
                 let node_pdf = document.createElement("iframe");
                 node_pdf.setAttribute("src",object.pdfLink);
+                console.log(object.pdfLink);
                 node_pdf.setAttribute("height","1000vh");
                 node_pdf.setAttribute("width","100%");
                 container.appendChild(node_pdf);
+                container.appendChild(document.createElement("br"));
                 break;
         }
     }
@@ -124,6 +131,37 @@ export function requestText(method, url) {
                 });
             }
             request.send();
+        } catch (e) {
+            reject({
+                status: request.status,
+                statusText: request.statusText
+            });
+        }
+    })
+}
+
+export function sendFile(url, formData) {
+    return new Promise(function (resolve, reject) {
+        const request = new XMLHttpRequest();
+        try {
+            request.open("POST", url);
+            request.onload = () => {
+                if (request.status >= 200 && request.status < 300) {
+                    resolve(request.response);
+                } else {
+                    reject({
+                        status: request.status,
+                        statusText: request.statusText
+                    });
+                }
+            }
+            request.onerror = () => {
+                reject({
+                    status: request.status,
+                    statusText: request.statusText
+                });
+            }
+            request.send(formData);
         } catch (e) {
             reject({
                 status: request.status,
