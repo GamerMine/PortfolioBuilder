@@ -118,8 +118,10 @@ async function showPortfolioProjectList() {
             for (const project of response.project) {
                 const btn = document.createElement("button");
                 btn.innerText = "Projet "+project.id;
-                btn.onclick = () => {
-                    getPageContent("Projet-"+project.id);
+                btn.onclick = async () => {
+                    const content = await getPageContent("Projet-"+project.id);
+                    console.log(content);
+                    loadPage(content);
                 };
                 iframe.contentWindow.document.getElementById("content").appendChild(btn);
             }
@@ -128,6 +130,26 @@ async function showPortfolioProjectList() {
 
     } catch (e) {
 
+    }
+}
+
+function loadPage(content) {
+    document.getElementById("portfolio-preview").src = "../template.html"
+    iframe.onload = async () => {
+        const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+        const user_info_json = JSON.parse(user_info);
+
+        const surname = user_info_json.info[0].surname;     //Get user's surname
+        const name = user_info_json.info[0].name;           //Get user's name
+        const mail = user_info_json.info[0].mail;           //Get user's mail
+
+        iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+        iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
+        page.empty();
+        jsonToPage(content, page);
+        pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
+        iframe.onload = () => {};
     }
 }
 
@@ -658,11 +680,6 @@ function toolsLien()
         selectPortfolio.querySelectorAll("option").forEach(o => o.remove());
 
         selectPortfolio.appendChild(value);
-        selectPortfolio.appendChild(comp1);
-        selectPortfolio.appendChild(comp2);
-        selectPortfolio.appendChild(proj1);
-        selectPortfolio.appendChild(proj2);
-        selectPortfolio.appendChild(proj3);
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(inputTexteLien);

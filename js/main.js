@@ -97,7 +97,7 @@ export async function getPageContent(name) {
 
         if (!response.connected) window.location.href = "index.html";
 
-
+        return response.content;
 
     } catch (e) {
 
