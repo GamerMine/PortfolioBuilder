@@ -6,11 +6,44 @@ import {Picture} from "./image.js";
 import {Button} from "./button.js";
 import {PDFView} from "./pdfView.js";
 
-export function jsonToHTML(json_content, container) {
+export function jsonToPage(json_content, container) {
 
     const parse_json = JSON.parse(json_content).objectList;
 
     for (const object of parse_json) {
+        switch (object.identifier) {
+            case 'a' :
+                let link = new Link(object.text,object.link);
+                container.addObject = link;
+                break;
+            case 'p' :
+                let para = new Paragraph(object.text);
+                container.addObject = para;
+                break;
+            case 'title' :
+                let title = new Title(object.text,object.titleLevel);
+                container.addObject = title;
+                break;
+            case 'img' :
+                let img = new Picture(object.imgLink,object.alt);
+                container.addObject = img;
+                break;
+            case 'button' :
+                let button = new Button(object.text);
+                container.addObject = button;
+                break;
+            case 'pdfView' :
+                let pdf = new PDFView(object.pdfLink);
+                container.addObject = pdf;
+                break;
+        }
+    }
+}
+export function pageToHTML(pageIn, container) {
+
+    let new_page = pageIn.objectList;
+
+    for (const object of new_page) {
         switch (object.identifier) {
             case 'a' :
                 let node_link = document.createElement(object.identifier);

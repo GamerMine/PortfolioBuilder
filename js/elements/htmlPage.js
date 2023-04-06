@@ -8,11 +8,6 @@ export class HTMLPage{
         this.objectList.push(get_object);
     }
 
-    removeObject()
-    {
-        this.objectList.splice(this.objectList.length,1);
-    }
-
     empty()
     {
         this.objectList = [];

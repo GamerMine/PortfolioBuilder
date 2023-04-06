@@ -1,6 +1,6 @@
 import {URL_BASE} from "./constants.js";
 import {HTMLPage} from "./elements/htmlPage.js";
-import {jsonToHTML, request, sendFile} from "./elements/utils.js";
+import {jsonToPage, pageToHTML, request, sendFile} from "./elements/utils.js";
 import {Paragraph} from "./elements/paragraph.js";
 import {Title} from "./elements/title.js";
 import {Link} from "./elements/link.js";
@@ -79,7 +79,14 @@ async function showPortfolioHome() {
             iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
             iframe.contentWindow.document.getElementById("mail").innerText = mail;
 
-            jsonToHTML(response.content, iframe.contentWindow.document.getElementById("content"));
+            jsonToPage(response.content, page);
+            pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
+        }
+
+        iframe.unload = () =>
+        {
+            //JSON.stringify(page);
+            console.log("on déload");
         }
     } catch (e) {
         console.log(e)
@@ -390,37 +397,20 @@ function toolsText() {
     btnRetour2.addEventListener("click", modifTools, false);
     btnAjout.addEventListener("click",() =>
     {
-        page.empty();
+        emptyIframe();
         if(select.value === "paragraphe")
         {
             page.addObject = new Paragraph(inputTexte.value);
-            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
             inputTexte.value="";
         }
         else
         {
             page.addObject = new Title(inputTexte.value,select.value);
-            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
             inputTexte.value="";
         }
     },false);
-    btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click",() =>
-    {
-        page.empty();
-        if(select.value === "paragraphe")
-        {
-            page.addObject = new Paragraph(inputTexte.value);
-            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
-        }
-        else
-        {
-            page.addObject = new Title(inputTexte.value,select.value);
-            jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
-        }
-    },false);
-
-
 }
 
 
@@ -494,10 +484,9 @@ function toolsImage()
                 const response = JSON.parse(resp);
                 if (!response.connected) window.location.href = "index.html";
 
-                page.empty();
+                emptyIframe();
                 page.addObject = new Picture(URL_BASE + "server/" + response.link, inputAlt.value);
-                console.log(URL_BASE + "server/" + response.link);
-                jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+                pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
                 inputImage.value = "";
                 inputAlt.value = "";
             } catch (e) {
@@ -667,11 +656,11 @@ function toolsLien()
 
     btnRetour2.addEventListener("click", modifTools, false);
     btnAjout.addEventListener("click",() => {
-        page.empty();
+        emptyIframe();
         if (text ==="Internet")
         {
             page.addObject = new Link(inputTexte.value,inputInternet.value);
-            jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+            pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
             inputInternet.value="";
             inputTexte.value="";
         }
@@ -730,14 +719,13 @@ function toolsCV()
             const resp = await sendFile(URL_BASE+"server/sendData.php?command=SAVE_FILE", formData);
 
             try {
-                console.log(resp);
                 const response = JSON.parse(resp);
                 if (!response.connected) window.location.href = "index.html";
 
-                page.empty();
+                emptyIframe();
                 page.addObject = new PDFView(URL_BASE+"server/"+response.link);
                 console.log(URL_BASE+"server/"+response.link);
-                jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+                pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
                 inputCV.value="";
             } catch (e) {
                 console.log(e);
@@ -748,4 +736,13 @@ function toolsCV()
             console.warn("No file selected"); //TODO: an error message popup
         }
     },false);
+}
+
+function emptyIframe()
+{
+    let iframe_to_change = iframe.contentWindow.document.getElementById("content")
+    while(iframe_to_change.firstChild)
+    {
+        iframe_to_change.removeChild(iframe_to_change.lastChild);
+    }
 }

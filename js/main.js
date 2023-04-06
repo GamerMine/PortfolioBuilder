@@ -1,5 +1,6 @@
 import {URL_BASE} from "./constants.js";
-import {jsonToHTML, request} from "./elements/utils.js";
+import {jsonToPage, pageToHTML, request} from "./elements/utils.js";
+import {HTMLPage} from "./elements/htmlPage.js";
 
 export function loginForm() {
     window.location.href = "session/loginForm.html";
@@ -58,7 +59,9 @@ async function createPortfolioPreviewElement(name, surname, mail, homeContent) {
     embed.onload = () => {
         embed.contentWindow.document.getElementById("name").innerText = name + " " + surname;
         embed.contentWindow.document.getElementById("mail").innerText = mail;
-        jsonToHTML(homeContent, embed.contentWindow.document.getElementById("content"));
+        let page = new HTMLPage();
+        jsonToPage(homeContent,page);
+        pageToHTML(page,embed.contentWindow.document.getElementById("content"))
     }
 
     article.appendChild(h5);
