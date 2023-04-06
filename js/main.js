@@ -104,8 +104,9 @@ export async function getPageContent(name) {
     }
 }
 
-
-document.getElementById("img-footer").onclick = showRights;
+if (document.getElementById("img-footer") != null) {
+    document.getElementById("img-footer").onclick = showRights;
+}
 
 
 function showRights(){

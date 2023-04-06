@@ -27,8 +27,6 @@ switch ($sentCommand) {
     }
     case "SAVE_FILE":{
         $filename = generateUUID(openssl_random_pseudo_bytes(16));
-        if ( !is_writable("upload"))
-            echo("Pas les droits");
         $file = move_uploaded_file($_FILES["file"]["tmp_name"], "upload/".$filename);
         $data = array("connected" => true, "link" => "upload/".$filename);
         break;
