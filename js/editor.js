@@ -3,6 +3,7 @@ import {HTMLPage} from "./elements/htmlPage.js";
 import {jsonToHTML, request, sendFile} from "./elements/utils.js";
 import {Paragraph} from "./elements/paragraph.js";
 import {Title} from "./elements/title.js";
+import {Link} from "./elements/link.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
@@ -564,6 +565,7 @@ function toolsLien()
 
     console.log("avant la fonction");
 
+    let text = "";
     selectElement.addEventListener('change', (event) => 
     {
         console.log("dans la fonction");
@@ -582,7 +584,7 @@ function toolsLien()
         selectPortfolio.appendChild(proj2);
         selectPortfolio.appendChild(proj3);
         
-        let text = selectElement.options[selectElement.selectedIndex].text;
+        text = selectElement.options[selectElement.selectedIndex].text;
         
         if (text === "Internet")
         {
@@ -603,6 +605,19 @@ function toolsLien()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
+    btnAjout.addEventListener("click",() => {
+        page.empty();
+        if (text ==="Internet")
+        {
+            console.log(inputInternet.value);
+            page.addObject = new Link(inputTexte.value,inputInternet.value);
+            jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+        }
+        else if (text ==="Portfolio")
+        {
+            //TODO LIEN PORTFOLIO
+        }
+    }, false)
 }
 
 let lblCV = document.createElement("div");
