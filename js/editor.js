@@ -4,6 +4,7 @@ import {jsonToHTML, request, sendFile} from "./elements/utils.js";
 import {Paragraph} from "./elements/paragraph.js";
 import {Title} from "./elements/title.js";
 import {Link} from "./elements/link.js";
+import {PDFView} from "./elements/pdfView.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
@@ -609,9 +610,10 @@ function toolsLien()
         page.empty();
         if (text ==="Internet")
         {
-            console.log(inputInternet.value);
             page.addObject = new Link(inputTexte.value,inputInternet.value);
             jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+            inputInternet.value="";
+            inputTexte.value="";
         }
         else if (text ==="Portfolio")
         {
@@ -666,10 +668,15 @@ function toolsCV()
          const resp = await sendFile(URL_BASE+"server/sendData.php?command=SAVE_FILE", formData);
 
          try {
+             console.log(resp);
              const response = JSON.parse(resp);
              if (!response.connected) window.location.href = "index.html";
 
+             page.empty();
+             page.addObject = new PDFView(URL_BASE+"server/"+response.link);
              console.log(URL_BASE+"server/"+response.link);
+             jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+
          } catch (e) {
              console.log(e);
          }
