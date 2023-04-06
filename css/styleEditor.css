@@ -61,10 +61,10 @@ footer ul {
 	border-bottom: none;
 	background-color: rgb(189, 193, 194);
 	min-width: 250px;
+	padding-bottom: 20px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	padding-bottom: 20px;
 	transition: all 1s;
 }
 
@@ -74,11 +74,11 @@ footer ul {
 
 .top {
 	position: relative;
+	border-bottom: solid gray 2px;
+	padding-bottom: 10px;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-	border-bottom: solid gray 2px;
-	padding-bottom: 10px;
 }
 
 #cursor {
@@ -96,6 +96,10 @@ footer ul {
 	text-align: center;
 }
 
+#btnselect div input{
+	max-width: 200px;
+}
+
 #btnselect {
 	display: grid;
 	grid-template-columns: 1fr;
@@ -104,12 +108,18 @@ footer ul {
 
 }
 
+.space-between{
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
 #bottom {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
 	position: relative;
-
 }
 
 #portfolio-preview-container {
@@ -123,10 +133,6 @@ footer ul {
 
 #img-tools {
 	width: 55px;
-}
-
-.divImage {
-	padding-top: 20px;
 }
 
 .lblImage {

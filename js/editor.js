@@ -446,10 +446,6 @@ inputAlt.setAttribute("name", "alt");
 let div1 = document.createElement("div");
 let div2 = document.createElement("div");
 
-div1.setAttribute("class", "divImage");
-div2.setAttribute("class", "divImage");
-
-
 function toolsImage()
 {
     let divSelect  = document.getElementById("btnselect");
