@@ -6,6 +6,7 @@ import {Title} from "./elements/title.js";
 import {Link} from "./elements/link.js";
 import {PDFView} from "./elements/pdfView.js";
 import {Picture} from "./elements/image.js";
+import {getPageContent} from "./main.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
@@ -81,6 +82,7 @@ async function showPortfolioHome() {
 
             jsonToPage(response.content, page);
             pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
+            iframe.onload = () => {};
         }
 
         iframe.unload = () =>
@@ -90,6 +92,42 @@ async function showPortfolioHome() {
         }
     } catch (e) {
         console.log(e)
+    }
+}
+
+async function showPortfolioProjectList() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+    try {
+        const response = JSON.parse(resp);
+
+        if (!response.connected) window.location.href = "index.html";
+
+        document.getElementById("portfolio-preview").src = "../templateProject.html";
+
+        iframe.onload = async () => {
+            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+            const user_info_json = JSON.parse(user_info);
+
+            const surname = user_info_json.info[0].surname;     //Get user's surname
+            const name = user_info_json.info[0].name;           //Get user's name
+            const mail = user_info_json.info[0].mail;           //Get user's mail
+
+            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
+            for (const project of response.project) {
+                const btn = document.createElement("button");
+                btn.innerText = "Projet "+project.id;
+                btn.onclick = () => {
+                    getPageContent("Projet-"+project.id);
+                };
+                iframe.contentWindow.document.getElementById("content").appendChild(btn);
+            }
+            iframe.onload = () => {};
+        }
+
+    } catch (e) {
+
     }
 }
 
@@ -186,11 +224,11 @@ function toolsBase()
 
     btnHome.addEventListener("click", () =>
     {
-        document.getElementById("portfolio-preview").src = "../template.html";
+        showPortfolioHome();
     });
     btnProject.addEventListener("click", () =>
     {
-        document.getElementById("portfolio-preview").src = "../templateProject.html";
+        showPortfolioProjectList();
     });
 
     btnSkill.addEventListener("click", () =>
@@ -690,7 +728,8 @@ function toolsLien()
         }
         else if (text ==="Portfolio")
         {
-            //TODO LIEN PORTFOLIO
+            page.addObject = new Link(inputTexte.value,"javascript:loadPage('"+ selectPortfolio.options[selectPortfolio.selectedIndex].text +"');");
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
     }, false)
 }
