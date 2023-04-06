@@ -1,8 +1,9 @@
 import {URL_BASE} from "./constants.js";
 import {HTMLPage} from "./elements/htmlPage.js";
-import {jsonToHTML, request} from "./elements/utils.js";
+import {jsonToHTML, request, sendFile} from "./elements/utils.js";
 import {Paragraph} from "./elements/paragraph.js";
 import {Title} from "./elements/title.js";
+import {Link} from "./elements/link.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
@@ -169,21 +170,21 @@ function toolsBase()
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
 
-    btnHome.addEventListener("click", () => 
+    btnHome.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../template.html";
     });
-    btnProject.addEventListener("click", () => 
+    btnProject.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateProject.html";
     });
 
-    btnSkill.addEventListener("click", () => 
+    btnSkill.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateSkill.html";
     });
 
-    btnApropos.addEventListener("click", () => 
+    btnApropos.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateAPropos.html";
     });
@@ -578,7 +579,8 @@ function toolsLien()
 
     console.log("avant la fonction");
 
-    selectElement.addEventListener('change', (event) => 
+    let text = "";
+    selectElement.addEventListener('change', (event) =>
     {
         console.log("dans la fonction");
 
@@ -596,7 +598,7 @@ function toolsLien()
         selectPortfolio.appendChild(proj2);
         selectPortfolio.appendChild(proj3);
         
-        let text = selectElement.options[selectElement.selectedIndex].text;
+        text = selectElement.options[selectElement.selectedIndex].text;
         
         if (text === "Internet")
         {
@@ -617,6 +619,19 @@ function toolsLien()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
+    btnAjout.addEventListener("click",() => {
+        page.empty();
+        if (text ==="Internet")
+        {
+            console.log(inputInternet.value);
+            page.addObject = new Link(inputTexte.value,inputInternet.value);
+            jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+        }
+        else if (text ==="Portfolio")
+        {
+            //TODO LIEN PORTFOLIO
+        }
+    }, false)
 }
 
 let lblCV = document.createElement("div");
@@ -658,12 +673,19 @@ function toolsCV()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
+    btnAjout.addEventListener("click", async () => {
          const formData = new FormData();
          formData.append("file", document.getElementById("choose-cv").files[0]);
 
-         const request = new XMLHttpRequest();
-         request.open("POST", URL_BASE+"server/sendData.php?command=SAVE_FILE");
-         request.send(formData);
+         const resp = await sendFile(URL_BASE+"server/sendData.php?command=SAVE_FILE", formData);
+
+         try {
+             const response = JSON.parse(resp);
+             if (!response.connected) window.location.href = "index.html";
+
+             console.log(URL_BASE+"server/"+response.link);
+         } catch (e) {
+             console.log(e);
+         }
     },false);
 }
