@@ -11,6 +11,11 @@ lblStyleG.innerHTML = "Style Général";
 
 function settingsGeneraux()
 {
+    const cursor = document.getElementById("cursor");
+
+    cursor.style.left = "";
+    cursor.style.right = "26px";
+
     let divSelect  = document.getElementById("btnselect");
     let divBottom  = document.getElementById("bottom");
 

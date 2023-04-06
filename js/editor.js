@@ -142,6 +142,11 @@ document.getElementById("img-tools").onclick = toolsBase;
 
 function toolsBase()
 {
+    const cursor = document.getElementById("cursor");
+
+    cursor.style.left = "33px";
+    cursor.style.right = "";
+
     let divSelect  = document.getElementById("btnselect");
     let divBottom  = document.getElementById("bottom");
 
