@@ -5,10 +5,10 @@ ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_report
 class Database
 {
     const PORT   = 5432;
-    const HOST   = "woody";
-    const DBNAME = "sm211563";
-    const LOGIN  = "sm211563";
-    const PASS   = "pompier50";
+    const HOST   = "localhost";
+    const DBNAME = "ll211074";
+    const LOGIN  = "ll211074";
+    const PASS   = "patate";
 
     private static ?Database $instance = null;
     private ?PDO $connection = null;
@@ -143,6 +143,35 @@ class Database
         } else {
             $stmt = $this->connection->prepare("UPDATE info SET name = ?, surname = ? WHERE mail = ?");
             $stmt->execute([$name, $surname, $mail]);
+        }
+    }
+
+    public function checkIfHomeContentExists($mail)
+    {
+        $stmt = $this->connection->prepare("SELECT * FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0) return true;
+
+        return false;
+    }
+
+    public function checkIfContentExists($location,$mail)
+    {
+        $stmt = $this->connection->prepare("SELECT * FROM ? JOIN account a on a.mail = ?.mail WHERE a.mail = ?");
+        $stmt->execute([$location,$location,$mail]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0) return true;
+
+        return false;
+    }
+
+    public function setHomeContent($mail,$content)
+    {
+        $stmt = $this->connection->prepare("SELECT a.mail FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
+        {
+            $stmt = $this->connection->prepare("UPDATE info SET homecontent=? WHERE mail=?");
+            $stmt->execute([$content,$mail]);
         }
     }
 }
