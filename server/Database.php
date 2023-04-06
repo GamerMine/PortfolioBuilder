@@ -88,6 +88,20 @@ class Database
         return $stmt->fetch()[0];
     }
 
+    public function getSkillPagesList($mail) {
+        $stmt = $this->connection->prepare("SELECT id FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getProjectPagesList($mail) {
+        $stmt = $this->connection->prepare("SELECT id FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function checkIfPortfolioExist($mail): bool
     {
         $stmt = $this->connection->prepare("SELECT * FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ?");

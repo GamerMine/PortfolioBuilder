@@ -357,8 +357,7 @@ btnRetour2.setAttribute("type", "button");
 btnRetour2.innerHTML = "Retour";
 
 
-function toolsText()
-{
+function toolsText() {
     let divSelect  = document.getElementById("btnselect");
     let divBottom  = document.getElementById("bottom");
 
@@ -615,12 +614,9 @@ function toolsLien()
 
     const selectElement = document.getElementById("choose-link");
 
-    console.log("avant la fonction");
-
     let text = "";
-    selectElement.addEventListener('change', (event) =>
+    selectElement.addEventListener('change', async (event) =>
     {
-        console.log("dans la fonction");
 
         divSelect.appendChild(lblLien);
         divSelect.appendChild(selectLien);
@@ -630,7 +626,9 @@ function toolsLien()
         {
             divChoose.removeChild(divChoose.firstChild);
         }
-      
+
+        selectPortfolio.querySelectorAll("option").forEach(o => o.remove());
+
         selectPortfolio.appendChild(value);
         selectPortfolio.appendChild(comp1);
         selectPortfolio.appendChild(comp2);
@@ -640,7 +638,30 @@ function toolsLien()
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(inputTexteLien);
-        
+
+        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+
+        try {
+            const response = JSON.parse(resp);
+
+            if (!response.connected) window.location.href = "index.html";
+
+            for (const sk of response.skill) {
+                const option = document.createElement("option");
+                option.value = "Projet-"+sk[0];
+                option.innerText = "Projet-"+sk.id;
+                selectPortfolio.appendChild(option);
+            }
+            for (const pr of response.project) {
+                const option = document.createElement("option");
+                option.value = "Projet-"+pr[0];
+                option.innerText = "Projet-"+pr.id;
+                selectPortfolio.appendChild(option);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
         text = selectElement.options[selectElement.selectedIndex].text;
         
         if (text === "Internet")
@@ -661,12 +682,13 @@ function toolsLien()
             divSelect.appendChild(selectLien);
         }
 
-     
+        divSelect.appendChild(lblTexte);
+        divSelect.appendChild(inputTexte);
     
     });
 
-    
-  
+
+
     divBottom.appendChild(btnAjout);
     divBottom.appendChild(btnRetour2);
 
