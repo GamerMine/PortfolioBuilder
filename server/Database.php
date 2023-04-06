@@ -88,6 +88,20 @@ class Database
         return $stmt->fetch()[0];
     }
 
+    public function getProjectContent($mail, $id) {
+        $stmt = $this->connection->prepare("SELECT content FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ? AND id = ?");
+        $stmt->execute([$mail, $id]);
+
+        return $stmt->fetch()[0];
+    }
+
+    public function getSkillContent($mail, $id) {
+        $stmt = $this->connection->prepare("SELECT content FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ? AND id = ?");
+        $stmt->execute([$mail, $id]);
+
+        return $stmt->fetch()[0];
+    }
+
     public function getSkillPagesList($mail) {
         $stmt = $this->connection->prepare("SELECT id FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);

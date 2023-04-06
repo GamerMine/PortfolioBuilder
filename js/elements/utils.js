@@ -48,8 +48,6 @@ export function pageToHTML(pageIn, container) {
             case 'a' :
                 let node_link = document.createElement(object.identifier);
                 node_link.setAttribute("href", object.link);
-                node_link.setAttribute("target","_blank");
-                node_link.setAttribute("rel","noreferrer noopener");
                 node_link.textContent = object.text;
                 container.appendChild(node_link);
                 container.appendChild(document.createElement("br"));

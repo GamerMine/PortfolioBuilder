@@ -188,22 +188,81 @@ function toolsBase()
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
 
     btnHome.addEventListener("click", () =>
-    {
-        document.getElementById("portfolio-preview").src = "../template.html";
+    {        
+        document.getElementById("portfolio-preview").src = "../template.html"; 
+        toolsBase(); 
     });
+
+
+
     btnProject.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateProject.html";
+        
+        while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
+        while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
+
+        divSelect.appendChild(lblTitre);
+        divSelect.appendChild(btnHome);
+        divSelect.appendChild(btnProject);
+
+        let btnAjouterProjet = document.createElement("button");
+        let divNewButton = document.createElement("div");
+
+        btnAjouterProjet.setAttribute("class", "buttonNew");
+        btnAjouterProjet.setAttribute("id", "btn-add-projet");
+        btnAjouterProjet.setAttribute("type", "button");
+        btnAjouterProjet.innerHTML = "Nouveau";
+
+        divNewButton.setAttribute("class", "divNewButton");
+
+        divNewButton.appendChild(btnAjouterProjet);
+
+        divSelect.appendChild(divNewButton);
+
+        divSelect.appendChild(btnSkill);
+        divSelect.appendChild(btnApropos);
     });
+
+
 
     btnSkill.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateSkill.html";
+
+        while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
+        while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
+
+        divSelect.appendChild(lblTitre);
+        divSelect.appendChild(btnHome);
+        divSelect.appendChild(btnProject);
+        divSelect.appendChild(btnSkill);
+
+        let btnAjouterCompetence = document.createElement("button");
+        let divNewButton = document.createElement("div");
+
+        btnAjouterCompetence.setAttribute("class", "buttonNew");
+        btnAjouterCompetence.setAttribute("id", "btn-add-comp");
+        btnAjouterCompetence.setAttribute("type", "button");
+        btnAjouterCompetence.innerHTML = "Nouveau";
+
+        divNewButton.setAttribute("class", "divNewButton");
+
+        divNewButton.appendChild(btnAjouterCompetence);
+
+        divSelect.appendChild(divNewButton);
+
+        
+        divSelect.appendChild(btnApropos);
     });
+
+
 
     btnApropos.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateAPropos.html";
+        toolsBase(); 
+
     });
 }
 

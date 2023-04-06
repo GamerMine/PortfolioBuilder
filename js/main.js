@@ -89,6 +89,21 @@ export async function disconnect() {
     window.location.href = "index.html";
 }
 
+export async function getPageContent(name) {
+    const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_CONTENT&name="+ name +"&visibility=editor");
+
+    try {
+        const response = JSON.parse(resp);
+
+        if (!response.connected) window.location.href = "index.html";
+
+
+
+    } catch (e) {
+
+    }
+}
+
 
 document.getElementById("img-footer").onclick = showRights;
 
