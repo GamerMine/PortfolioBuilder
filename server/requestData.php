@@ -38,10 +38,10 @@ switch ($requestedData) {
 
         if (strtolower($_GET["name"]) == "homecontent") {
             $data = array("connected" => (isset($_SESSION["mail"])), "content" => $db->getHomeContent($mail));
-        } else if (str_contains(strtolower($_GET["name"]), "projet")) {
+        } else if (strpos(strtolower($_GET["name"]), "projet") !== false) {
             $id = explode("-", $_GET["name"]);
             $data = array("connected" => (isset($_SESSION["mail"])), "content" => $db->getProjectContent($mail, $id[1]));
-        } else if (str_contains(strtolower($_GET["name"]), "competence")) {
+        } else if (strpos(strtolower($_GET["name"]), "competence") !== false) {
             $id = explode("-", $_GET["name"]);
             $data = array("connected" => (isset($_SESSION["mail"])), "content" => $db->getSkillContent($mail, $id[1]));
         }

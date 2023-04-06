@@ -79,17 +79,78 @@ async function showPortfolioHome() {
             iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
             iframe.contentWindow.document.getElementById("mail").innerText = mail;
 
+            page.empty();
             jsonToPage(response.content, page);
             pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
         }
 
-        iframe.unload = () =>
-        {
-            //JSON.stringify(page);
-            console.log("on déload");
+        document.onvisibilitychange = async () => {
+            if (document.visibilityState === "hidden") {
+                let dataJson = JSON.stringify(page);
+                await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
+                console.log("on déload");
+            }
         }
     } catch (e) {
         console.log(e)
+    }
+}
+
+async function showPortfolioProjectList() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+    try {
+        const response = JSON.parse(resp);
+
+        if (!response.connected) window.location.href = "index.html";
+
+        document.getElementById("portfolio-preview").src = "../templateProject.html";
+
+        iframe.onload = async () => {
+            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+            const user_info_json = JSON.parse(user_info);
+
+            const surname = user_info_json.info[0].surname;     //Get user's surname
+            const name = user_info_json.info[0].name;           //Get user's name
+            const mail = user_info_json.info[0].mail;           //Get user's mail
+
+            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
+            for (const project of response.project) {
+                const btn = document.createElement("button");
+                btn.innerText = "Projet "+project.id;
+                btn.onclick = async () => {
+                    const content = await getPageContent("Projet-"+project.id);
+                    console.log(content);
+                    loadPage(content);
+                };
+                iframe.contentWindow.document.getElementById("content").appendChild(btn);
+            }
+            iframe.onload = () => {};
+        }
+
+    } catch (e) {
+
+    }
+}
+
+function loadPage(content) {
+    document.getElementById("portfolio-preview").src = "../template.html"
+    iframe.onload = async () => {
+        const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+        const user_info_json = JSON.parse(user_info);
+
+        const surname = user_info_json.info[0].surname;     //Get user's surname
+        const name = user_info_json.info[0].name;           //Get user's name
+        const mail = user_info_json.info[0].mail;           //Get user's mail
+
+        iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+        iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
+        page.empty();
+        jsonToPage(content, page);
+        pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
+        iframe.onload = () => {};
     }
 }
 
@@ -185,9 +246,10 @@ function toolsBase()
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
 
     btnHome.addEventListener("click", () =>
-    {        
-        document.getElementById("portfolio-preview").src = "../template.html"; 
-        toolsBase(); 
+    {
+        document.getElementById("portfolio-preview").src = "../template.html";
+        toolsBase();
+        showPortfolioHome();
     });
 
 
@@ -195,7 +257,7 @@ function toolsBase()
     btnProject.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateProject.html";
-        
+
         while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
         while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
 
@@ -219,6 +281,7 @@ function toolsBase()
 
         divSelect.appendChild(btnSkill);
         divSelect.appendChild(btnApropos);
+        showPortfolioProjectList();
     });
 
 
@@ -249,7 +312,7 @@ function toolsBase()
 
         divSelect.appendChild(divNewButton);
 
-        
+
         divSelect.appendChild(btnApropos);
     });
 
@@ -258,7 +321,7 @@ function toolsBase()
     btnApropos.addEventListener("click", () =>
     {
         document.getElementById("portfolio-preview").src = "../templateAPropos.html";
-        toolsBase(); 
+        toolsBase();
 
     });
 }
@@ -679,11 +742,6 @@ function toolsLien()
         selectPortfolio.querySelectorAll("option").forEach(o => o.remove());
 
         selectPortfolio.appendChild(value);
-        selectPortfolio.appendChild(comp1);
-        selectPortfolio.appendChild(comp2);
-        selectPortfolio.appendChild(proj1);
-        selectPortfolio.appendChild(proj2);
-        selectPortfolio.appendChild(proj3);
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(inputTexteLien);
@@ -749,7 +807,8 @@ function toolsLien()
         }
         else if (text ==="Portfolio")
         {
-            //TODO LIEN PORTFOLIO
+            page.addObject = new Link(inputTexte.value,"javascript:loadPage('"+ selectPortfolio.options[selectPortfolio.selectedIndex].text +"');");
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
     }, false)
 }
