@@ -5,6 +5,7 @@ import {Paragraph} from "./elements/paragraph.js";
 import {Title} from "./elements/title.js";
 import {Link} from "./elements/link.js";
 import {PDFView} from "./elements/pdfView.js";
+import {Picture} from "./elements/image.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
@@ -482,6 +483,33 @@ function toolsImage()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
+    btnAjout.addEventListener("click", async ()=>{
+        if(!inputImage.value=="") {
+            const formData = new FormData();
+            formData.append("file", document.getElementById("choose_img").files[0]);
+
+            const resp = await sendFile(URL_BASE + "server/sendData.php?command=SAVE_FILE", formData);
+
+            try {
+                console.log(resp);
+                const response = JSON.parse(resp);
+                if (!response.connected) window.location.href = "index.html";
+
+                page.empty();
+                page.addObject = new Picture(URL_BASE + "server/" + response.link, inputAlt.value);
+                console.log(URL_BASE + "server/" + response.link);
+                jsonToHTML(JSON.stringify(page), iframe.contentWindow.document.getElementById("content"));
+                inputImage.value = "";
+                inputAlt.value = "";
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        else
+        {
+            console.warn("No file selected"); //TODO : an error message box
+        }
+    }, false);
 }
 
 
@@ -676,23 +704,30 @@ function toolsCV()
 
     btnRetour2.addEventListener("click", modifTools, false);
     btnAjout.addEventListener("click", async () => {
-         const formData = new FormData();
-         formData.append("file", document.getElementById("choose-cv").files[0]);
+        if(!inputCV.value=="")
+        {
+            const formData = new FormData();
+            formData.append("file", document.getElementById("choose-cv").files[0]);
 
-         const resp = await sendFile(URL_BASE+"server/sendData.php?command=SAVE_FILE", formData);
+            const resp = await sendFile(URL_BASE+"server/sendData.php?command=SAVE_FILE", formData);
 
-         try {
-             console.log(resp);
-             const response = JSON.parse(resp);
-             if (!response.connected) window.location.href = "index.html";
+            try {
+                console.log(resp);
+                const response = JSON.parse(resp);
+                if (!response.connected) window.location.href = "index.html";
 
-             page.empty();
-             page.addObject = new PDFView(URL_BASE+"server/"+response.link);
-             console.log(URL_BASE+"server/"+response.link);
-             jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
-
-         } catch (e) {
-             console.log(e);
-         }
+                page.empty();
+                page.addObject = new PDFView(URL_BASE+"server/"+response.link);
+                console.log(URL_BASE+"server/"+response.link);
+                jsonToHTML(JSON.stringify(page),iframe.contentWindow.document.getElementById("content"));
+                inputCV.value="";
+            } catch (e) {
+                console.log(e);
+            }
+        }
+         else
+        {
+            console.warn("No file selected"); //TODO: an error message popup
+        }
     },false);
 }
