@@ -33,6 +33,18 @@ switch ($sentCommand) {
         $data = array("connected" => true, "link" => "upload/".$filename);
         break;
     }
+    case "SEND_CONTENT":{
+        if(!isset($_SESSION["mail"]))
+        {
+            $data = array("connected" => false);
+            break;
+        }
+
+        if($_GET["name"]=="homecontent")
+        {
+            $db->setHomeContent($_SESSION["mail"],$_GET["content"]);
+        }
+    }
 }
 
 $db->close();

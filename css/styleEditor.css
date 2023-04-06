@@ -222,6 +222,10 @@ button:hover {
 	cursor: pointer;
 }
 
+img:hover {
+	cursor: pointer;
+}
+
 .button {
 	background-color: blueviolet;
 	color: white;
@@ -229,6 +233,26 @@ button:hover {
 	border-radius: 0.6em;
 	padding: 10px 20px;
 }
+
+.buttonNew{
+	width: 2px;
+    display: flex;
+    background-color: blueviolet;
+    color: white;
+    border: solid blueviolet 1px;
+    border-radius: 0.6em;
+    padding: 10px 20px;
+    justify-content: center;
+	width: min-content;
+
+}
+
+.divNewButton{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 
 .button:hover {
 	background-color: rgb(98, 27, 165);
