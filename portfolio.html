@@ -8,7 +8,9 @@
 
 <script async type="module">
     import {URL_BASE} from "./js/constants.js";
-    import {jsonToHTML, request, requestText } from "./js/elements/utils.js";
+    import {request, requestText } from "./js/elements/utils.js";
+    import {HTMLPage} from "./js/elements/htmlPage.js";
+    import {jsonToPage, pageToHTML} from "./js/elements/utils.js";
 
     const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
     try {
@@ -22,9 +24,11 @@
         const templateResp = await requestText("GET", "template.html");
 
         document.querySelector("body").innerHTML = templateResp;
-        jsonToHTML(dataResponse.content, document.getElementById("content"));
+        let page = new HTMLPage();
+        jsonToPage(dataResponse.content,page);
+        pageToHTML(page,document.getElementById("content"))
 
-        const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO&mail="+result[1]);
+        const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
         const user_info_json = JSON.parse(user_info);
 
         const surname = user_info_json.info[0].surname;     //Get user's surname

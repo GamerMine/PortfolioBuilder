@@ -79,14 +79,17 @@ async function showPortfolioHome() {
             iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
             iframe.contentWindow.document.getElementById("mail").innerText = mail;
 
+            page.empty();
             jsonToPage(response.content, page);
             pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
         }
 
-        iframe.unload = () =>
-        {
-            //JSON.stringify(page);
-            console.log("on déload");
+        document.onvisibilitychange = async () => {
+            if (document.visibilityState === "hidden") {
+                let dataJson = JSON.stringify(page);
+                await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
+                console.log("on déload");
+            }
         }
     } catch (e) {
         console.log(e)
