@@ -6,6 +6,7 @@ import {Title} from "./elements/title.js";
 import {Link} from "./elements/link.js";
 import {PDFView} from "./elements/pdfView.js";
 import {Picture} from "./elements/image.js";
+import {getPageContent} from "./main.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
@@ -124,7 +125,8 @@ async function showPortfolioProjectList() {
                     console.log(content);
                     loadPage(content);
                 };
-                iframe.contentWindow.document.getElementById("content").appendChild(btn);
+                console.log(iframe.contentWindow.document.getElementById("list-project"));
+                iframe.contentWindow.document.getElementById("list-project").appendChild(btn);
             }
             iframe.onload = () => {};
         }
@@ -256,8 +258,6 @@ function toolsBase()
 
     btnProject.addEventListener("click", () =>
     {
-        document.getElementById("portfolio-preview").src = "../templateProject.html";
-
         while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
         while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
 
