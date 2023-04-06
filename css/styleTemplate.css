@@ -1,0 +1,142 @@
+html{
+	height: 100%;
+}
+/*----------*/
+/*---BODY---*/
+/*----------*/
+body{
+	margin: 0;
+	position: relative;
+	min-height: 100%;
+	font-family:Arial, Helvetica, sans-serif;
+	background-color:whitesmoke;
+}
+
+/*----------*/
+/*--HEADER--*/
+/*----------*/
+
+header{
+	position: relative;
+	background-color: white;
+	padding: 0 10px 0 10px;
+	width: auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: solid gray 2px ;
+}
+
+header h1{
+	display: flex;
+	align-items: center;
+}
+
+header label{
+	display: none;
+	font-size: x-large;
+}
+
+header ul.nav {
+	display: grid;
+	grid-template-columns: repeat(4,1fr);
+	list-style-type: none;
+	text-align: center;
+	gap:30px;
+	margin: 0;
+	padding: 0;
+}
+
+header ul li a{
+	color: black;
+	text-decoration: none;
+}
+header ul li a:hover{
+	border-bottom: solid 3px;
+	border-color: currentColor;
+}
+
+
+#burger-menu{
+	display: none;
+}
+
+/*----------*/
+/*--FOOTER--*/
+/*----------*/
+
+footer{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	background-color: white;
+	border-top: solid gray 2px;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+footer p{
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px
+}
+
+/*----------*/
+/*---MAIN---*/
+/*----------*/
+main{
+	min-height: 100%;
+	padding-bottom: 120px;
+	margin: 0 10px 0 10px;
+	position: relative;
+	z-index: 1;
+}
+
+/*----------*/
+/*MEDIAQUERY*/
+/*----------*/
+@media (max-width: 900px){
+	header ul.nav{
+		gap:0;
+	}
+}
+
+@media (max-width: 600px){
+
+	header label{
+		display: block;
+	}
+
+	input#burger-menu:checked + ul.nav {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+	}
+
+	header ul.nav {
+		position: absolute;
+		right: 0;
+		display: none;
+		bottom: -168px;
+		background-color: gray;
+		border-bottom: solid 3px gray;
+		width: fit-content;
+		z-index: 10;
+	}
+
+	header ul.nav li{
+		background-color: white;
+		padding: 10px 5px;
+	}
+
+	header ul.nav li a{
+		width: 100%;
+	}
+
+	footer p{
+		flex-direction: column;
+		gap: 2px;
+	}
+}
