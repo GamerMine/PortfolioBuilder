@@ -200,7 +200,7 @@ async function showPortfolioSkillList() {
                 btn.innerText = "Competence " + skill.id;
                 btn.onclick = async () => {
                     const content = await getPageContent("Competence-" + skill.id);
-                    loadPage(content);
+                    loadPage(conten
                 };
                 iframe.contentWindow.document.getElementById("list-skill").appendChild(btn);
             }
@@ -896,7 +896,7 @@ function toolsLien() {
             inputInternet.value = "";
             inputTexteLien.value = "";
         } else if (text === "Portfolio") {
-            page.addObject = new Link(inputTexte.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
+            page.addObject = new Link(inputTexteLien.value, "javascript:goToPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
         saveActualContent();

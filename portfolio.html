@@ -5,12 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-
 <script async type="module">
     import {URL_BASE} from "./js/constants.js";
     import {HTMLPage} from "./js/elements/htmlPage.js";
     import {jsonToPage, pageToHTML, request, requestText } from "./js/elements/utils.js";
-    import {setupEventsInPortfolioView, setupUserInfoInPageView} from "./js/main.js";
+    import {setupEventsInPortfolioView, setupUserInfoInPageView, loadPage, test} from "./js/main.js";
 
     const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
     try {
@@ -33,6 +32,8 @@
     } catch (e) {
         console.log(e);
     }
+
+    window.goToPage = test();
 </script>
 </body>
 </html>

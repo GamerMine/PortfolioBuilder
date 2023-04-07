@@ -189,7 +189,7 @@ export async function showPortfolioSkillList() {
     }
 }
 
-async function loadPage(name, mail) {
+export async function loadPage(name, mail) {
     await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=projet-"+ name +"IN"+mail);
     const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
     try {
@@ -211,6 +211,10 @@ async function loadPage(name, mail) {
     } catch (e) {
         console.log(e)
     }
+}
+
+export function test() {
+    console.log("oui");
 }
 
 export function setupEventsInPortfolioView(mail) {
