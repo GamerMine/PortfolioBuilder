@@ -86,14 +86,6 @@ async function showPortfolioHome() {
             jsonToPage(response.content, page);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
-
-        document.onvisibilitychange = async () => {
-            if (document.visibilityState === "hidden") {
-                let dataJson = JSON.stringify(page);
-                await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
-                console.log("on déload");
-            }
-        }
     } catch (e) {
         console.log(e)
     }
@@ -171,9 +163,6 @@ let btnProject = document.createElement("button");
 let btnSkill = document.createElement("button");
 let btnApropos = document.createElement("button");
 
-let btnAjouter = document.createElement("button");
-
-
 lblTitre.innerHTML = "Titre";
 
 btnHome.setAttribute("class", "button");
@@ -197,9 +186,11 @@ btnApropos.setAttribute("type", "button");
 btnApropos.innerHTML = "A propos";
 
 
-btnAjouter.setAttribute("class", "button");
-btnAjouter.setAttribute("id", "btn-add");
-btnAjouter.setAttribute("type", "button");
+let btnAjouterElement = document.createElement("button");
+
+btnAjouterElement.setAttribute("class", "button");
+btnAjouterElement.setAttribute("id", "btn-add");
+btnAjouterElement.setAttribute("type", "button");
 
 document.getElementById("img-tools").onclick = toolsBase;
 
@@ -221,7 +212,7 @@ function toolsBase() {
     }
 
 
-    btnAjouter.innerHTML = "Ajouter élément";
+    btnAjouterElement.innerHTML = "Ajouter élément";
 
     divSelect.appendChild(lblTitre);
     divSelect.appendChild(btnHome);
@@ -229,7 +220,7 @@ function toolsBase() {
     divSelect.appendChild(btnSkill);
     divSelect.appendChild(btnApropos);
 
-    divBottom.appendChild(btnAjouter);
+    divBottom.appendChild(btnAjouterElement);
 
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
@@ -241,17 +232,14 @@ function toolsBase() {
     });
 
 
-    btnProject.addEventListener("click", () => {
-        while (divSelect.firstChild) {
-            divSelect.removeChild(divSelect.firstChild);
-        }
-        while (divBottom.firstChild) {
-            divBottom.removeChild(divBottom.firstChild);
-        }
+
+    btnProject.addEventListener("click", async () =>
+    {
+        while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
+        while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
 
         divSelect.appendChild(lblTitre);
         divSelect.appendChild(btnHome);
-        divSelect.appendChild(btnProject);
 
         let btnAjouterProjet = document.createElement("button");
         let divListeProjet = document.createElement("div");
@@ -263,12 +251,11 @@ function toolsBase() {
         btnAjouterProjet.innerHTML = "Nouveau";
 
         divNewButton.setAttribute("class", "divNewButton");
-        divListeProjet.setAttribute("class", "divListeProjet");
+        divListeProjet.setAttribute("class", "divListe");
 
 
-        let ulBtnProjet = document.createElement("ul");
-        let liBtnProjet = document.createElement("li");
         let ulListProjet = document.createElement("ul");
+        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
 
         try {
             const response = JSON.parse(resp);
@@ -287,12 +274,8 @@ function toolsBase() {
             console.log(e);
         }
 
-        liBtnProjet.appendChild(ulListProjet);
-
-        ulBtnProjet.appendChild(btnProject);
-        ulBtnProjet.appendChild(liBtnProjet);
-
-        divListeProjet.appendChild(ulBtnProjet);
+        divListeProjet.appendChild(btnProject);
+        divListeProjet.appendChild(ulListProjet);
 
         divNewButton.appendChild(btnAjouterProjet);
 
@@ -307,22 +290,18 @@ function toolsBase() {
     });
 
 
-    btnSkill.addEventListener("click", () => {
+    btnSkill.addEventListener("click", async () => {
         document.getElementById("portfolio-preview").src = "../templateSkill.html";
 
-        while (divSelect.firstChild) {
-            divSelect.removeChild(divSelect.firstChild);
-        }
-        while (divBottom.firstChild) {
-            divBottom.removeChild(divBottom.firstChild);
-        }
+        while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
+        while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
 
         divSelect.appendChild(lblTitre);
         divSelect.appendChild(btnHome);
         divSelect.appendChild(btnProject);
-        divSelect.appendChild(btnSkill);
 
         let btnAjouterCompetence = document.createElement("button");
+        let divListeCompetence = document.createElement("div");
         let divNewButton = document.createElement("div");
 
         btnAjouterCompetence.setAttribute("class", "buttonNew");
@@ -331,11 +310,37 @@ function toolsBase() {
         btnAjouterCompetence.innerHTML = "Nouveau";
 
         divNewButton.setAttribute("class", "divNewButton");
+        divListeCompetence.setAttribute("class", "divListe");
+
+
+        let ulListCompetence = document.createElement("ul");
+
+        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+
+        try {
+            const response = JSON.parse(resp);
+
+            if (!response.connected) window.location.href = "index.html";
+
+            for (const sk of response.skill) {
+                let li = document.createElement("li");
+                let btn = document.createElement("button");
+                btn.value = "Competence-" + sk.id;
+                btn.innerText = "Competence-" + sk.id;
+                li.appendChild(btn);
+                ulListCompetence.appendChild(li);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+        divListeCompetence.appendChild(btnSkill);
+        divListeCompetence.appendChild(ulListCompetence);
 
         divNewButton.appendChild(btnAjouterCompetence);
 
+        divSelect.appendChild(divListeCompetence);
         divSelect.appendChild(divNewButton);
-
 
         divSelect.appendChild(btnApropos);
     });
@@ -395,6 +400,7 @@ function modifTools() {
     while (divBottom.firstChild) {
         divBottom.removeChild(divBottom.firstChild);
     }
+
 
 
     divBtnSelect.appendChild(lblAjout);
@@ -462,12 +468,11 @@ inputTexte.setAttribute("style", "resize: none;");
 lblTexte.innerText = "Texte :";
 
 
-let btnAjout = document.createElement("button");
-
-btnAjout.setAttribute("class", "button");
-btnAjout.setAttribute("id", "btn-add");
-btnAjout.setAttribute("type", "button");
-btnAjout.innerHTML = "Ajouter";
+let btnAjoutText = document.createElement("button");
+btnAjoutText.setAttribute("class", "button");
+btnAjoutText.setAttribute("id", "btn-add");
+btnAjoutText.setAttribute("type", "button");
+btnAjoutText.innerHTML = "Ajouter Texte";
 
 let btnRetour2 = document.createElement("button");
 
@@ -502,11 +507,11 @@ function toolsText() {
     divSelect.appendChild(lblTexte);
     divSelect.appendChild(inputTexte);
 
-    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnAjoutText);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
+    btnAjoutText.addEventListener("click", () => {
         emptyIframe();
         if (select.value === "paragraphe") {
             page.addObject = new Paragraph(inputTexte.value);
@@ -517,6 +522,7 @@ function toolsText() {
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
             inputTexte.value = "";
         }
+        saveActualContent();
     }, false);
 }
 
@@ -547,6 +553,12 @@ inputAlt.setAttribute("name", "alt");
 let div1 = document.createElement("div");
 let div2 = document.createElement("div");
 
+let btnAjoutImage = document.createElement("button");
+btnAjoutImage.setAttribute("class", "button");
+btnAjoutImage.setAttribute("id", "btn-add");
+btnAjoutImage.setAttribute("type", "button");
+btnAjoutImage.innerHTML = "Ajouter Image";
+
 function toolsImage() {
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
@@ -567,11 +579,11 @@ function toolsImage() {
     divSelect.appendChild(div1);
     divSelect.appendChild(div2);
 
-    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnAjoutImage);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", async () => {
+    btnAjoutImage.addEventListener("click", async () => {
         if (!inputImage.value == "") {
             const formData = new FormData();
             formData.append("file", document.getElementById("choose_img").files[0]);
@@ -588,6 +600,7 @@ function toolsImage() {
                 pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
                 inputImage.value = "";
                 inputAlt.value = "";
+                await saveActualContent();
             } catch (e) {
                 console.log(e);
             }
@@ -655,6 +668,13 @@ value.innerHTML = "----Value----";
 let divChoose = document.createElement("div");
 
 divChoose.setAttribute("id", "divChoose");
+
+let btnAjoutLien = document.createElement("button");
+btnAjoutLien.setAttribute("class", "button");
+btnAjoutLien.setAttribute("id", "btn-add");
+btnAjoutLien.setAttribute("type", "button");
+btnAjoutLien.innerHTML = "Ajouter Lien";
+
 
 function toolsLien() {
     let divSelect = document.getElementById("btnselect");
@@ -734,21 +754,23 @@ function toolsLien() {
     });
 
 
-    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnAjoutLien);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
+    btnAjoutLien.addEventListener("click", () => {
         emptyIframe();
         if (text === "Internet") {
-            page.addObject = new Link(inputTexte.value, inputInternet.value);
+            page.addObject = new Link(inputTexteLien.value, inputInternet.value);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            console.log(inputTexteLien.value + inputInternet.value);
             inputInternet.value = "";
-            inputTexte.value = "";
+            inputTexteLien.value = "";
         } else if (text === "Portfolio") {
             page.addObject = new Link(inputTexte.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
+        saveActualContent();
     }, false)
 }
 
@@ -762,6 +784,12 @@ inputCV.setAttribute("type", "file");
 inputCV.setAttribute("id", "choose-cv");
 inputCV.setAttribute("name", "choose-cv");
 inputCV.setAttribute("accept", "application/pdf");
+
+let btnAjoutCV = document.createElement("button");
+btnAjoutCV.setAttribute("class", "button");
+btnAjoutCV.setAttribute("id", "btn-add");
+btnAjoutCV.setAttribute("type", "button");
+btnAjoutCV.innerHTML = "Ajouter CV";
 
 function toolsCV() {
     let divSelect = document.getElementById("btnselect");
@@ -779,11 +807,11 @@ function toolsCV() {
     divSelect.appendChild(lblCV);
     divSelect.appendChild(inputCV);
 
-    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnAjoutCV);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", async () => {
+    btnAjoutCV.addEventListener("click", async () => {
         if (document.getElementById("choose-cv").files.length > 0) {
             const formData = new FormData();
             formData.append("file", document.getElementById("choose-cv").files[0]);
@@ -801,6 +829,7 @@ function toolsCV() {
                 inputCV.value = "";
                 let dataJson = JSON.stringify(page);
                 await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
+                await saveActualContent();
             } catch (e) {
                 console.log(e);
             }
@@ -815,4 +844,9 @@ function emptyIframe() {
     while (iframe_to_change.firstChild) {
         iframe_to_change.removeChild(iframe_to_change.lastChild);
     }
+}
+async function saveActualContent()
+{
+    let dataJson = JSON.stringify(page);
+    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
 }
