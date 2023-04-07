@@ -11,6 +11,7 @@ import {getPageContent} from "./main.js";
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
 let current_name="";
+let id_object =1;
 
 loadPortfolio()
 
@@ -121,6 +122,7 @@ async function showPortfolioAbout() {
             page.empty();
             jsonToPage(response.content, page);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            current_name = "aboutcontent";
 
             iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
             iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
