@@ -84,7 +84,6 @@ export function pageToHTML(pageIn, container) {
             case 'pdfView' :
                 let node_pdf = document.createElement("iframe");
                 node_pdf.setAttribute("src",object.pdfLink);
-                console.log(object.pdfLink);
                 node_pdf.setAttribute("height","1000vh");
                 node_pdf.setAttribute("width","100%");
                 container.appendChild(node_pdf);

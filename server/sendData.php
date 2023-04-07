@@ -1,6 +1,8 @@
 <?php
 
-ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 include "Database.php";
 include "utils.php";
@@ -55,6 +57,26 @@ switch ($sentCommand) {
             $db->setSkillContent($_SESSION["mail"],$_GET["content"],$id[1]);
             break;
         }
+    }
+    case "NEW_PROJECT":
+    {
+        if (!isset($_SESSION["mail"])) {
+            $data = array("connected" => false);
+            break;
+        }
+        $db->createProject($_SESSION["mail"]);
+        $data = array("connected" => (isset($_SESSION["mail"])), "id" => $db->countProjectPages(($_SESSION["mail"])));
+        break;
+    }
+    case "NEW_SKILL":
+    {
+        if (!isset($_SESSION["mail"])) {
+            $data = array("connected" => false);
+            break;
+        }
+        $db->createSkill($_SESSION["mail"]);
+        $data = array("connected" => (isset($_SESSION["mail"])), "id" => $db->countSkillPages($_SESSION["mail"]));
+        break;
     }
 }
 

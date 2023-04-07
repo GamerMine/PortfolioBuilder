@@ -1,7 +1,5 @@
 <?php
 
-ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
-
 class Database
 {
     const PORT   = 5432;
@@ -167,7 +165,7 @@ class Database
 
     public function setProjectContent($mail,$content,$id)
     {
-        $stmt = $this->connection->prepare("SELECT a.mail FROM project JOIN account a on a.mail = info.mail WHERE a.mail = ? AND id=?");
+        $stmt = $this->connection->prepare("SELECT a.mail FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ? AND id=?");
         $stmt->execute([$mail,$id]);
         if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
         {
@@ -183,7 +181,7 @@ class Database
 
     public function setSkillContent($mail,$content,$id)
     {
-        $stmt = $this->connection->prepare("SELECT a.mail FROM skill JOIN account a on a.mail = info.mail WHERE a.mail = ? AND id=?");
+        $stmt = $this->connection->prepare("SELECT a.mail FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ? AND id=?");
         $stmt->execute([$mail,$id]);
         if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
         {
@@ -195,5 +193,35 @@ class Database
             $stmt = $this->connection->prepare("INSERT INTO skill(id,mail,content) VALUES (?, ?, ?)");
             $stmt->execute([$id,$mail,$content]);
         }
+    }
+
+    public function createProject($mail)
+    {
+        $id = $this->countProjectPages($mail)+1;
+        $stmt = $this->connection->prepare("INSERT INTO project(id,mail,content) VALUES (?, ?, ?)");
+        $stmt->execute([$id,$mail,"{}"]);
+    }
+
+    public function createSkill($mail)
+    {
+        $id = 1;
+        $stmt = $this->connection->prepare("INSERT INTO skill(id,mail,content) VALUES (?, ?, ?)");
+        $stmt->execute([$id,$mail,"{}"]);
+        print_r([$id,$mail,"{}"]);
+    }
+
+    public function countProjectPages($mail)
+    {
+        $stmt = $this->connection->prepare("SELECT COUNT(id) FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+
+        return $stmt->fetch()[0];
+    }
+    public function countSkillPages($mail)
+    {
+        $stmt = $this->connection->prepare("SELECT COUNT(id) FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+
+        return ($stmt->fetch()[0]+1);
     }
 }

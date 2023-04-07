@@ -55,7 +55,6 @@ document.getElementById("btn-vision").onclick = vision;
 
 function vision(){
     const pass = document.getElementById("pass");
-    console.log("visible");
     if(pass.type === "password"){
         pass.type = "text";
     }else{

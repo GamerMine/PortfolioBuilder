@@ -61,7 +61,8 @@ async function createPortfolioPreviewElement(name, surname, mail, homeContent) {
         embed.contentWindow.document.getElementById("mail").innerText = mail;
         let page = new HTMLPage();
         jsonToPage(homeContent,page);
-        pageToHTML(page,embed.contentWindow.document.getElementById("content"))
+        pageToHTML(page,embed.contentWindow.document.getElementById("content"));
+        embed.onload = () => {};
     }
 
     article.appendChild(h5);
@@ -127,7 +128,6 @@ export async function showPortfolioInfo() {
 
         document.querySelector("body").innerHTML = templateResp;
         let page = new HTMLPage();
-        console.log(dataResponse);
         jsonToPage(dataResponse.content,page);
         pageToHTML(page,document.getElementById("content"))
         await setupUserInfoInPageView(result[1]);
