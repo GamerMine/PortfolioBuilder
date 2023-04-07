@@ -235,7 +235,6 @@ function toolsBase() {
 
         divSelect.appendChild(lblTitre);
         divSelect.appendChild(btnHome);
-        divSelect.appendChild(btnProject);
 
         let btnAjouterProjet = document.createElement("button");
         let divListeProjet = document.createElement("div");
@@ -250,17 +249,8 @@ function toolsBase() {
         divListeProjet.setAttribute("class", "divListe");
 
 
-        let ulBtnProjet = document.createElement("ul");
-        let liBtnProjet = document.createElement("li");
         let ulListProjet = document.createElement("ul");
-        //let liProjet1 = document.createElement("li");
-        //let liProjet2 = document.createElement("li");
-
-        //let btnProjet1 = document.createElement("button");
-        //btnProjet1.innerText = "Projet-1";
-        //let btnProjet2 = document.createElement("button");
-        //btnProjet2.innerText = "Projet-2";
-
+        
         const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
 
         try {
@@ -280,18 +270,8 @@ function toolsBase() {
             console.log(e);
         }
 
-        //liProjet1.appendChild(btnProjet1);
-        //liProjet2.appendChild(btnProjet2);
-
-        //ulListProjet.appendChild(liProjet1);
-        //ulListProjet.appendChild(liProjet2);
-
-        liBtnProjet.appendChild(btnProject);
-        liBtnProjet.appendChild(ulListProjet);
-
-        ulBtnProjet.appendChild(liBtnProjet);
-
-        divListeProjet.appendChild(ulBtnProjet);
+        divListeProjet.appendChild(btnProject);
+        divListeProjet.appendChild(ulListProjet);
 
         divNewButton.appendChild(btnAjouterProjet);
 
@@ -313,7 +293,6 @@ function toolsBase() {
         divSelect.appendChild(lblTitre);
         divSelect.appendChild(btnHome);
         divSelect.appendChild(btnProject);
-        divSelect.appendChild(btnSkill);
 
         let btnAjouterCompetence = document.createElement("button");
         let divListeCompetence = document.createElement("div");
@@ -328,22 +307,7 @@ function toolsBase() {
         divListeCompetence.setAttribute("class", "divListe");
 
 
-
-
-
-        let ulBtnCompetence = document.createElement("ul");
-        let liBtnCompetence = document.createElement("li");
         let ulListCompetence = document.createElement("ul");
-
-
-        let liCompetence1 = document.createElement("li");
-        let liCompetence2 = document.createElement("li");
-
-        //let btnCompetence1 = document.createElement("button");
-        //btnCompetence1.innerText = "Competence-1";
-        //let btnCompetence2 = document.createElement("button");
-        //btnCompetence2.innerText = "Competence-2";
-
 
         const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
 
@@ -364,26 +328,8 @@ function toolsBase() {
             console.log(e);
         }
 
-
-        //liCompetence1.appendChild(btnCompetence1);
-        //liCompetence2.appendChild(btnCompetence2);
-
-        //ulListCompetence.appendChild(liCompetence1);
-        //ulListCompetence.appendChild(liCompetence2);
-
-
-        liBtnCompetence.appendChild(btnSkill);
-        liBtnCompetence.appendChild(ulListCompetence);
-
-        ulBtnCompetence.appendChild(liBtnCompetence);
-
-        divListeCompetence.appendChild(ulBtnCompetence);
-
-
-
-
-
-
+        divListeCompetence.appendChild(btnSkill);
+        divListeCompetence.appendChild(ulListCompetence);
 
         divNewButton.appendChild(btnAjouterCompetence);
 
