@@ -143,6 +143,7 @@ main h6{
 }
 
 main p{
+	word-wrap: break-word;
 	margin: 10px 30px;
 	text-align: justify;
 }

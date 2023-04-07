@@ -10,6 +10,7 @@ import {getPageContent} from "./main.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
+let current_name="";
 
 loadPortfolio()
 
@@ -92,6 +93,39 @@ async function showPortfolioHome() {
     }
 }
 
+async function showPortfolioAbout() {
+    const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_CONTENT&name=aboutcontent&visibility=editor");
+    try {
+        const response = JSON.parse(resp);
+
+        if (!response.connected) window.location.href = "../index.html";
+
+        const iframeParent = document.getElementById("portfolio-preview").parentElement;
+        iframe.remove();
+        iframe.src = "../template.html";
+        iframeParent.appendChild(iframe);
+
+        iframe.onload = async () => {
+            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+            const user_info_json = JSON.parse(user_info);
+
+            const surname = user_info_json.info[0].surname;     //Get user's surname
+            const name = user_info_json.info[0].name;           //Get user's name
+            const mail = user_info_json.info[0].mail;           //Get user's mail
+
+            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
+            page.empty();
+            jsonToPage(response.content, page);
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            iframe.onload = () => {};
+        }
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 async function showPortfolioProjectList() {
     const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_PAGE_LIST");
     try {
@@ -120,6 +154,7 @@ async function showPortfolioProjectList() {
                 btn.innerText = "Projet " + project.id;
                 btn.onclick = async () => {
                     const content = await getPageContent("Projet-" + project.id);
+                    current_name="Projet-" + project.id;
                     loadPage(content);
                 };
                 iframe.contentWindow.document.getElementById("list-project").appendChild(btn);
@@ -211,6 +246,7 @@ btnHome.innerHTML = "Accueil";
 
 btnHome.addEventListener("click", () => {
     toolsBase();
+    current_name="homecontent";
     showPortfolioHome();
 });
 
@@ -381,9 +417,8 @@ btnApropos.setAttribute("type", "button");
 btnApropos.innerHTML = "A propos";
 
 btnApropos.addEventListener("click", () => {
-    document.getElementById("portfolio-preview").src = "../templateAPropos.html";
+    showPortfolioAbout();
     toolsBase();
-
 });
 
 let btnAjouterElement = document.createElement("button");
@@ -918,5 +953,5 @@ function emptyIframe() {
 async function saveActualContent()
 {
     let dataJson = JSON.stringify(page);
-    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
+    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
 }
