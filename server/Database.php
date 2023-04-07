@@ -145,4 +145,15 @@ class Database
             $stmt->execute([$name, $surname, $mail]);
         }
     }
+
+    public function setHomeContent($mail,$content)
+    {
+        $stmt = $this->connection->prepare("SELECT a.mail FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
+        {
+            $stmt = $this->connection->prepare("UPDATE info SET homecontent=? WHERE mail=?");
+            $stmt->execute([$content,$mail]);
+        }
+    }
 }

@@ -14,7 +14,7 @@ const iframe = document.getElementById("portfolio-preview");
 loadPortfolio()
 
 async function loadPortfolio() {
-    const resp = await request("GET", URL_BASE+"server/requestData.php?command=PORTFOLIO_EXIST");
+    const resp = await request("GET", URL_BASE + "server/requestData.php?command=PORTFOLIO_EXIST");
 
     try {
         const response = JSON.parse(resp);
@@ -82,7 +82,7 @@ async function showPortfolioHome() {
 
             page.empty();
             jsonToPage(response.content, page);
-            pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
 
         document.onvisibilitychange = async () => {
@@ -98,7 +98,7 @@ async function showPortfolioHome() {
 }
 
 async function showPortfolioProjectList() {
-    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+    const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_PAGE_LIST");
     try {
         const response = JSON.parse(resp);
 
@@ -119,16 +119,17 @@ async function showPortfolioProjectList() {
 
             for (const project of response.project) {
                 const btn = document.createElement("button");
-                btn.innerText = "Projet "+project.id;
+                btn.innerText = "Projet " + project.id;
                 btn.onclick = async () => {
-                    const content = await getPageContent("Projet-"+project.id);
+                    const content = await getPageContent("Projet-" + project.id);
                     console.log(content);
                     loadPage(content);
                 };
                 console.log(iframe.contentWindow.document.getElementById("list-project"));
                 iframe.contentWindow.document.getElementById("list-project").appendChild(btn);
             }
-            iframe.onload = () => {};
+            iframe.onload = () => {
+            };
         }
 
     } catch (e) {
@@ -151,34 +152,16 @@ function loadPage(content) {
 
         page.empty();
         jsonToPage(content, page);
-        pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
-        iframe.onload = () => {};
+        pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+        iframe.onload = () => {
+        };
     }
 }
 
-/*
-<div>Titre</div>
-
-<button class="button" id="btn-home" type="button">Accueil</button>
-
-
-<button class="button" id="btn-project" type="button">Projet</button>
-
-
-<button class="button" id="btn-skill" type="button">Compétence</button>
-
-
-<button class="button" id="btn-a-propos" type="button">A propos</button>
-*/
-/*
-<button class="button" id="btn-add" type="button">Ajouter élément</button>
-*/
-
-
-let lblTitre   = document.createElement("div");
-let btnHome    = document.createElement("button");
+let lblTitre = document.createElement("div");
+let btnHome = document.createElement("button");
 let btnProject = document.createElement("button");
-let btnSkill   = document.createElement("button");
+let btnSkill = document.createElement("button");
 let btnApropos = document.createElement("button");
 
 let btnAjouter = document.createElement("button");
@@ -213,29 +196,26 @@ btnAjouter.setAttribute("type", "button");
 
 document.getElementById("img-tools").onclick = toolsBase;
 
-function toolsBase()
-{
+function toolsBase() {
     const cursor = document.getElementById("cursor");
 
     cursor.style.left = "33px";
     cursor.style.right = "";
 
-    let divSelect  = document.getElementById("btnselect");
-    let divBottom  = document.getElementById("bottom");
+    let divSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
 
-    while (divSelect.firstChild)
-    {
+    while (divSelect.firstChild) {
         divSelect.removeChild(divSelect.firstChild);
     }
 
-    while (divBottom.firstChild)
-    {
+    while (divBottom.firstChild) {
         divBottom.removeChild(divBottom.firstChild);
     }
 
 
     btnAjouter.innerHTML = "Ajouter élément";
-    
+
     divSelect.appendChild(lblTitre);
     divSelect.appendChild(btnHome);
     divSelect.appendChild(btnProject);
@@ -247,8 +227,7 @@ function toolsBase()
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
 
-    btnHome.addEventListener("click", () =>
-    {
+    btnHome.addEventListener("click", () => {
         document.getElementById("portfolio-preview").src = "../template.html";
         toolsBase();
         showPortfolioHome();
@@ -300,10 +279,10 @@ function toolsBase()
 
             for (const pr of response.project) {
                 let li = document.createElement("li");
-                let btnProjetDynamique = document.createElement("button");
-                btnProjetDynamique.value = "Projet-"+pr.id;
-                btnProjetDynamique.innerText = "Projet-"+pr.id;
-                li.appendChild(btnProjetDynamique);
+                let btn = document.createElement("button");
+                btn.value = "Projet-" + pr.id;
+                btn.innerText = "Projet-" + pr.id;
+                li.appendChild(btn);
                 ulListProjet.appendChild(li);
             }
         } catch (e) {
@@ -319,6 +298,7 @@ function toolsBase()
         liBtnProjet.appendChild(btnProject);
         liBtnProjet.appendChild(ulListProjet);
 
+        ulBtnProjet.appendChild(btnProject);
         ulBtnProjet.appendChild(liBtnProjet);
 
         divListeProjet.appendChild(ulBtnProjet);
@@ -334,9 +314,7 @@ function toolsBase()
     });
 
 
-
-    btnSkill.addEventListener("click", () =>
-    {
+    btnSkill.addEventListener("click", () => {
         document.getElementById("portfolio-preview").src = "../templateSkill.html";
 
         while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
@@ -366,38 +344,19 @@ function toolsBase()
     });
 
 
-
-    btnApropos.addEventListener("click", () =>
-    {
+    btnApropos.addEventListener("click", () => {
         document.getElementById("portfolio-preview").src = "../templateAPropos.html";
         toolsBase();
 
     });
 }
 
-/*
-<div>Titre</div>
-
-<button class="button" id="btn-txt" type="button">Accueil</button>
-
-
-<button class="button" id="btn-img" type="button">Projet</button>
-
-
-<button class="button" id="btn-link" type="button">Compétence</button>
-
-
-<button class="button" id="btn-cv" type="button">A propos</button>
-*/
-
-
-
-let lblAjout   = document.createElement("div");
-let btnTxt     = document.createElement("button");
-let btnImg     = document.createElement("button");
-let btnLink    = document.createElement("button");
-let btnCv      = document.createElement("button");
-let btnRetour  = document.createElement("button");
+let lblAjout = document.createElement("div");
+let btnTxt = document.createElement("button");
+let btnImg = document.createElement("button");
+let btnLink = document.createElement("button");
+let btnCv = document.createElement("button");
+let btnRetour = document.createElement("button");
 
 lblAjout.textContent = "Sélectionner un élément à ajouter :";
 
@@ -427,21 +386,18 @@ btnRetour.setAttribute("type", "button");
 btnRetour.innerHTML = "Retour";
 
 
-function modifTools()
-{
-    inputTexte.value="";
-    let divBtnSelect  = document.getElementById("btnselect");
-    let divBottom     = document.getElementById("bottom");
+function modifTools() {
+    inputTexte.value = "";
+    let divBtnSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
 
-    while (divBtnSelect.firstChild)
-    {
+    while (divBtnSelect.firstChild) {
         divBtnSelect.removeChild(divBtnSelect.firstChild);
     }
 
-    while (divBottom.firstChild)
-    {
+    while (divBottom.firstChild) {
         divBottom.removeChild(divBottom.firstChild);
-    }   
+    }
 
 
 
@@ -455,38 +411,23 @@ function modifTools()
 
     btnRetour.addEventListener("click", toolsBase, false);
 
-    btnTxt .addEventListener("click", toolsText , false);
-    btnImg .addEventListener("click", toolsImage, false);
-    btnLink.addEventListener("click", toolsLien , false);
-    btnCv  .addEventListener("click", toolsCV   , false);
+    btnTxt.addEventListener("click", toolsText, false);
+    btnImg.addEventListener("click", toolsImage, false);
+    btnLink.addEventListener("click", toolsLien, false);
+    btnCv.addEventListener("click", toolsCV, false);
 
 }
 
-
-
-/*
-<select name="text" id="text-select">
-    <option value="titre">Titre</option>
-    <option value="titre1">Titre 1</option>
-    <option value="titre2">Titre 2</option>
-    <option value="titre3">Titre 3</option>
-    <option value="titre4">Titre 4</option>
-    <option value="titre5">Titre 5</option>
-    <option value="paragraphe">Paragraphe</option>
-</select>
-*/
-
-
 let lblType = document.createElement("div");
 
-let select      = document.createElement("select");
-let titre       = document.createElement("option");
-let titre1      = document.createElement("option");
-let titre2      = document.createElement("option");
-let titre3      = document.createElement("option");
-let titre4      = document.createElement("option");
-let titre5      = document.createElement("option");
-let paragraphe  = document.createElement("option");
+let select = document.createElement("select");
+let titre = document.createElement("option");
+let titre1 = document.createElement("option");
+let titre2 = document.createElement("option");
+let titre3 = document.createElement("option");
+let titre4 = document.createElement("option");
+let titre5 = document.createElement("option");
+let paragraphe = document.createElement("option");
 
 lblType.innerText = "Sélectionner un élément à ajouter :";
 
@@ -509,7 +450,7 @@ titre4.setAttribute("value", "5");
 titre4.innerHTML = "Titre 4";
 
 titre5.setAttribute("value", "6");
-titre5.innerHTML= "Titre 5";
+titre5.innerHTML = "Titre 5";
 
 paragraphe.setAttribute("value", "paragraphe");
 paragraphe.innerHTML = "Paragraphe";
@@ -541,16 +482,14 @@ btnRetour2.innerHTML = "Retour";
 
 
 function toolsText() {
-    let divSelect  = document.getElementById("btnselect");
-    let divBottom  = document.getElementById("bottom");
+    let divSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
 
-    while (divSelect.firstChild)
-    {
+    while (divSelect.firstChild) {
         divSelect.removeChild(divSelect.firstChild);
     }
 
-    while (divBottom.firstChild)
-    {
+    while (divBottom.firstChild) {
         divBottom.removeChild(divBottom.firstChild);
     }
 
@@ -571,31 +510,26 @@ function toolsText() {
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click",() =>
-    {
+    btnAjout.addEventListener("click", () => {
         emptyIframe();
-        if(select.value === "paragraphe")
-        {
+        if (select.value === "paragraphe") {
             page.addObject = new Paragraph(inputTexte.value);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
-            inputTexte.value="";
-        }
-        else
-        {
-            page.addObject = new Title(inputTexte.value,select.value);
+            inputTexte.value = "";
+        } else {
+            page.addObject = new Title(inputTexte.value, select.value);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
-            inputTexte.value="";
+            inputTexte.value = "";
         }
-    },false);
+    }, false);
 }
 
 
-
-let lbl   = document.createElement("div");
+let lbl = document.createElement("div");
 let inputImage = document.createElement("input");
 
 lbl.setAttribute("class", "lbl")
-lbl.textContent = "Choissisez une image :";
+lbl.textContent = "Choissisez une image (2MO MAX) :";
 
 inputImage.setAttribute("type", "file");
 inputImage.setAttribute("id", "choose_img");
@@ -603,11 +537,11 @@ inputImage.setAttribute("name", "choose_img");
 inputImage.setAttribute("accept", "image/png, image/jpeg");
 
 
-let lblAlt     = document.createElement("div");
-let inputAlt   = document.createElement("input");
+let lblAlt = document.createElement("div");
+let inputAlt = document.createElement("input");
 
 lblAlt.setAttribute("class", "lbl")
-lblAlt.textContent   = "Texte alternatif :";
+lblAlt.textContent = "Texte alternatif :";
 
 inputAlt.setAttribute("type", "text");
 inputAlt.setAttribute("id", "alt");
@@ -617,18 +551,15 @@ inputAlt.setAttribute("name", "alt");
 let div1 = document.createElement("div");
 let div2 = document.createElement("div");
 
-function toolsImage()
-{
-    let divSelect  = document.getElementById("btnselect");
-    let divBottom  = document.getElementById("bottom");
+function toolsImage() {
+    let divSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
 
-    while (divSelect.firstChild)
-    {
+    while (divSelect.firstChild) {
         divSelect.removeChild(divSelect.firstChild);
     }
 
-    while (divBottom.firstChild)
-    {
+    while (divBottom.firstChild) {
         divBottom.removeChild(divBottom.firstChild);
     }
 
@@ -644,8 +575,8 @@ function toolsImage()
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", async ()=>{
-        if(!inputImage.value=="") {
+    btnAjout.addEventListener("click", async () => {
+        if (!inputImage.value == "") {
             const formData = new FormData();
             formData.append("file", document.getElementById("choose_img").files[0]);
 
@@ -664,14 +595,11 @@ function toolsImage()
             } catch (e) {
                 console.log(e);
             }
-        }
-        else
-        {
+        } else {
             console.warn("No file selected"); //TODO : an error message box
         }
     }, false);
 }
-
 
 
 let lblLien = document.createElement("div");
@@ -685,8 +613,8 @@ let selectLien = document.createElement("select");
 selectLien.setAttribute("id", "choose-link");
 selectLien.setAttribute("name", "choose-link");
 
-let optValue     = document.createElement("option");
-let optInternet  = document.createElement("option");
+let optValue = document.createElement("option");
+let optInternet = document.createElement("option");
 let optPortfolio = document.createElement("option");
 
 optValue.setAttribute("value", "");
@@ -719,11 +647,6 @@ inputInternet.setAttribute("placeholder", "http://");
 // select si Portfolio ------------------
 let selectPortfolio = document.createElement("select");
 let value = document.createElement("option");
-let comp1 = document.createElement("option");
-let comp2 = document.createElement("option");
-let proj1 = document.createElement("option");
-let proj2 = document.createElement("option");
-let proj3 = document.createElement("option");
 
 selectPortfolio.setAttribute("name", "text");
 selectPortfolio.setAttribute("id", "text-select");
@@ -731,38 +654,21 @@ selectPortfolio.setAttribute("id", "text-select");
 value.setAttribute("value", "value");
 value.innerHTML = "----Value----";
 
-comp1.setAttribute("value", "comp1");
-comp1.innerHTML = "Compétence 1";
-
-comp2.setAttribute("value", "comp2");
-comp2.innerHTML = "Compétence 2";
-
-proj1.setAttribute("value", "proj1");
-proj1.innerHTML = "Projet 1";
-
-proj2.setAttribute("value", "proj2");
-proj2.innerHTML = "Projet 2";
-
-proj3.setAttribute("value", "proj3");
-proj3.innerHTML = "Projet 3";
 // --------------------------------------
 
 let divChoose = document.createElement("div");
 
 divChoose.setAttribute("id", "divChoose");
 
-function toolsLien()
-{
-    let divSelect  = document.getElementById("btnselect");
-    let divBottom  = document.getElementById("bottom");
-    
-    while (divSelect.firstChild)
-    {
+function toolsLien() {
+    let divSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
+
+    while (divSelect.firstChild) {
         divSelect.removeChild(divSelect.firstChild);
     }
 
-    while (divBottom.firstChild)
-    {
+    while (divBottom.firstChild) {
         divBottom.removeChild(divBottom.firstChild);
     }
 
@@ -776,15 +682,13 @@ function toolsLien()
     const selectElement = document.getElementById("choose-link");
 
     let text = "";
-    selectElement.addEventListener('change', async (event) =>
-    {
+    selectElement.addEventListener('change', async (event) => {
 
         divSelect.appendChild(lblLien);
         divSelect.appendChild(selectLien);
         divSelect.appendChild(divChoose);
-    
-        while(divChoose.firstChild)
-        {
+
+        while (divChoose.firstChild) {
             divChoose.removeChild(divChoose.firstChild);
         }
 
@@ -795,7 +699,7 @@ function toolsLien()
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(inputTexteLien);
 
-        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+        const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_PAGE_LIST");
 
         try {
             const response = JSON.parse(resp);
@@ -804,14 +708,14 @@ function toolsLien()
 
             for (const sk of response.skill) {
                 const option = document.createElement("option");
-                option.value = "Competence-"+sk.id;
-                option.innerText = "Competence-"+sk.id;
+                option.value = "Competence-" + sk.id;
+                option.innerText = "Competence-" + sk.id;
                 selectPortfolio.appendChild(option);
             }
             for (const pr of response.project) {
                 const option = document.createElement("option");
-                option.value = "Projet-"+pr.id;
-                option.innerText = "Projet-"+pr.id;
+                option.value = "Projet-" + pr.id;
+                option.innerText = "Projet-" + pr.id;
                 selectPortfolio.appendChild(option);
             }
         } catch (e) {
@@ -819,19 +723,13 @@ function toolsLien()
         }
 
         text = selectElement.options[selectElement.selectedIndex].text;
-        
-        if (text === "Internet")
-        {
+
+        if (text === "Internet") {
             divChoose.appendChild(inputInternet);
-        }
-        else if (text === "Portfolio")
-        {
+        } else if (text === "Portfolio") {
             divChoose.appendChild(selectPortfolio);
-        }
-        else if (text === "")
-        {
-            while (divSelect.firstChild)
-            {
+        } else if (text === "") {
+            while (divSelect.firstChild) {
                 divSelect.removeChild(divSelect.firstChild);
             }
             divSelect.appendChild(lblLien);
@@ -840,23 +738,19 @@ function toolsLien()
     });
 
 
-
     divBottom.appendChild(btnAjout);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click",() => {
+    btnAjout.addEventListener("click", () => {
         emptyIframe();
-        if (text ==="Internet")
-        {
-            page.addObject = new Link(inputTexte.value,inputInternet.value);
-            pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
-            inputInternet.value="";
-            inputTexte.value="";
-        }
-        else if (text ==="Portfolio")
-        {
-            page.addObject = new Link(inputTexte.value,"javascript:loadPage('"+ selectPortfolio.options[selectPortfolio.selectedIndex].text +"');");
+        if (text === "Internet") {
+            page.addObject = new Link(inputTexte.value, inputInternet.value);
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            inputInternet.value = "";
+            inputTexte.value = "";
+        } else if (text === "Portfolio") {
+            page.addObject = new Link(inputTexte.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
     }, false)
@@ -866,31 +760,23 @@ let lblCV = document.createElement("div");
 let inputCV = document.createElement("input");
 
 lblCV.setAttribute("class", "lbl")
-lblCV.textContent = "Ajouter un CV :";
+lblCV.textContent = "Ajouter un CV (2MO MAX) :";
 
-/*
-<input type="file"
-       id="choose-cv" name="choose-cv"
-       accept="application/pdf">
-*/
 inputCV.setAttribute("type", "file");
 inputCV.setAttribute("id", "choose-cv");
 inputCV.setAttribute("name", "choose-cv");
 inputCV.setAttribute("accept", "application/pdf");
 
-function toolsCV()
-{
-    let divSelect  = document.getElementById("btnselect");
-    let divBottom  = document.getElementById("bottom");
+function toolsCV() {
+    let divSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
 
-    while (divSelect.firstChild)
-    {
+    while (divSelect.firstChild) {
         divSelect.removeChild(divSelect.firstChild);
     }
 
 
-    while (divBottom.firstChild)
-    {
+    while (divBottom.firstChild) {
         divBottom.removeChild(divBottom.firstChild);
     }
 
@@ -902,38 +788,35 @@ function toolsCV()
 
     btnRetour2.addEventListener("click", modifTools, false);
     btnAjout.addEventListener("click", async () => {
-        if(!inputCV.value=="")
-        {
+        if (document.getElementById("choose-cv").files.length > 0) {
             const formData = new FormData();
             formData.append("file", document.getElementById("choose-cv").files[0]);
 
-            const resp = await sendFile(URL_BASE+"server/sendData.php?command=SAVE_FILE", formData);
+            const resp = await sendFile(URL_BASE + "server/sendData.php?command=SAVE_FILE", formData);
 
             try {
                 const response = JSON.parse(resp);
                 if (!response.connected) window.location.href = "index.html";
 
                 emptyIframe();
-                page.addObject = new PDFView(URL_BASE+"server/"+response.link);
-                console.log(URL_BASE+"server/"+response.link);
-                pageToHTML(page,iframe.contentWindow.document.getElementById("content"));
-                inputCV.value="";
+                page.addObject = new PDFView(URL_BASE + "server/" + response.link);
+                console.log(URL_BASE + "server/" + response.link);
+                pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+                inputCV.value = "";
+                let dataJson = JSON.stringify(page);
+                await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
             } catch (e) {
                 console.log(e);
             }
-        }
-         else
-        {
+        } else {
             console.warn("No file selected"); //TODO: an error message popup
         }
-    },false);
+    }, false);
 }
 
-function emptyIframe()
-{
+function emptyIframe() {
     let iframe_to_change = iframe.contentWindow.document.getElementById("content")
-    while(iframe_to_change.firstChild)
-    {
+    while (iframe_to_change.firstChild) {
         iframe_to_change.removeChild(iframe_to_change.lastChild);
     }
 }
