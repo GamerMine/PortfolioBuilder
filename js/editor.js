@@ -86,8 +86,6 @@ async function showPortfolioHome() {
             page.empty();
             jsonToPage(response.content, page);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
-            iframe.contentWindow.document.querySelectorAll("button").forEach(elt=> elt.setAttribute("class", "disable"));
-            iframe.contentWindow.document.querySelectorAll("a").forEach(elt=> elt.setAttribute("class", "disable"));
             iframe.onload = () => {};
         }
     } catch (e) {
@@ -121,9 +119,6 @@ async function showPortfolioAbout() {
             page.empty();
             jsonToPage(response.content, page);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
-
-            iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
-            iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
             iframe.onload = () => {};
         }
     } catch (e) {
@@ -200,7 +195,7 @@ async function showPortfolioSkillList() {
                 btn.innerText = "Competence " + skill.id;
                 btn.onclick = async () => {
                     const content = await getPageContent("Competence-" + skill.id);
-                    loadPage(conten
+                    loadPage(content);
                 };
                 iframe.contentWindow.document.getElementById("list-skill").appendChild(btn);
             }
@@ -232,9 +227,6 @@ function loadPage(content) {
         page.empty();
         jsonToPage(content, page);
         pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
-        iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
-        iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
-
         iframe.onload = () => {};
     }
 }
@@ -788,7 +780,7 @@ selectPortfolio.setAttribute("name", "text");
 selectPortfolio.setAttribute("id", "text-select");
 
 value.setAttribute("value", "value");
-value.innerHTML = "----Value----";
+value.innerHTML = "----Valeur----";
 
 // --------------------------------------
 
@@ -878,9 +870,6 @@ function toolsLien() {
             divSelect.appendChild(lblLien);
             divSelect.appendChild(selectLien);
         }
-
-        iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
-        iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
     });
 
 
@@ -896,7 +885,7 @@ function toolsLien() {
             inputInternet.value = "";
             inputTexteLien.value = "";
         } else if (text === "Portfolio") {
-            page.addObject = new Link(inputTexteLien.value, "javascript:goToPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
+            page.addObject = new Link(inputTexteLien.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
         saveActualContent();
@@ -967,6 +956,126 @@ function toolsCV() {
     }, false);
 }
 
+
+function modifElement(element) {
+    let divSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
+
+    while (divSelect.firstChild) {
+        divSelect.removeChild(divSelect.firstChild);
+    }
+
+    while (divBottom.firstChild) {
+        divBottom.removeChild(divBottom.firstChild);
+    }
+
+
+    if(element.nodeName.includes("H") || element.nodeName === "P"){
+        let lblTexte = document.createElement("div");
+        let textareaTexte = document.createElement("textarea");
+        let btnSupprimer = document.createElement("button");
+
+        lblTexte.setAttribute("class", "lbl")
+        lblTexte.textContent = "Texte :";
+
+        textareaTexte.setAttribute("id", "texte");
+        textareaTexte.setAttribute("name", "texte");
+        textareaTexte.setAttribute("rows", "10");
+        textareaTexte.innerHTML = element.innerText;
+
+
+        btnSupprimer.setAttribute("class", "button");
+        btnSupprimer.setAttribute("id", "btn-delete");
+        btnSupprimer.setAttribute("type", "button");
+        btnSupprimer.innerHTML = "Supprimer le texte";
+
+        divSelect.appendChild(lblTexte);
+        divSelect.appendChild(textareaTexte);
+        divSelect.appendChild(btnSupprimer);
+
+        let btnAnnuler = document.createElement("button");
+
+        btnAnnuler.setAttribute("class", "button");
+        btnAnnuler.setAttribute("id", "btn-cancel");
+        btnAnnuler.setAttribute("type", "button");
+        btnAnnuler.innerHTML = "Annuler";
+
+        divBottom.appendChild(btnAnnuler);
+    }
+    else if(element.nodeName === "IMG"){
+        let btnSupprimer = document.createElement("button");
+        let btnAnnuler = document.createElement("button");
+
+        btnSupprimer.setAttribute("class", "button");
+        btnSupprimer.setAttribute("id", "btn-delete");
+        btnSupprimer.setAttribute("type", "button");
+        btnSupprimer.innerHTML = "Supprimer l'image";
+
+        btnAnnuler.setAttribute("class", "button");
+        btnAnnuler.setAttribute("id", "btn-cancel");
+        btnAnnuler.setAttribute("type", "button");
+        btnAnnuler.innerHTML = "Annuler";
+
+        divSelect.appendChild(btnSupprimer);
+
+        divBottom.appendChild(btnAnnuler);
+
+    }
+    else if(element.nodeName === "A"){
+        let lblTexte = document.createElement("div");
+        let inputTexte = document.createElement("input");
+        let btnSupprimer = document.createElement("button");
+
+        lblTexte.setAttribute("class", "lbl")
+        lblTexte.textContent = "Texte :";
+
+        inputTexte.setAttribute("type", "text");
+        inputTexte.setAttribute("id", "texte");
+        inputTexte.setAttribute("name", "texte");
+        inputTexte.innerHTML = element.innerText;
+
+        btnSupprimer.setAttribute("class", "button");
+        btnSupprimer.setAttribute("id", "btn-delete");
+        btnSupprimer.setAttribute("type", "button");
+        btnSupprimer.innerHTML = "Supprimer le texte";
+
+        divSelect.appendChild(lblTexte);
+        divSelect.appendChild(inputTexte);
+        divSelect.appendChild(btnSupprimer);
+
+        let btnAnnuler = document.createElement("button");
+
+        btnAnnuler.setAttribute("class", "button");
+        btnAnnuler.setAttribute("id", "btn-cancel");
+        btnAnnuler.setAttribute("type", "button");
+        btnAnnuler.innerHTML = "Annuler";
+
+        divBottom.appendChild(btnAnnuler);
+    }
+    else if(element.nodeName === "IFRAME"){
+        let btnSupprimer = document.createElement("button");
+        let btnAnnuler = document.createElement("button");
+
+        btnSupprimer.setAttribute("class", "button");
+        btnSupprimer.setAttribute("id", "btn-delete");
+        btnSupprimer.setAttribute("type", "button");
+        btnSupprimer.innerHTML = "Supprimer l'image";
+
+        btnAnnuler.setAttribute("class", "button");
+        btnAnnuler.setAttribute("id", "btn-cancel");
+        btnAnnuler.setAttribute("type", "button");
+        btnAnnuler.innerHTML = "Annuler";
+
+        divSelect.appendChild(btnSupprimer);
+
+        divBottom.appendChild(btnAnnuler);
+    }
+
+}
+
+
+
+
 function emptyIframe() {
     let iframe_to_change = iframe.contentWindow.document.getElementById("content")
     while (iframe_to_change.firstChild) {
@@ -976,7 +1085,5 @@ function emptyIframe() {
 async function saveActualContent()
 {
     let dataJson = JSON.stringify(page);
-    console.log(current_name);
-    const resp = await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
-    console.log(resp);
+    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
 }
