@@ -85,6 +85,7 @@ async function showPortfolioHome() {
             page.empty();
             jsonToPage(response.content, page);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            iframe.onload = () => {};
         }
     } catch (e) {
         console.log(e)
@@ -119,14 +120,11 @@ async function showPortfolioProjectList() {
                 btn.innerText = "Projet " + project.id;
                 btn.onclick = async () => {
                     const content = await getPageContent("Projet-" + project.id);
-                    console.log(content);
                     loadPage(content);
                 };
-                console.log(iframe.contentWindow.document.getElementById("list-project"));
                 iframe.contentWindow.document.getElementById("list-project").appendChild(btn);
             }
-            iframe.onload = () => {
-            };
+            iframe.onload = () => {};
         }
 
     } catch (e) {
@@ -162,10 +160,8 @@ async function showPortfolioSkillList() {
                 btn.innerText = "Competence " + skill.id;
                 btn.onclick = async () => {
                     const content = await getPageContent("Competence-" + skill.id);
-                    console.log(content);
                     loadPage(content);
                 };
-                console.log(iframe.contentWindow.document.getElementById("list-skill"));
                 iframe.contentWindow.document.getElementById("list-skill").appendChild(btn);
             }
             iframe.onload = () => {
@@ -214,7 +210,6 @@ btnHome.setAttribute("type", "button");
 btnHome.innerHTML = "Accueil";
 
 btnHome.addEventListener("click", () => {
-    document.getElementById("portfolio-preview").src = "../template.html";
     toolsBase();
     showPortfolioHome();
 });
@@ -268,6 +263,10 @@ async function toolsProject() {
             let btn = document.createElement("button");
             btn.value = "Projet-" + pr.id;
             btn.innerText = "Projet-" + pr.id;
+            btn.onclick = async () => {
+                const content = await getPageContent("Projet-" + pr.id);
+                loadPage(content);
+            }
             li.appendChild(btn);
             ulListProjet.appendChild(li);
         }
@@ -290,12 +289,9 @@ async function toolsProject() {
     showPortfolioProjectList();
     btnAjouterProjet.addEventListener("click", async () =>
     {
-        console.log("begin");
         const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
-        console.log(resp);
         let content = await getPageContent("Projet-" + JSON.parse(resp).id);
         loadPage(content);
-        console.log("Projet-" + JSON.parse(resp).id + " : " + content);
     }, false);
 
 }
@@ -318,7 +314,7 @@ async function toolsSkill() {
 
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
-    
+
     while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
     while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
 
@@ -353,6 +349,10 @@ async function toolsSkill() {
             let btn = document.createElement("button");
             btn.value = "Competence-" + sk.id;
             btn.innerText = "Competence-" + sk.id;
+            btn.onclick = async () => {
+                const content = await getPageContent("Competence-" + sk.id);
+                loadPage(content);
+            }
             li.appendChild(btn);
             ulListCompetence.appendChild(li);
         }
@@ -663,7 +663,6 @@ function toolsImage() {
             const resp = await sendFile(URL_BASE + "server/sendData.php?command=SAVE_FILE", formData);
 
             try {
-                console.log(resp);
                 const response = JSON.parse(resp);
                 if (!response.connected) window.location.href = "index.html";
 
@@ -835,7 +834,6 @@ function toolsLien() {
         if (text === "Internet") {
             page.addObject = new Link(inputTexteLien.value, inputInternet.value);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
-            console.log(inputTexteLien.value + inputInternet.value);
             inputInternet.value = "";
             inputTexteLien.value = "";
         } else if (text === "Portfolio") {
@@ -896,7 +894,6 @@ function toolsCV() {
 
                 emptyIframe();
                 page.addObject = new PDFView(URL_BASE + "server/" + response.link);
-                console.log(URL_BASE + "server/" + response.link);
                 pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
                 inputCV.value = "";
                 let dataJson = JSON.stringify(page);

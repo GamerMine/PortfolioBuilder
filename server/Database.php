@@ -197,10 +197,9 @@ class Database
 
     public function createProject($mail)
     {
-        $id = 1;
+        $id = $this->countProjectPages($mail)+1;
         $stmt = $this->connection->prepare("INSERT INTO project(id,mail,content) VALUES (?, ?, ?)");
         $stmt->execute([$id,$mail,"{}"]);
-        print_r([$id,$mail,"{}"]);
     }
 
     public function createSkill($mail)
@@ -216,7 +215,7 @@ class Database
         $stmt = $this->connection->prepare("SELECT COUNT(id) FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
 
-        return ($stmt->fetch()[0]+1);
+        return $stmt->fetch()[0];
     }
     public function countSkillPages($mail)
     {

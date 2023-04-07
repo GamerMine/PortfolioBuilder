@@ -85,7 +85,6 @@ async function register() {
             document.getElementById("form").firstChild.after(warn);
         }
     } catch (e) {
-        console.log("uio");
         warn.innerText = "Une erreur serveur est survenu !\nVeuillez rééssayer plus tard !";
         document.getElementById("form").firstChild.after(warn);
     }
@@ -96,7 +95,6 @@ document.getElementById("btn-vision2").onclick = vision2;
 
 function vision() {
     const pass = document.getElementById("pass");
-    console.log("visible");
     if (pass.type === "password") {
         pass.type = "text";
     } else {
@@ -106,7 +104,6 @@ function vision() {
 
 function vision2() {
     const pass = document.getElementById("verifPass");
-    console.log("visible");
     if (pass.type === "password") {
         pass.type = "text";
     } else {
