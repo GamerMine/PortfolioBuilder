@@ -57,6 +57,9 @@ switch ($sentCommand) {
             $db->setSkillContent($_SESSION["mail"],$_GET["content"],$id[1]);
             break;
         }
+        else if (strtolower($_GET["name"]) == "aboutcontent") {
+            $db->setInfoContent($_SESSION["mail"],$_GET["content"]);
+        }
     }
     case "NEW_PROJECT":
     {

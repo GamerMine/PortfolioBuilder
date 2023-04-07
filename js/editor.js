@@ -10,6 +10,7 @@ import {getPageContent} from "./main.js";
 
 let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
+let current_name="";
 
 loadPortfolio()
 
@@ -120,6 +121,7 @@ async function showPortfolioProjectList() {
                 btn.innerText = "Projet " + project.id;
                 btn.onclick = async () => {
                     const content = await getPageContent("Projet-" + project.id);
+                    current_name="Projet-" + project.id;
                     loadPage(content);
                 };
                 iframe.contentWindow.document.getElementById("list-project").appendChild(btn);
@@ -211,6 +213,7 @@ btnHome.innerHTML = "Accueil";
 
 btnHome.addEventListener("click", () => {
     toolsBase();
+    current_name="homecontent";
     showPortfolioHome();
 });
 
@@ -917,5 +920,5 @@ function emptyIframe() {
 async function saveActualContent()
 {
     let dataJson = JSON.stringify(page);
-    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
+    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
 }
