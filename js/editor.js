@@ -248,7 +248,7 @@ function toolsBase() {
         btnAjouterProjet.innerHTML = "Nouveau";
 
         divNewButton.setAttribute("class", "divNewButton");
-        divListeProjet.setAttribute("class", "divListeProjet");
+        divListeProjet.setAttribute("class", "div-list");
 
 
         let ulBtnProjet = document.createElement("ul");

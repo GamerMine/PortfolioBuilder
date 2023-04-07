@@ -146,6 +146,47 @@ footer ul {
 	border: none;
 }
 
+/*--LIST-- */
+
+.div-list ul{
+	display: none;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 140px;
+	overflow-y: auto ;
+	
+}
+
+.div-list ul *{
+	transition: all .3s;
+}
+
+.div-list:hover ul{
+	display: block;
+}
+
+.div-list:hover > button{
+	border-radius: .5em .5em 0 0;
+}
+
+.div-list button{
+	width: 100%;
+}
+
+.div-list ul li button{
+	background-color: white;
+	border: solid gray 1px;
+}
+
+.div-list ul li:last-child button{
+	border-radius: 0 0 .5em .5em;
+}
+
+.div-list ul li button:hover{
+	filter: brightness(75%);
+}
+
 /*----------*/
 /*--POPUPS--*/
 /*----------*/
@@ -245,6 +286,10 @@ img:hover {
     justify-content: center;
 	width: min-content;
 
+}
+
+.buttonNew:hover{
+	background-color: rgb(98, 27, 165);
 }
 
 .divNewButton{
