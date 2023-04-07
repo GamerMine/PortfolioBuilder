@@ -161,6 +161,13 @@ main iframe{
 }
 
 /*----------*/
+/*DESACTIVE-*/
+/*----------*/
+.disable{
+	pointer-events: none;
+}
+
+/*----------*/
 /*MEDIAQUERY*/
 /*----------*/
 @media (max-width: 900px){
