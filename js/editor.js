@@ -256,7 +256,7 @@ function toolsBase()
 
 
 
-    btnProject.addEventListener("click", () =>
+    btnProject.addEventListener("click", async () =>
     {
         document.getElementById("portfolio-preview").src = "../templateProject.html";
 
@@ -291,6 +291,7 @@ function toolsBase()
         //let btnProjet2 = document.createElement("button");
         //btnProjet2.innerText = "Projet-2";
 
+        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
 
         try {
             const response = JSON.parse(resp);
@@ -299,10 +300,10 @@ function toolsBase()
 
             for (const pr of response.project) {
                 let li = document.createElement("li");
-                let btn = document.createElement("button");
-                btn.value = "Projet-"+pr.id;
-                btn.innerText = "Projet-"+pr.id;
-                li.appendChild(btn);
+                let btnProjetDynamique = document.createElement("button");
+                btnProjetDynamique.value = "Projet-"+pr.id;
+                btnProjetDynamique.innerText = "Projet-"+pr.id;
+                li.appendChild(btnProjetDynamique);
                 ulListProjet.appendChild(li);
             }
         } catch (e) {
@@ -315,10 +316,9 @@ function toolsBase()
         //ulListProjet.appendChild(liProjet1);
         //ulListProjet.appendChild(liProjet2);
 
-
+        liBtnProjet.appendChild(btnProject);
         liBtnProjet.appendChild(ulListProjet);
 
-        ulBtnProjet.appendChild(btnProject);
         ulBtnProjet.appendChild(liBtnProjet);
 
         divListeProjet.appendChild(ulBtnProjet);
