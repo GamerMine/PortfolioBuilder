@@ -297,6 +297,7 @@ async function toolsProject() {
         for (const pr of response.project) {
             let li = document.createElement("li");
             let btn = document.createElement("button");
+            btn.addEventListener("click", toolsBase);
             btn.value = "Projet-" + pr.id;
             btn.innerText = "Projet-" + pr.id;
             btn.onclick = async () => {
