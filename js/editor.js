@@ -86,6 +86,8 @@ async function showPortfolioHome() {
             page.empty();
             jsonToPage(response.content, page);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            iframe.contentWindow.document.querySelectorAll("button").forEach(elt=> elt.setAttribute("class", "disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt=> elt.setAttribute("class", "disable"));
             iframe.onload = () => {};
         }
     } catch (e) {
@@ -119,6 +121,9 @@ async function showPortfolioAbout() {
             page.empty();
             jsonToPage(response.content, page);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+
+            iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
             iframe.onload = () => {};
         }
     } catch (e) {
@@ -227,6 +232,9 @@ function loadPage(content) {
         page.empty();
         jsonToPage(content, page);
         pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+        iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
+        iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
+
         iframe.onload = () => {};
     }
 }
@@ -870,6 +878,9 @@ function toolsLien() {
             divSelect.appendChild(lblLien);
             divSelect.appendChild(selectLien);
         }
+
+        iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
+        iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
     });
 
 
@@ -965,5 +976,7 @@ function emptyIframe() {
 async function saveActualContent()
 {
     let dataJson = JSON.stringify(page);
-    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
+    console.log(current_name);
+    const resp = await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
+    console.log(resp);
 }
