@@ -287,6 +287,17 @@ function toolsBase() {
         divSelect.appendChild(btnApropos);
 
         showPortfolioProjectList();
+
+        btnAjouterProjet.addEventListener("click", async () =>
+        {
+            console.log("begin");
+            const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
+            console.log(resp);
+            let content = await getPageContent("Projet-" + JSON.parse(resp).id);
+            loadPage(content);
+            console.log("Projet-" + JSON.parse(resp).id + " : " + content);
+        }, false);
+
     });
 
 
@@ -343,8 +354,8 @@ function toolsBase() {
         divSelect.appendChild(divNewButton);
 
         divSelect.appendChild(btnApropos);
-    });
 
+    });
 
     btnApropos.addEventListener("click", () => {
         document.getElementById("portfolio-preview").src = "../templateAPropos.html";
@@ -763,7 +774,6 @@ function toolsLien() {
         if (text === "Internet") {
             page.addObject = new Link(inputTexteLien.value, inputInternet.value);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
-            console.log(inputTexteLien.value + inputInternet.value);
             inputInternet.value = "";
             inputTexteLien.value = "";
         } else if (text === "Portfolio") {
