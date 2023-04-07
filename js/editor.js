@@ -310,7 +310,7 @@ function toolsBase() {
         btnAjouterCompetence.innerHTML = "Nouveau";
 
         divNewButton.setAttribute("class", "divNewButton");
-        divListeCompetence.setAttribute("class", "divListe");
+        divListeCompetence.setAttribute("class", "div-list");
 
 
         let ulListCompetence = document.createElement("ul");
