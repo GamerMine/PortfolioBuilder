@@ -92,6 +92,39 @@ async function showPortfolioHome() {
     }
 }
 
+async function showPortfolioAbout() {
+    const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_CONTENT&name=aboutcontent&visibility=editor");
+    try {
+        const response = JSON.parse(resp);
+
+        if (!response.connected) window.location.href = "../index.html";
+
+        const iframeParent = document.getElementById("portfolio-preview").parentElement;
+        iframe.remove();
+        iframe.src = "../template.html";
+        iframeParent.appendChild(iframe);
+
+        iframe.onload = async () => {
+            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+            const user_info_json = JSON.parse(user_info);
+
+            const surname = user_info_json.info[0].surname;     //Get user's surname
+            const name = user_info_json.info[0].name;           //Get user's name
+            const mail = user_info_json.info[0].mail;           //Get user's mail
+
+            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
+            page.empty();
+            jsonToPage(response.content, page);
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            iframe.onload = () => {};
+        }
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 async function showPortfolioProjectList() {
     const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_PAGE_LIST");
     try {
@@ -380,9 +413,8 @@ btnApropos.setAttribute("type", "button");
 btnApropos.innerHTML = "A propos";
 
 btnApropos.addEventListener("click", () => {
-    document.getElementById("portfolio-preview").src = "../templateAPropos.html";
+    showPortfolioAbout();
     toolsBase();
-
 });
 
 let btnAjouterElement = document.createElement("button");
