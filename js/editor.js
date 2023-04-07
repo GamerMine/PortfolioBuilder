@@ -247,7 +247,7 @@ function toolsBase() {
         btnAjouterProjet.innerHTML = "Nouveau";
 
         divNewButton.setAttribute("class", "divNewButton");
-        divListeProjet.setAttribute("class", "divListeProjet");
+        divListeProjet.setAttribute("class", "divListe");
 
 
         let ulBtnProjet = document.createElement("ul");
@@ -304,7 +304,7 @@ function toolsBase() {
     });
 
 
-    btnSkill.addEventListener("click", () => {
+    btnSkill.addEventListener("click", async () => {
         document.getElementById("portfolio-preview").src = "../templateSkill.html";
 
         while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
@@ -316,6 +316,7 @@ function toolsBase() {
         divSelect.appendChild(btnSkill);
 
         let btnAjouterCompetence = document.createElement("button");
+        let divListeCompetence = document.createElement("div");
         let divNewButton = document.createElement("div");
 
         btnAjouterCompetence.setAttribute("class", "buttonNew");
@@ -324,11 +325,70 @@ function toolsBase() {
         btnAjouterCompetence.innerHTML = "Nouveau";
 
         divNewButton.setAttribute("class", "divNewButton");
+        divListeCompetence.setAttribute("class", "divListe");
+
+
+
+
+
+        let ulBtnCompetence = document.createElement("ul");
+        let liBtnCompetence = document.createElement("li");
+        let ulListCompetence = document.createElement("ul");
+
+
+        let liCompetence1 = document.createElement("li");
+        let liCompetence2 = document.createElement("li");
+
+        //let btnCompetence1 = document.createElement("button");
+        //btnCompetence1.innerText = "Competence-1";
+        //let btnCompetence2 = document.createElement("button");
+        //btnCompetence2.innerText = "Competence-2";
+
+
+        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+
+        try {
+            const response = JSON.parse(resp);
+
+            if (!response.connected) window.location.href = "index.html";
+
+            for (const sk of response.skill) {
+                let li = document.createElement("li");
+                let btn = document.createElement("button");
+                btn.value = "Competence-" + sk.id;
+                btn.innerText = "Competence-" + sk.id;
+                li.appendChild(btn);
+                ulListCompetence.appendChild(li);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+
+        //liCompetence1.appendChild(btnCompetence1);
+        //liCompetence2.appendChild(btnCompetence2);
+
+        //ulListCompetence.appendChild(liCompetence1);
+        //ulListCompetence.appendChild(liCompetence2);
+
+
+        liBtnCompetence.appendChild(btnSkill);
+        liBtnCompetence.appendChild(ulListCompetence);
+
+        ulBtnCompetence.appendChild(liBtnCompetence);
+
+        divListeCompetence.appendChild(ulBtnCompetence);
+
+
+
+
+
+
 
         divNewButton.appendChild(btnAjouterCompetence);
 
+        divSelect.appendChild(divListeCompetence);
         divSelect.appendChild(divNewButton);
-
 
         divSelect.appendChild(btnApropos);
     });
