@@ -119,26 +119,32 @@ main{
 /*MISEENPAGE*/
 /*----------*/
 main h1{
+	word-wrap: break-word;
 	text-align: center;
 }
 
 main h2{
+	word-wrap: break-word;
 	margin: 20px 30px;
 }
 
 main h3{
+	word-wrap: break-word;
 	margin: 20px 60px;
 }
 
 main h4{
+	word-wrap: break-word;
 	margin: 20px 90px;
 }
 
 main h5{
+	word-wrap: break-word;
 	margin: 20px 120px;
 }
 
 main h6{
+	word-wrap: break-word;
 	margin: 20px 150px;
 }
 
@@ -153,6 +159,7 @@ main img{
 }
 
 main a{
+	word-wrap: break-word;
 	margin: 10px 30px;
 }
 
