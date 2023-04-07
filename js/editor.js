@@ -166,6 +166,9 @@ async function showPortfolioProjectList() {
                 };
                 iframe.contentWindow.document.getElementById("list-project").appendChild(btn);
             }
+            iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
+f
             iframe.onload = () => {};
         }
 
@@ -206,6 +209,9 @@ async function showPortfolioSkillList() {
                 };
                 iframe.contentWindow.document.getElementById("list-skill").appendChild(btn);
             }
+            iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
+
             iframe.onload = () => {
             };
         }
@@ -314,6 +320,8 @@ async function toolsProject() {
                 const content = await getPageContent("Projet-" + pr.id);
                 current_name="Projet-" + pr.id;
                 loadPage(content);
+                console.log(pr.id);
+
             }
             li.appendChild(btn);
             ulListProjet.appendChild(li);
@@ -339,6 +347,8 @@ async function toolsProject() {
     {
         const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
         let content = await getPageContent("Projet-" + JSON.parse(resp).id);
+        iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
+        iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
         loadPage(content);
         toolsBase();
     }, false);
@@ -427,6 +437,10 @@ async function toolsSkill() {
     {
         const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_SKILL");
         let content = await getPageContent("Competence-" + JSON.parse(resp).id);
+        iframe.contentWindow.document.querySelectorAll("button").forEach(elt=>elt.classList.add("disable"));
+        iframe.contentWindow.document.querySelectorAll("a").forEach(elt=>elt.classList.add("disable"));
+
+
         loadPage(content);
         toolsBase();
     }, false);
