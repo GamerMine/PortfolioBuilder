@@ -156,9 +156,6 @@ let btnProject = document.createElement("button");
 let btnSkill = document.createElement("button");
 let btnApropos = document.createElement("button");
 
-let btnAjouter = document.createElement("button");
-
-
 lblTitre.innerHTML = "Titre";
 
 btnHome.setAttribute("class", "button");
@@ -182,9 +179,11 @@ btnApropos.setAttribute("type", "button");
 btnApropos.innerHTML = "A propos";
 
 
-btnAjouter.setAttribute("class", "button");
-btnAjouter.setAttribute("id", "btn-add");
-btnAjouter.setAttribute("type", "button");
+let btnAjouterElement = document.createElement("button");
+
+btnAjouterElement.setAttribute("class", "button");
+btnAjouterElement.setAttribute("id", "btn-add");
+btnAjouterElement.setAttribute("type", "button");
 
 document.getElementById("img-tools").onclick = toolsBase;
 
@@ -206,7 +205,7 @@ function toolsBase() {
     }
 
 
-    btnAjouter.innerHTML = "Ajouter élément";
+    btnAjouterElement.innerHTML = "Ajouter élément";
 
     divSelect.appendChild(lblTitre);
     divSelect.appendChild(btnHome);
@@ -214,7 +213,7 @@ function toolsBase() {
     divSelect.appendChild(btnSkill);
     divSelect.appendChild(btnApropos);
 
-    divBottom.appendChild(btnAjouter);
+    divBottom.appendChild(btnAjouterElement);
 
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
@@ -457,12 +456,11 @@ inputTexte.setAttribute("style", "resize: none;");
 lblTexte.innerText = "Texte :";
 
 
-let btnAjout = document.createElement("button");
-
-btnAjout.setAttribute("class", "button");
-btnAjout.setAttribute("id", "btn-add");
-btnAjout.setAttribute("type", "button");
-btnAjout.innerHTML = "Ajouter";
+let btnAjoutText = document.createElement("button");
+btnAjoutText.setAttribute("class", "button");
+btnAjoutText.setAttribute("id", "btn-add");
+btnAjoutText.setAttribute("type", "button");
+btnAjoutText.innerHTML = "Ajouter Texte";
 
 let btnRetour2 = document.createElement("button");
 
@@ -497,11 +495,11 @@ function toolsText() {
     divSelect.appendChild(lblTexte);
     divSelect.appendChild(inputTexte);
 
-    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnAjoutText);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
+    btnAjoutText.addEventListener("click", () => {
         emptyIframe();
         if (select.value === "paragraphe") {
             page.addObject = new Paragraph(inputTexte.value);
@@ -543,6 +541,12 @@ inputAlt.setAttribute("name", "alt");
 let div1 = document.createElement("div");
 let div2 = document.createElement("div");
 
+let btnAjoutImage = document.createElement("button");
+btnAjoutImage.setAttribute("class", "button");
+btnAjoutImage.setAttribute("id", "btn-add");
+btnAjoutImage.setAttribute("type", "button");
+btnAjoutImage.innerHTML = "Ajouter Image";
+
 function toolsImage() {
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
@@ -563,11 +567,11 @@ function toolsImage() {
     divSelect.appendChild(div1);
     divSelect.appendChild(div2);
 
-    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnAjoutImage);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", async () => {
+    btnAjoutImage.addEventListener("click", async () => {
         if (!inputImage.value == "") {
             const formData = new FormData();
             formData.append("file", document.getElementById("choose_img").files[0]);
@@ -653,6 +657,13 @@ let divChoose = document.createElement("div");
 
 divChoose.setAttribute("id", "divChoose");
 
+let btnAjoutLien = document.createElement("button");
+btnAjoutLien.setAttribute("class", "button");
+btnAjoutLien.setAttribute("id", "btn-add");
+btnAjoutLien.setAttribute("type", "button");
+btnAjoutLien.innerHTML = "Ajouter Lien";
+
+
 function toolsLien() {
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
@@ -731,11 +742,11 @@ function toolsLien() {
     });
 
 
-    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnAjoutLien);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", () => {
+    btnAjoutLien.addEventListener("click", () => {
         emptyIframe();
         if (text === "Internet") {
             page.addObject = new Link(inputTexte.value, inputInternet.value);
@@ -761,6 +772,12 @@ inputCV.setAttribute("id", "choose-cv");
 inputCV.setAttribute("name", "choose-cv");
 inputCV.setAttribute("accept", "application/pdf");
 
+let btnAjoutCV = document.createElement("button");
+btnAjoutCV.setAttribute("class", "button");
+btnAjoutCV.setAttribute("id", "btn-add");
+btnAjoutCV.setAttribute("type", "button");
+btnAjoutCV.innerHTML = "Ajouter CV";
+
 function toolsCV() {
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
@@ -777,11 +794,11 @@ function toolsCV() {
     divSelect.appendChild(lblCV);
     divSelect.appendChild(inputCV);
 
-    divBottom.appendChild(btnAjout);
+    divBottom.appendChild(btnAjoutCV);
     divBottom.appendChild(btnRetour2);
 
     btnRetour2.addEventListener("click", modifTools, false);
-    btnAjout.addEventListener("click", async () => {
+    btnAjoutCV.addEventListener("click", async () => {
         if (document.getElementById("choose-cv").files.length > 0) {
             const formData = new FormData();
             formData.append("file", document.getElementById("choose-cv").files[0]);
