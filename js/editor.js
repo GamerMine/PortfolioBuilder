@@ -290,7 +290,6 @@ function toolsBase() {
         liBtnProjet.appendChild(btnProject);
         liBtnProjet.appendChild(ulListProjet);
 
-        ulBtnProjet.appendChild(btnProject);
         ulBtnProjet.appendChild(liBtnProjet);
 
         divListeProjet.appendChild(ulBtnProjet);
