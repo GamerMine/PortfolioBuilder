@@ -134,6 +134,49 @@ async function showPortfolioProjectList() {
     }
 }
 
+async function showPortfolioSkillList() {
+    const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_PAGE_LIST");
+    try {
+        const response = JSON.parse(resp);
+
+        if (!response.connected) window.location.href = "index.html";
+
+        const iframeParent = document.getElementById("portfolio-preview").parentElement;
+        iframe.remove();
+        iframe.src = "../templateSkill.html";
+        iframeParent.appendChild(iframe);
+
+        iframe.onload = async () => {
+            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+            const user_info_json = JSON.parse(user_info);
+
+            const surname = user_info_json.info[0].surname;     //Get user's surname
+            const name = user_info_json.info[0].name;           //Get user's name
+            const mail = user_info_json.info[0].mail;           //Get user's mail
+
+            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+
+            for (const skill of response.skill) {
+                const btn = document.createElement("button");
+                btn.innerText = "Competence " + skill.id;
+                btn.onclick = async () => {
+                    const content = await getPageContent("Competence-" + skill.id);
+                    console.log(content);
+                    loadPage(content);
+                };
+                console.log(iframe.contentWindow.document.getElementById("list-skill"));
+                iframe.contentWindow.document.getElementById("list-skill").appendChild(btn);
+            }
+            iframe.onload = () => {
+            };
+        }
+
+    } catch (e) {
+
+    }
+}
+
 function loadPage(content) {
     const iframeParent = document.getElementById("portfolio-preview").parentElement;
     iframe.remove();
@@ -170,21 +213,177 @@ btnHome.setAttribute("id", "btn-home");
 btnHome.setAttribute("type", "button");
 btnHome.innerHTML = "Accueil";
 
+btnHome.addEventListener("click", () => {
+    document.getElementById("portfolio-preview").src = "../template.html";
+    toolsBase();
+    showPortfolioHome();
+});
+
+
 btnProject.setAttribute("class", "button");
 btnProject.setAttribute("id", "btn-project");
 btnProject.setAttribute("type", "button");
 btnProject.innerHTML = "Projet";
+
+btnProject.onclick = toolsProject;
+
+async function toolsProject() {
+    const cursor = document.getElementById("cursor");
+
+    cursor.style.left = "33px";
+    cursor.style.right = "";
+
+    let divSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
+
+    while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
+    while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
+
+    divSelect.appendChild(lblTitre);
+    divSelect.appendChild(btnHome);
+
+    let btnAjouterProjet = document.createElement("button");
+    let divListeProjet = document.createElement("div");
+    let divNewButton = document.createElement("div");
+
+    btnAjouterProjet.setAttribute("class", "buttonNew");
+    btnAjouterProjet.setAttribute("id", "btn-add-projet");
+    btnAjouterProjet.setAttribute("type", "button");
+    btnAjouterProjet.innerHTML = "Nouveau";
+
+    divNewButton.setAttribute("class", "divNewButton");
+    divListeProjet.setAttribute("class", "div-list");
+
+
+    let ulListProjet = document.createElement("ul");
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+
+    try {
+        const response = JSON.parse(resp);
+
+        if (!response.connected) window.location.href = "index.html";
+
+        for (const pr of response.project) {
+            let li = document.createElement("li");
+            let btn = document.createElement("button");
+            btn.value = "Projet-" + pr.id;
+            btn.innerText = "Projet-" + pr.id;
+            li.appendChild(btn);
+            ulListProjet.appendChild(li);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    divListeProjet.appendChild(btnProject);
+    divListeProjet.appendChild(ulListProjet);
+
+    divNewButton.appendChild(btnAjouterProjet);
+
+    divSelect.appendChild(divListeProjet);
+    divSelect.appendChild(divNewButton);
+
+
+    divSelect.appendChild(btnSkill);
+    divSelect.appendChild(btnApropos);
+
+    showPortfolioProjectList();
+    btnAjouterProjet.addEventListener("click", async () =>
+    {
+        console.log("begin");
+        const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
+        console.log(resp);
+        let content = await getPageContent("Projet-" + JSON.parse(resp).id);
+        loadPage(content);
+        console.log("Projet-" + JSON.parse(resp).id + " : " + content);
+    }, false);
+
+}
+
+
+
 
 btnSkill.setAttribute("class", "button");
 btnSkill.setAttribute("id", "btn-skill");
 btnSkill.setAttribute("type", "button");
 btnSkill.innerHTML = "Compétence";
 
+btnSkill.onclick = toolsSkill;
+
+async function toolsSkill() {
+    const cursor = document.getElementById("cursor");
+
+    cursor.style.left = "33px";
+    cursor.style.right = "";
+
+    let divSelect = document.getElementById("btnselect");
+    let divBottom = document.getElementById("bottom");
+    
+    while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
+    while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
+
+    divSelect.appendChild(lblTitre);
+    divSelect.appendChild(btnHome);
+    divSelect.appendChild(btnProject);
+
+    let btnAjouterCompetence = document.createElement("button");
+    let divListeCompetence = document.createElement("div");
+    let divNewButton = document.createElement("div");
+
+    btnAjouterCompetence.setAttribute("class", "buttonNew");
+    btnAjouterCompetence.setAttribute("id", "btn-add-comp");
+    btnAjouterCompetence.setAttribute("type", "button");
+    btnAjouterCompetence.innerHTML = "Nouveau";
+
+    divNewButton.setAttribute("class", "divNewButton");
+    divListeCompetence.setAttribute("class", "div-list");
+
+
+    let ulListCompetence = document.createElement("ul");
+
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
+
+    try {
+        const response = JSON.parse(resp);
+
+        if (!response.connected) window.location.href = "index.html";
+
+        for (const sk of response.skill) {
+            let li = document.createElement("li");
+            let btn = document.createElement("button");
+            btn.value = "Competence-" + sk.id;
+            btn.innerText = "Competence-" + sk.id;
+            li.appendChild(btn);
+            ulListCompetence.appendChild(li);
+        }
+    } catch (e) {
+        console.log(e);
+    }
+
+    divListeCompetence.appendChild(btnSkill);
+    divListeCompetence.appendChild(ulListCompetence);
+
+    divNewButton.appendChild(btnAjouterCompetence);
+
+    divSelect.appendChild(divListeCompetence);
+    divSelect.appendChild(divNewButton);
+
+    divSelect.appendChild(btnApropos);
+
+    showPortfolioSkillList();
+
+}
+
 btnApropos.setAttribute("class", "button");
 btnApropos.setAttribute("id", "btn-a-propos");
 btnApropos.setAttribute("type", "button");
 btnApropos.innerHTML = "A propos";
 
+btnApropos.addEventListener("click", () => {
+    document.getElementById("portfolio-preview").src = "../templateAPropos.html";
+    toolsBase();
+
+});
 
 let btnAjouterElement = document.createElement("button");
 
@@ -224,144 +423,6 @@ function toolsBase() {
 
 
     document.getElementById("btn-add").addEventListener("click", modifTools, false);
-
-    btnHome.addEventListener("click", () => {
-        document.getElementById("portfolio-preview").src = "../template.html";
-        toolsBase();
-        showPortfolioHome();
-    });
-
-
-
-    btnProject.addEventListener("click", async () =>
-    {
-        while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
-        while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
-
-        divSelect.appendChild(lblTitre);
-        divSelect.appendChild(btnHome);
-
-        let btnAjouterProjet = document.createElement("button");
-        let divListeProjet = document.createElement("div");
-        let divNewButton = document.createElement("div");
-
-        btnAjouterProjet.setAttribute("class", "buttonNew");
-        btnAjouterProjet.setAttribute("id", "btn-add-projet");
-        btnAjouterProjet.setAttribute("type", "button");
-        btnAjouterProjet.innerHTML = "Nouveau";
-
-        divNewButton.setAttribute("class", "divNewButton");
-        divListeProjet.setAttribute("class", "div-list");
-
-
-        let ulListProjet = document.createElement("ul");
-        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
-
-        try {
-            const response = JSON.parse(resp);
-
-            if (!response.connected) window.location.href = "index.html";
-
-            for (const pr of response.project) {
-                let li = document.createElement("li");
-                let btn = document.createElement("button");
-                btn.value = "Projet-" + pr.id;
-                btn.innerText = "Projet-" + pr.id;
-                li.appendChild(btn);
-                ulListProjet.appendChild(li);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-
-        divListeProjet.appendChild(btnProject);
-        divListeProjet.appendChild(ulListProjet);
-
-        divNewButton.appendChild(btnAjouterProjet);
-
-        divSelect.appendChild(divListeProjet);
-        divSelect.appendChild(divNewButton);
-
-
-        divSelect.appendChild(btnSkill);
-        divSelect.appendChild(btnApropos);
-
-        showPortfolioProjectList();
-
-        btnAjouterProjet.addEventListener("click", async () =>
-        {
-            console.log("begin");
-            const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
-            console.log(resp);
-            let content = await getPageContent("Projet-" + JSON.parse(resp).id);
-            loadPage(content);
-            console.log("Projet-" + JSON.parse(resp).id + " : " + content);
-        }, false);
-
-    });
-
-
-    btnSkill.addEventListener("click", async () => {
-        document.getElementById("portfolio-preview").src = "../templateSkill.html";
-
-        while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
-        while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
-
-        divSelect.appendChild(lblTitre);
-        divSelect.appendChild(btnHome);
-        divSelect.appendChild(btnProject);
-
-        let btnAjouterCompetence = document.createElement("button");
-        let divListeCompetence = document.createElement("div");
-        let divNewButton = document.createElement("div");
-
-        btnAjouterCompetence.setAttribute("class", "buttonNew");
-        btnAjouterCompetence.setAttribute("id", "btn-add-comp");
-        btnAjouterCompetence.setAttribute("type", "button");
-        btnAjouterCompetence.innerHTML = "Nouveau";
-
-        divNewButton.setAttribute("class", "divNewButton");
-        divListeCompetence.setAttribute("class", "div-list");
-
-
-        let ulListCompetence = document.createElement("ul");
-
-        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
-
-        try {
-            const response = JSON.parse(resp);
-
-            if (!response.connected) window.location.href = "index.html";
-
-            for (const sk of response.skill) {
-                let li = document.createElement("li");
-                let btn = document.createElement("button");
-                btn.value = "Competence-" + sk.id;
-                btn.innerText = "Competence-" + sk.id;
-                li.appendChild(btn);
-                ulListCompetence.appendChild(li);
-            }
-        } catch (e) {
-            console.log(e);
-        }
-
-        divListeCompetence.appendChild(btnSkill);
-        divListeCompetence.appendChild(ulListCompetence);
-
-        divNewButton.appendChild(btnAjouterCompetence);
-
-        divSelect.appendChild(divListeCompetence);
-        divSelect.appendChild(divNewButton);
-
-        divSelect.appendChild(btnApropos);
-
-    });
-
-    btnApropos.addEventListener("click", () => {
-        document.getElementById("portfolio-preview").src = "../templateAPropos.html";
-        toolsBase();
-
-    });
 }
 
 let lblAjout = document.createElement("div");
@@ -774,6 +835,7 @@ function toolsLien() {
         if (text === "Internet") {
             page.addObject = new Link(inputTexteLien.value, inputInternet.value);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            console.log(inputTexteLien.value + inputInternet.value);
             inputInternet.value = "";
             inputTexteLien.value = "";
         } else if (text === "Portfolio") {

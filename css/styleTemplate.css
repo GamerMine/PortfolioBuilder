@@ -115,7 +115,49 @@ main{
     filter: brightness(75%);
 }
 
+/*----------*/
+/*MISEENPAGE*/
+/*----------*/
+main h1{
+	text-align: center;
+}
 
+main h2{
+	margin: 20px 30px;
+}
+
+main h3{
+	margin: 20px 60px;
+}
+
+main h4{
+	margin: 20px 90px;
+}
+
+main h5{
+	margin: 20px 120px;
+}
+
+main h6{
+	margin: 20px 150px;
+}
+
+main p{
+	margin: 10px 30px;
+	text-align: justify;
+}
+
+main img{
+	max-width: 100%;
+}
+
+main a{
+	margin: 10px 30px;
+}
+
+main iframe{
+	max-width: 100%;
+}
 
 /*----------*/
 /*MEDIAQUERY*/
