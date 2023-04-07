@@ -83,14 +83,6 @@ async function showPortfolioHome() {
             jsonToPage(response.content, page);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
-
-        document.onvisibilitychange = async () => {
-            if (document.visibilityState === "hidden") {
-                let dataJson = JSON.stringify(page);
-                await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
-                console.log("on déload");
-            }
-        }
     } catch (e) {
         console.log(e)
     }
@@ -509,6 +501,7 @@ function toolsText() {
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
             inputTexte.value = "";
         }
+        saveActualContent();
     }, false);
 }
 
@@ -580,6 +573,7 @@ function toolsImage() {
                 pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
                 inputImage.value = "";
                 inputAlt.value = "";
+                await saveActualContent();
             } catch (e) {
                 console.log(e);
             }
@@ -741,6 +735,7 @@ function toolsLien() {
             page.addObject = new Link(inputTexte.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
+        saveActualContent();
     }, false)
 }
 
@@ -793,6 +788,7 @@ function toolsCV() {
                 inputCV.value = "";
                 let dataJson = JSON.stringify(page);
                 await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
+                await saveActualContent();
             } catch (e) {
                 console.log(e);
             }
@@ -807,4 +803,9 @@ function emptyIframe() {
     while (iframe_to_change.firstChild) {
         iframe_to_change.removeChild(iframe_to_change.lastChild);
     }
+}
+async function saveActualContent()
+{
+    let dataJson = JSON.stringify(page);
+    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
 }
