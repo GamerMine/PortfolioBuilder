@@ -56,7 +56,8 @@ async function submitInformation() {
         return;
     }
 
-    await request("GET", URL_BASE + "server/sendData.php?command=SEND_INFO&title=" + titleField.value + "&name=" + nameField.value + "&surname=" + surnameField.value);
+    await request("GET", URL_BASE+"server/sendData.php?command=SEND_INFO&title="+titleField.value+"&name="+nameField.value+"&surname="+surnameField.value);
+    console.log(URL_BASE+"server/sendData.php?command=SEND_INFO&title="+titleField.value+"&name="+nameField.value+"&surname="+surnameField.value);
 }
 
 async function showPortfolioHome() {
@@ -225,15 +226,13 @@ function toolsBase() {
     });
 
 
-    btnProject.addEventListener("click", () => {
+
+    btnProject.addEventListener("click", async () =>
+    {
         document.getElementById("portfolio-preview").src = "../templateProject.html";
 
-        while (divSelect.firstChild) {
-            divSelect.removeChild(divSelect.firstChild);
-        }
-        while (divBottom.firstChild) {
-            divBottom.removeChild(divBottom.firstChild);
-        }
+        while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
+        while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
 
         divSelect.appendChild(lblTitre);
         divSelect.appendChild(btnHome);
@@ -255,6 +254,15 @@ function toolsBase() {
         let ulBtnProjet = document.createElement("ul");
         let liBtnProjet = document.createElement("li");
         let ulListProjet = document.createElement("ul");
+        //let liProjet1 = document.createElement("li");
+        //let liProjet2 = document.createElement("li");
+
+        //let btnProjet1 = document.createElement("button");
+        //btnProjet1.innerText = "Projet-1";
+        //let btnProjet2 = document.createElement("button");
+        //btnProjet2.innerText = "Projet-2";
+
+        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_PAGE_LIST");
 
         try {
             const response = JSON.parse(resp);
@@ -273,6 +281,13 @@ function toolsBase() {
             console.log(e);
         }
 
+        //liProjet1.appendChild(btnProjet1);
+        //liProjet2.appendChild(btnProjet2);
+
+        //ulListProjet.appendChild(liProjet1);
+        //ulListProjet.appendChild(liProjet2);
+
+        liBtnProjet.appendChild(btnProject);
         liBtnProjet.appendChild(ulListProjet);
 
         ulBtnProjet.appendChild(btnProject);
@@ -294,12 +309,8 @@ function toolsBase() {
     btnSkill.addEventListener("click", () => {
         document.getElementById("portfolio-preview").src = "../templateSkill.html";
 
-        while (divSelect.firstChild) {
-            divSelect.removeChild(divSelect.firstChild);
-        }
-        while (divBottom.firstChild) {
-            divBottom.removeChild(divBottom.firstChild);
-        }
+        while (divSelect.firstChild){divSelect.removeChild(divSelect.firstChild);}
+        while (divBottom.firstChild){divBottom.removeChild(divBottom.firstChild);}
 
         divSelect.appendChild(lblTitre);
         divSelect.appendChild(btnHome);
@@ -379,6 +390,7 @@ function modifTools() {
     while (divBottom.firstChild) {
         divBottom.removeChild(divBottom.firstChild);
     }
+
 
 
     divBtnSelect.appendChild(lblAjout);
