@@ -45,7 +45,13 @@ export function jsonToPage(json_content, container) {
         }
     }
 }
-export function pageToHTML(pageIn, container) {
+export async function pageToHTML(pageIn, container, isInEditor = false) {
+
+    let editor;
+
+    if (isInEditor) {
+        editor = await import("../editor.js");
+    }
 
     let new_page = pageIn.objectList;
 
@@ -55,43 +61,74 @@ export function pageToHTML(pageIn, container) {
                 let node_link = document.createElement(object.identifier);
                 node_link.setAttribute("href", object.link);
                 node_link.textContent = object.text;
-                node_link.setAttribute("id",new_page.indexOf(object));
+                node_link.setAttribute("id", new_page.indexOf(object));
+                if (isInEditor) {
+                    node_link.onclick = (e) => {
+                        editor.modifElement(e.target);
+                    }
+                }
                 container.appendChild(node_link);
                 container.appendChild(document.createElement("br"));
                 break;
             case 'p' :
                 let node_paragraph = document.createElement(object.identifier);
                 node_paragraph.textContent = object.text;
-                node_paragraph.setAttribute("id",new_page.indexOf(object));
+                node_paragraph.setAttribute("id", new_page.indexOf(object));
+                if (isInEditor) {
+                    node_paragraph.onclick = (e) => {
+                        editor.modifElement(e.target);
+                    }
+                }
                 container.appendChild(node_paragraph);
                 break;
             case 'title' :
                 let node_title = document.createElement("h" + object.titleLevel);
                 node_title.textContent = object.text;
-                node_title.setAttribute("id",new_page.indexOf(object));
+                node_title.setAttribute("id", new_page.indexOf(object));
+                if (isInEditor) {
+                    //const a = document.createElement("a");
+                    node_title.onclick = (e) => {
+                        editor.modifElement(e.target);
+                    }
+                }
                 container.appendChild(node_title);
                 break;
             case 'img' :
                 let node_img = document.createElement(object.identifier);
                 node_img.setAttribute("src", object.imgLink);
                 node_img.setAttribute("alt", object.alt);
-                node_img.setAttribute("id",new_page.indexOf(object));
+                node_img.setAttribute("id", new_page.indexOf(object));
+                if (isInEditor) {
+                    node_img.onclick = (e) => {
+                        editor.modifElement(e.target);
+                    }
+                }
                 container.appendChild(node_img);
                 container.appendChild(document.createElement("br"));
                 break;
             case 'button' :
                 let node_button = document.createElement(object.identifier);
                 node_button.textContent = object.text;
-                node_button.setAttribute("id",new_page.indexOf(object));
+                node_button.setAttribute("id", new_page.indexOf(object));
+                if (isInEditor) {
+                    node_button.onclick = (e) => {
+                        editor.modifElement(e.target);
+                    }
+                }
                 container.appendChild(node_button);
                 container.appendChild(document.createElement("br"));
                 break;
             case 'pdfView' :
                 let node_pdf = document.createElement("iframe");
-                node_pdf.setAttribute("src",object.pdfLink);
-                node_pdf.setAttribute("height","1000vh");
-                node_pdf.setAttribute("width","100%");
-                node_pdf.setAttribute("id",new_page.indexOf(object));
+                node_pdf.setAttribute("src", object.pdfLink);
+                node_pdf.setAttribute("height", "1000vh");
+                node_pdf.setAttribute("width", "100%");
+                node_pdf.setAttribute("id", new_page.indexOf(object));
+                if (isInEditor) {
+                    node_pdf.onclick = (e) => {
+                        editor.modifElement(e.target);
+                    }
+                }
                 container.appendChild(node_pdf);
                 container.appendChild(document.createElement("br"));
                 break;

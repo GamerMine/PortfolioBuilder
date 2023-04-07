@@ -15,16 +15,10 @@ export class HTMLPage{
 
     set delObject(gotten_object)
     {
-        let id=-1;
-        for (let element of this.objectList) {
-            if(element===gotten_object)
-            {
-                id=this.objectList.indexOf(element);
+        for (let i = 0; i < this.objectList.length; i++) {
+            if (this.objectList[i] === gotten_object) {
+                console.log(this.objectList.splice(i, i));
             }
         }
-        if(!id===-1)
-            this.objectList.slice(id,id+1);
-        else
-            console.log("ERREUR LORS DE LA SUPPRESION D'ITEM");
     }
 }

@@ -56,12 +56,12 @@ async function createPortfolioPreviewElement(name, surname, mail, homeContent) {
     embed.src = "template.html";
     embed.scrolling = "no";
 
-    embed.onload = () => {
+    embed.onload = async () => {
         embed.contentWindow.document.getElementById("name").innerText = name + " " + surname;
         embed.contentWindow.document.getElementById("mail").innerText = mail;
         let page = new HTMLPage();
         jsonToPage(homeContent,page);
-        pageToHTML(page,embed.contentWindow.document.getElementById("content"));
+        await pageToHTML(page,embed.contentWindow.document.getElementById("content"));
         embed.onload = () => {};
     }
 
@@ -129,7 +129,7 @@ export async function showPortfolioInfo() {
         document.querySelector("body").innerHTML = templateResp;
         let page = new HTMLPage();
         jsonToPage(dataResponse.content,page);
-        pageToHTML(page,document.getElementById("content"))
+        await pageToHTML(page,document.getElementById("content"))
         await setupUserInfoInPageView(result[1]);
         setupEventsInPortfolioView(result[1]);
     } catch (e) {
@@ -152,7 +152,7 @@ export async function showPortfolioProjectList() {
             const btn = document.createElement("button");
             btn.innerText = "Projet " + project.id;
             btn.onclick = async () => {
-                loadPage(project.id, result[1]);
+                loadPage("Projet-"+project.id, result[1]);
             };
             document.getElementById("list-project").appendChild(btn);
         }
@@ -178,7 +178,7 @@ export async function showPortfolioSkillList() {
             const btn = document.createElement("button");
             btn.innerText = "Projet " + skill.id;
             btn.onclick = async () => {
-                loadPage(skill.id, result[1]);
+                loadPage("Competence-"+skill.id, result[1]);
             };
             document.getElementById("list-skill").appendChild(btn);
         }
@@ -190,7 +190,7 @@ export async function showPortfolioSkillList() {
 }
 
 export async function loadPage(name, mail) {
-    await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=projet-"+ name +"IN"+mail);
+    await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location="+ name +"IN"+mail);
     const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
     try {
         const response = JSON.parse(resp);
@@ -205,7 +205,7 @@ export async function loadPage(name, mail) {
         document.querySelector("body").innerHTML = templateResp;
         let page = new HTMLPage();
         jsonToPage(dataResponse.content,page);
-        pageToHTML(page,document.getElementById("content"))
+        await pageToHTML(page,document.getElementById("content"))
         await setupUserInfoInPageView(result[1]);
         setupEventsInPortfolioView(result[1]);
     } catch (e) {

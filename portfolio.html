@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<script>
+    async function goToPage(name) {
+        const { loadPage } = await import("./js/main.js");
+        const { request } = await import("./js/elements/utils.js");
+        const { URL_BASE } = await import("./js/constants.js");
+
+        const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
+        const response = JSON.parse(resp);
+        const result = response.result.split("IN");
+
+        await loadPage(name, result[1]);
+    }
+</script>
 <body>
 <script async type="module">
     import {URL_BASE} from "./js/constants.js";
@@ -32,8 +45,6 @@
     } catch (e) {
         console.log(e);
     }
-
-    window.goToPage = test();
 </script>
 </body>
 </html>

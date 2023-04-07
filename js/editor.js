@@ -73,19 +73,16 @@ async function showPortfolioHome() {
         iframeParent.appendChild(iframe);
 
         iframe.onload = async () => {
-            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
-            const user_info_json = JSON.parse(user_info);
-
-            const surname = user_info_json.info[0].surname;     //Get user's surname
-            const name = user_info_json.info[0].name;           //Get user's name
-            const mail = user_info_json.info[0].mail;           //Get user's mail
-
-            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
-            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+            await fillUserInfo();
 
             page.empty();
             jsonToPage(response.content, page);
-            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            current_name = "homecontent";
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => {
+                elt.setAttribute("class", "disable");
+                console.log(elt);
+            });
             iframe.onload = () => {};
         }
     } catch (e) {
@@ -106,19 +103,13 @@ async function showPortfolioAbout() {
         iframeParent.appendChild(iframe);
 
         iframe.onload = async () => {
-            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
-            const user_info_json = JSON.parse(user_info);
-
-            const surname = user_info_json.info[0].surname;     //Get user's surname
-            const name = user_info_json.info[0].name;           //Get user's name
-            const mail = user_info_json.info[0].mail;           //Get user's mail
-
-            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
-            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+            await fillUserInfo();
 
             page.empty();
             jsonToPage(response.content, page);
-            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            current_name = "aboutcontent";
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
             iframe.onload = () => {};
         }
     } catch (e) {
@@ -139,15 +130,7 @@ async function showPortfolioProjectList() {
         iframeParent.appendChild(iframe);
 
         iframe.onload = async () => {
-            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
-            const user_info_json = JSON.parse(user_info);
-
-            const surname = user_info_json.info[0].surname;     //Get user's surname
-            const name = user_info_json.info[0].name;           //Get user's name
-            const mail = user_info_json.info[0].mail;           //Get user's mail
-
-            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
-            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+            await fillUserInfo();
 
             for (const project of response.project) {
                 const btn = document.createElement("button");
@@ -159,6 +142,7 @@ async function showPortfolioProjectList() {
                 };
                 iframe.contentWindow.document.getElementById("list-project").appendChild(btn);
             }
+            iframe.contentWindow.document.querySelectorAll("button").forEach(elt => elt.setAttribute("class", "disable"));
             iframe.onload = () => {};
         }
 
@@ -180,15 +164,7 @@ async function showPortfolioSkillList() {
         iframeParent.appendChild(iframe);
 
         iframe.onload = async () => {
-            const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
-            const user_info_json = JSON.parse(user_info);
-
-            const surname = user_info_json.info[0].surname;     //Get user's surname
-            const name = user_info_json.info[0].name;           //Get user's name
-            const mail = user_info_json.info[0].mail;           //Get user's mail
-
-            iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
-            iframe.contentWindow.document.getElementById("mail").innerText = mail;
+            await fillUserInfo();
 
             for (const skill of response.skill) {
                 const btn = document.createElement("button");
@@ -199,6 +175,7 @@ async function showPortfolioSkillList() {
                 };
                 iframe.contentWindow.document.getElementById("list-skill").appendChild(btn);
             }
+            iframe.contentWindow.document.querySelectorAll("button").forEach(elt => elt.setAttribute("class", "disable"));
             iframe.onload = () => {
             };
         }
@@ -214,21 +191,26 @@ function loadPage(content) {
     iframe.src = "../template.html";
     iframeParent.appendChild(iframe);
     iframe.onload = async () => {
-        const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
-        const user_info_json = JSON.parse(user_info);
-
-        const surname = user_info_json.info[0].surname;     //Get user's surname
-        const name = user_info_json.info[0].name;           //Get user's name
-        const mail = user_info_json.info[0].mail;           //Get user's mail
-
-        iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
-        iframe.contentWindow.document.getElementById("mail").innerText = mail;
+        await fillUserInfo();
 
         page.empty();
         jsonToPage(content, page);
-        pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+        await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+        iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
         iframe.onload = () => {};
     }
+}
+
+async function fillUserInfo() {
+    const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
+    const user_info_json = JSON.parse(user_info);
+
+    const surname = user_info_json.info[0].surname;     //Get user's surname
+    const name = user_info_json.info[0].name;           //Get user's name
+    const mail = user_info_json.info[0].mail;           //Get user's mail
+
+    iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
+    iframe.contentWindow.document.getElementById("mail").innerText = mail;
 }
 
 let lblTitre = document.createElement("div");
@@ -334,9 +316,6 @@ async function toolsProject() {
     }, false);
 
 }
-
-
-
 
 btnSkill.setAttribute("class", "button");
 btnSkill.setAttribute("id", "btn-skill");
@@ -635,11 +614,11 @@ function toolsText() {
         emptyIframe();
         if (select.value === "paragraphe") {
             page.addObject = new Paragraph(inputTexte.value);
-            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
             inputTexte.value = "";
         } else {
             page.addObject = new Title(inputTexte.value, select.value);
-            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
             inputTexte.value = "";
         }
         saveActualContent();
@@ -716,7 +695,7 @@ function toolsImage() {
 
                 emptyIframe();
                 page.addObject = new Picture(URL_BASE + "server/" + response.link, inputAlt.value);
-                pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+                pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
                 inputImage.value = "";
                 inputAlt.value = "";
                 await saveActualContent();
@@ -841,16 +820,26 @@ function toolsLien() {
 
             if (!response.connected) window.location.href = "index.html";
 
+            let option = document.createElement("option");
+            option.value = "homecontent";
+            option.innerText = "Accueil";
+            selectPortfolio.appendChild(option);
+
+            option = document.createElement("option");
+            option.value = "aboutcontent";
+            option.innerText = "A propos";
+            selectPortfolio.appendChild(option);
+
             for (const sk of response.skill) {
                 const option = document.createElement("option");
                 option.value = "Competence-" + sk.id;
-                option.innerText = "Competence-" + sk.id;
+                option.innerText = "Competence " + sk.id;
                 selectPortfolio.appendChild(option);
             }
             for (const pr of response.project) {
                 const option = document.createElement("option");
                 option.value = "Projet-" + pr.id;
-                option.innerText = "Projet-" + pr.id;
+                option.innerText = "Projet " + pr.id;
                 selectPortfolio.appendChild(option);
             }
         } catch (e) {
@@ -881,12 +870,12 @@ function toolsLien() {
         emptyIframe();
         if (text === "Internet") {
             page.addObject = new Link(inputTexteLien.value, inputInternet.value);
-            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
             inputInternet.value = "";
             inputTexteLien.value = "";
         } else if (text === "Portfolio") {
-            page.addObject = new Link(inputTexteLien.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
-            pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            page.addObject = new Link(inputTexteLien.value, "javascript:goToPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].value + "');");
+            pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
         }
         saveActualContent();
     }, false)
@@ -942,7 +931,7 @@ function toolsCV() {
 
                 emptyIframe();
                 page.addObject = new PDFView(URL_BASE + "server/" + response.link);
-                pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+                pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
                 inputCV.value = "";
                 let dataJson = JSON.stringify(page);
                 await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name=homecontent&content=" + dataJson);
@@ -957,7 +946,7 @@ function toolsCV() {
 }
 
 
-function modifElement(element) {
+export function modifElement(element) {
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
 
@@ -969,6 +958,7 @@ function modifElement(element) {
         divBottom.removeChild(divBottom.firstChild);
     }
 
+    console.log(element.nodeName);
 
     if(element.nodeName.includes("H") || element.nodeName === "P"){
         let lblTexte = document.createElement("div");
@@ -988,6 +978,14 @@ function modifElement(element) {
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer le texte";
+        btnSupprimer.onclick = async () => {
+            page.delObject = page.objectList.at(element.id);
+            emptyIframe();
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            await saveActualContent();
+            toolsBase();
+        }
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(textareaTexte);
@@ -999,6 +997,9 @@ function modifElement(element) {
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
         btnAnnuler.innerHTML = "Annuler";
+        btnAnnuler.onclick = () => {
+            toolsBase();
+        }
 
         divBottom.appendChild(btnAnnuler);
     }
@@ -1010,11 +1011,22 @@ function modifElement(element) {
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer l'image";
+        btnSupprimer.onclick = async () => {
+            page.delObject = page.objectList.at(element.id);
+            emptyIframe();
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            await saveActualContent();
+            toolsBase();
+        }
 
         btnAnnuler.setAttribute("class", "button");
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
         btnAnnuler.innerHTML = "Annuler";
+        btnAnnuler.onclick = () => {
+            toolsBase();
+        }
 
         divSelect.appendChild(btnSupprimer);
 
@@ -1038,6 +1050,14 @@ function modifElement(element) {
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer le texte";
+        btnSupprimer.onclick = async () => {
+            page.delObject = page.objectList.at(element.id);
+            emptyIframe();
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            await saveActualContent();
+            toolsBase();
+        }
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(inputTexte);
@@ -1049,6 +1069,9 @@ function modifElement(element) {
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
         btnAnnuler.innerHTML = "Annuler";
+        btnAnnuler.onclick = () => {
+            toolsBase();
+        }
 
         divBottom.appendChild(btnAnnuler);
     }
@@ -1060,11 +1083,22 @@ function modifElement(element) {
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer l'image";
+        btnSupprimer.onclick = async () => {
+            page.delObject = page.objectList.at(element.id);
+            emptyIframe();
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            await saveActualContent();
+            toolsBase();
+        }
 
         btnAnnuler.setAttribute("class", "button");
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
         btnAnnuler.innerHTML = "Annuler";
+        btnAnnuler.onclick = () => {
+            toolsBase();
+        }
 
         divSelect.appendChild(btnSupprimer);
 
@@ -1072,9 +1106,6 @@ function modifElement(element) {
     }
 
 }
-
-
-
 
 function emptyIframe() {
     let iframe_to_change = iframe.contentWindow.document.getElementById("content")
@@ -1085,5 +1116,7 @@ function emptyIframe() {
 async function saveActualContent()
 {
     let dataJson = JSON.stringify(page);
+    iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+    iframe.contentWindow.document.querySelectorAll("button").forEach(elt => elt.setAttribute("class", "disable"));
     await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
 }

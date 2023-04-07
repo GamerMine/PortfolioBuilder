@@ -109,14 +109,14 @@ class Database
     }
 
     public function getSkillPagesList($mail) {
-        $stmt = $this->connection->prepare("SELECT id FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ?");
+        $stmt = $this->connection->prepare("SELECT id FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ? ORDER BY id");
         $stmt->execute([$mail]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getProjectPagesList($mail) {
-        $stmt = $this->connection->prepare("SELECT id FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ?");
+        $stmt = $this->connection->prepare("SELECT id FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ? ORDER BY id");
         $stmt->execute([$mail]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -223,7 +223,6 @@ class Database
         $id = $this->countSkillPages($mail)+1;
         $stmt = $this->connection->prepare("INSERT INTO skill(id,mail,content) VALUES (?, ?, ?)");
         $stmt->execute([$id,$mail,"{}"]);
-        print_r([$id,$mail,"{}"]);
     }
 
     public function countProjectPages($mail)
