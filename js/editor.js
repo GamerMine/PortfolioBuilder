@@ -912,7 +912,7 @@ function toolsLien() {
             inputInternet.value = "";
             inputTexteLien.value = "";
         } else if (text === "Portfolio") {
-            page.addObject = new Link(inputTexte.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
+            page.addObject = new Link(inputTexteLien.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
         }
         saveActualContent();
