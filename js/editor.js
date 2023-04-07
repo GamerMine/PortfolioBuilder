@@ -302,6 +302,7 @@ async function toolsProject() {
             btn.innerText = "Projet-" + pr.id;
             btn.onclick = async () => {
                 const content = await getPageContent("Projet-" + pr.id);
+                current_name="Projet-" + pr.id;
                 loadPage(content);
             }
             li.appendChild(btn);
@@ -388,6 +389,7 @@ async function toolsSkill() {
             btn.innerText = "Competence-" + sk.id;
             btn.onclick = async () => {
                 const content = await getPageContent("Competence-" + sk.id);
+                current_name="Competence-" + sk.id;
                 loadPage(content);
             }
             li.appendChild(btn);
@@ -411,8 +413,8 @@ async function toolsSkill() {
 
     btnAjouterCompetence.addEventListener("click", async () =>
     {
-        const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
-        let content = await getPageContent("Projet-" + JSON.parse(resp).id);
+        const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_SKILL");
+        let content = await getPageContent("Competence-" + JSON.parse(resp).id);
         loadPage(content);
     }, false);
 
