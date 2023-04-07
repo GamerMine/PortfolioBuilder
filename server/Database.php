@@ -88,6 +88,14 @@ class Database
         return $stmt->fetch()[0];
     }
 
+    public function getAboutContent($mail)
+    {
+        $stmt = $this->connection->prepare("SELECT content FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+
+        return $stmt->fetch()[0];
+    }
+
     public function getProjectContent($mail, $id) {
         $stmt = $this->connection->prepare("SELECT content FROM project JOIN account a on a.mail = project.mail WHERE a.mail = ? AND id = ?");
         $stmt->execute([$mail, $id]);

@@ -9,8 +9,12 @@ import {PDFView} from "./pdfView.js";
 export function jsonToPage(json_content, container) {
 
     let parse_json = JSON.parse(json_content);
-    if (parse_json.objectList == null) return;
-    parse_json = parse_json.objectList;
+    try {
+        if (parse_json.objectList == null) return;
+        parse_json = parse_json.objectList;
+    } catch (e) {
+        return;
+    }
 
     for (const object of parse_json) {
         switch (object.identifier) {

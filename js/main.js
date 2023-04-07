@@ -1,5 +1,5 @@
 import {URL_BASE} from "./constants.js";
-import {jsonToPage, pageToHTML, request} from "./elements/utils.js";
+import {jsonToPage, pageToHTML, request, requestText} from "./elements/utils.js";
 import {HTMLPage} from "./elements/htmlPage.js";
 
 export function loginForm() {
@@ -111,4 +111,135 @@ if (document.getElementById("img-footer") != null) {
 
 function showRights(){
     window.location.href = URL_BASE + "rights.html";
+}
+
+export async function showPortfolioInfo() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
+    try {
+        const response = JSON.parse(resp);
+        const result = response.result.split("IN");
+
+        const dataResp = await request("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name="+result[0]+"&mail="+result[1]);
+
+        const dataResponse = JSON.parse(dataResp);
+
+        const templateResp = await requestText("GET", "template.html");
+
+        document.querySelector("body").innerHTML = templateResp;
+        let page = new HTMLPage();
+        console.log(dataResponse);
+        jsonToPage(dataResponse.content,page);
+        pageToHTML(page,document.getElementById("content"))
+        await setupUserInfoInPageView(result[1]);
+        setupEventsInPortfolioView(result[1]);
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export async function showPortfolioProjectList() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
+    try {
+        const response = JSON.parse(resp);
+        const result = response.result.split("IN");
+        const templateResp = await requestText("GET", "templateProject.html");
+        const respPageList = await request("GET", URL_BASE + "server/requestData.php?command=GET_PAGE_LIST&mail="+result[1]);
+        const responsePageList = JSON.parse(respPageList);
+
+        document.querySelector("body").innerHTML = templateResp;
+
+        for (const project of responsePageList.project) {
+            const btn = document.createElement("button");
+            btn.innerText = "Projet " + project.id;
+            btn.onclick = async () => {
+                loadPage(project.id, result[1]);
+            };
+            document.getElementById("list-project").appendChild(btn);
+        }
+        await setupUserInfoInPageView(result[1]);
+        setupEventsInPortfolioView(result[1]);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+export async function showPortfolioSkillList() {
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
+    try {
+        const response = JSON.parse(resp);
+        const result = response.result.split("IN");
+        const templateResp = await requestText("GET", "templateSkill.html");
+        const respPageList = await request("GET", URL_BASE + "server/requestData.php?command=GET_PAGE_LIST&mail="+result[1]);
+        const responsePageList = JSON.parse(respPageList);
+
+        document.querySelector("body").innerHTML = templateResp;
+
+        for (const skill of responsePageList.skill) {
+            const btn = document.createElement("button");
+            btn.innerText = "Projet " + skill.id;
+            btn.onclick = async () => {
+                loadPage(skill.id, result[1]);
+            };
+            document.getElementById("list-project").appendChild(btn);
+        }
+        await setupUserInfoInPageView(result[1]);
+        setupEventsInPortfolioView(result[1]);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+async function loadPage(name, mail) {
+    await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=projet-"+ name +"IN"+mail);
+    const resp = await request("GET", URL_BASE+"server/requestData.php?command=GET_LOCATION");
+    try {
+        const response = JSON.parse(resp);
+        const result = response.result.split("IN");
+
+        const dataResp = await request("GET", URL_BASE+"server/requestData.php?command=GET_CONTENT&name="+result[0]+"&mail="+result[1]);
+
+        const dataResponse = JSON.parse(dataResp);
+
+        const templateResp = await requestText("GET", "template.html");
+
+        document.querySelector("body").innerHTML = templateResp;
+        let page = new HTMLPage();
+        jsonToPage(dataResponse.content,page);
+        pageToHTML(page,document.getElementById("content"))
+        await setupUserInfoInPageView(result[1]);
+        setupEventsInPortfolioView(result[1]);
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export function setupEventsInPortfolioView(mail) {
+    document.getElementById("homeHeader").onclick = async () => {
+        await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=homeContentIN"+mail);
+        await showPortfolioInfo();
+    }
+    document.getElementById("projectHeader").onclick = async () => {
+        await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=projectListIN"+mail);
+        await showPortfolioProjectList();
+    }
+    document.getElementById("skillHeader").onclick = async () => {
+        await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=skillListIN"+mail);
+        await showPortfolioSkillList();
+    }
+    document.getElementById("aboutHeader").onclick = async () => {
+        await request("GET", URL_BASE+"server/sendData.php?command=SET_LOCATION&location=aboutContentIN"+mail);
+        await showPortfolioInfo();
+    }
+}
+
+export async function setupUserInfoInPageView(m) {
+    const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO&mail="+m);
+    const user_info_json = JSON.parse(user_info);
+
+    const surname = user_info_json.info[0].surname;     //Get user's surname
+    const name = user_info_json.info[0].name;           //Get user's name
+    const mail = user_info_json.info[0].mail;           //Get user's mail
+
+    document.getElementById("name").innerText = name + " " + surname;
+    document.getElementById("mail").innerText = mail;
 }

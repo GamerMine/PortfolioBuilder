@@ -66,7 +66,10 @@ async function showPortfolioHome() {
 
         if (!response.connected) window.location.href = "../index.html";
 
-        document.getElementById("portfolio-preview").src = "../template.html";
+        const iframeParent = document.getElementById("portfolio-preview").parentElement;
+        iframe.remove();
+        iframe.src = "../template.html";
+        iframeParent.appendChild(iframe);
 
         iframe.onload = async () => {
             const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
@@ -103,7 +106,10 @@ async function showPortfolioProjectList() {
 
         if (!response.connected) window.location.href = "index.html";
 
-        document.getElementById("portfolio-preview").src = "../templateProject.html";
+        const iframeParent = document.getElementById("portfolio-preview").parentElement;
+        iframe.remove();
+        iframe.src = "../templateProject.html";
+        iframeParent.appendChild(iframe);
 
         iframe.onload = async () => {
             const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
@@ -137,7 +143,10 @@ async function showPortfolioProjectList() {
 }
 
 function loadPage(content) {
-    document.getElementById("portfolio-preview").src = "../template.html"
+    const iframeParent = document.getElementById("portfolio-preview").parentElement;
+    iframe.remove();
+    iframe.src = "../template.html";
+    iframeParent.appendChild(iframe);
     iframe.onload = async () => {
         const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
         const user_info_json = JSON.parse(user_info);
@@ -152,8 +161,7 @@ function loadPage(content) {
         page.empty();
         jsonToPage(content, page);
         pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
-        iframe.onload = () => {
-        };
+        iframe.onload = () => {};
     }
 }
 
@@ -234,8 +242,6 @@ function toolsBase() {
 
 
     btnProject.addEventListener("click", () => {
-        document.getElementById("portfolio-preview").src = "../templateProject.html";
-
         while (divSelect.firstChild) {
             divSelect.removeChild(divSelect.firstChild);
         }
@@ -296,6 +302,8 @@ function toolsBase() {
 
         divSelect.appendChild(btnSkill);
         divSelect.appendChild(btnApropos);
+
+        showPortfolioProjectList();
     });
 
 
