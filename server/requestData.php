@@ -44,6 +44,8 @@ switch ($requestedData) {
         } else if (strpos(strtolower($_GET["name"]), "competence") !== false) {
             $id = explode("-", $_GET["name"]);
             $data = array("connected" => (isset($_SESSION["mail"])), "content" => $db->getSkillContent($mail, $id[1]));
+        } else if (strtolower($_GET["name"]) == "aboutcontent") {
+            $data = array("connected" => (isset($_SESSION["mail"])), "content" => $db->getAboutContent($mail));
         }
         break;
     }
@@ -70,14 +72,18 @@ switch ($requestedData) {
         break;
     }
     case "GET_PAGE_LIST": {
-        if (!isset($_SESSION["mail"])) {
+        $mail = null;
+        if (isset($_GET["mail"])) {
             $data = array("connected" => false);
-            break;
+            $mail = $_GET["mail"];
+        } else if (isset($_SESSION["mail"])) {
+            $data = array("connected" => true);
+            $mail = $_SESSION["mail"];
         }
         $data = array("connected" => true);
 
-        $data["skill"] = $db->getSkillPagesList($_SESSION["mail"]);
-        $data["project"] = $db->getProjectPagesList($_SESSION["mail"]);
+        $data["skill"] = $db->getSkillPagesList($mail);
+        $data["project"] = $db->getProjectPagesList($mail);
         break;
     }
 }
