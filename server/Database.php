@@ -156,4 +156,36 @@ class Database
             $stmt->execute([$content,$mail]);
         }
     }
+
+    public function setProjectContent($mail,$content,$id)
+    {
+        $stmt = $this->connection->prepare("SELECT a.mail FROM project JOIN account a on a.mail = info.mail WHERE a.mail = ? AND id=?");
+        $stmt->execute([$mail,$id]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
+        {
+            $stmt = $this->connection->prepare("UPDATE project SET content=? WHERE mail=?");
+            $stmt->execute([$content,$mail]);
+        }
+        else
+        {
+            $stmt = $this->connection->prepare("INSERT INTO project(id,mail,content) VALUES (?, ?, ?)");
+            $stmt->execute([$id,$mail,$content]);
+        }
+    }
+
+    public function setSkillContent($mail,$content,$id)
+    {
+        $stmt = $this->connection->prepare("SELECT a.mail FROM skill JOIN account a on a.mail = info.mail WHERE a.mail = ? AND id=?");
+        $stmt->execute([$mail,$id]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
+        {
+            $stmt = $this->connection->prepare("UPDATE skill SET content=? WHERE mail=?");
+            $stmt->execute([$content,$mail]);
+        }
+        else
+        {
+            $stmt = $this->connection->prepare("INSERT INTO skill(id,mail,content) VALUES (?, ?, ?)");
+            $stmt->execute([$id,$mail,$content]);
+        }
+    }
 }

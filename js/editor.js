@@ -749,10 +749,11 @@ function toolsLien() {
     btnAjoutLien.addEventListener("click", () => {
         emptyIframe();
         if (text === "Internet") {
-            page.addObject = new Link(inputTexte.value, inputInternet.value);
+            page.addObject = new Link(inputTexteLien.value, inputInternet.value);
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
+            console.log(inputTexteLien.value + inputInternet.value);
             inputInternet.value = "";
-            inputTexte.value = "";
+            inputTexteLien.value = "";
         } else if (text === "Portfolio") {
             page.addObject = new Link(inputTexte.value, "javascript:loadPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].text + "');");
             pageToHTML(page, iframe.contentWindow.document.getElementById("content"));
