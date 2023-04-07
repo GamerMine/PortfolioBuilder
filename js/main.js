@@ -180,7 +180,7 @@ export async function showPortfolioSkillList() {
             btn.onclick = async () => {
                 loadPage(skill.id, result[1]);
             };
-            document.getElementById("list-project").appendChild(btn);
+            document.getElementById("list-skill").appendChild(btn);
         }
         await setupUserInfoInPageView(result[1]);
         setupEventsInPortfolioView(result[1]);
