@@ -408,6 +408,13 @@ async function toolsSkill() {
 
     showPortfolioSkillList();
 
+    btnAjouterCompetence.addEventListener("click", async () =>
+    {
+        const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
+        let content = await getPageContent("Projet-" + JSON.parse(resp).id);
+        loadPage(content);
+    }, false);
+
 }
 
 btnApropos.setAttribute("class", "button");

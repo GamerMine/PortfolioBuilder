@@ -169,8 +169,8 @@ class Database
         $stmt->execute([$mail,$id]);
         if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
         {
-            $stmt = $this->connection->prepare("UPDATE project SET content=? WHERE mail=?");
-            $stmt->execute([$content,$mail]);
+            $stmt = $this->connection->prepare("UPDATE project SET content=? WHERE mail=? AND id=?");
+            $stmt->execute([$content,$mail,$id]);
         }
         else
         {
@@ -185,8 +185,8 @@ class Database
         $stmt->execute([$mail,$id]);
         if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
         {
-            $stmt = $this->connection->prepare("UPDATE skill SET content=? WHERE mail=?");
-            $stmt->execute([$content,$mail]);
+            $stmt = $this->connection->prepare("UPDATE skill SET content=? WHERE mail=? AND id=?");
+            $stmt->execute([$content,$mail,$id]);
         }
         else
         {
