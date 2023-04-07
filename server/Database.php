@@ -169,8 +169,8 @@ class Database
         $stmt->execute([$mail,$id]);
         if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
         {
-            $stmt = $this->connection->prepare("UPDATE project SET content=? WHERE mail=?");
-            $stmt->execute([$content,$mail]);
+            $stmt = $this->connection->prepare("UPDATE project SET content=? WHERE mail=? AND id=?");
+            $stmt->execute([$content,$mail,$id]);
         }
         else
         {
@@ -185,13 +185,29 @@ class Database
         $stmt->execute([$mail,$id]);
         if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
         {
-            $stmt = $this->connection->prepare("UPDATE skill SET content=? WHERE mail=?");
-            $stmt->execute([$content,$mail]);
+            $stmt = $this->connection->prepare("UPDATE skill SET content=? WHERE mail=? AND id=?");
+            $stmt->execute([$content,$mail,$id]);
         }
         else
         {
             $stmt = $this->connection->prepare("INSERT INTO skill(id,mail,content) VALUES (?, ?, ?)");
             $stmt->execute([$id,$mail,$content]);
+        }
+    }
+
+    public function setInfoContent($mail,$content)
+    {
+        $stmt = $this->connection->prepare("SELECT a.mail FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
+        $stmt->execute([$mail]);
+        if (sizeof($stmt->fetchAll(PDO::FETCH_ASSOC)) > 0)
+        {
+            $stmt = $this->connection->prepare("UPDATE info SET content=? WHERE mail=?");
+            $stmt->execute([$content,$mail]);
+        }
+        else
+        {
+            $stmt = $this->connection->prepare("INSERT INTO info(mail,content) VALUES (?, ?)");
+            $stmt->execute([$mail,$content]);
         }
     }
 
@@ -204,7 +220,7 @@ class Database
 
     public function createSkill($mail)
     {
-        $id = 1;
+        $id = $this->countSkillPages($mail)+1;
         $stmt = $this->connection->prepare("INSERT INTO skill(id,mail,content) VALUES (?, ?, ?)");
         $stmt->execute([$id,$mail,"{}"]);
         print_r([$id,$mail,"{}"]);
@@ -222,6 +238,6 @@ class Database
         $stmt = $this->connection->prepare("SELECT COUNT(id) FROM skill JOIN account a on a.mail = skill.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
 
-        return ($stmt->fetch()[0]+1);
+        return ($stmt->fetch()[0]);
     }
 }
