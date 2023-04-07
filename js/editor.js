@@ -330,6 +330,7 @@ async function toolsProject() {
         const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
         let content = await getPageContent("Projet-" + JSON.parse(resp).id);
         loadPage(content);
+        toolsBase();
     }, false);
 
 }
@@ -385,6 +386,7 @@ async function toolsSkill() {
         for (const sk of response.skill) {
             let li = document.createElement("li");
             let btn = document.createElement("button");
+            btn.addEventListener("click", toolsBase);
             btn.value = "Competence-" + sk.id;
             btn.innerText = "Competence-" + sk.id;
             btn.onclick = async () => {
@@ -416,6 +418,7 @@ async function toolsSkill() {
         const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_SKILL");
         let content = await getPageContent("Competence-" + JSON.parse(resp).id);
         loadPage(content);
+        toolsBase();
     }, false);
 
 }
