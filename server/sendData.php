@@ -38,9 +38,22 @@ switch ($sentCommand) {
             break;
         }
 
-        if($_GET["name"]=="homecontent")
+        if(strtolower($_GET["name"])=="homecontent")
         {
             $db->setHomeContent($_SESSION["mail"],$_GET["content"]);
+            break;
+        }
+        else if(strpos(strtolower($_GET["name"]), "projet")!==false)
+        {
+            $id = explode("-", $_GET["name"]);
+            $db->setProjectContent($_SESSION["mail"],$_GET["content"],$id[1]);
+            break;
+        }
+        else if(strpos(strtolower($_GET["name"]), "competence")!==false)
+        {
+            $id = explode("-", $_GET["name"]);
+            $db->setSkillContent($_SESSION["mail"],$_GET["content"],$id[1]);
+            break;
         }
     }
 }
