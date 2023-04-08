@@ -9,15 +9,27 @@ import {Style} from "./style.js";
 
 export function jsonToPage(json_content, container) {
 
-    let parse_json = JSON.parse(json_content);
+    let parsedObjectList = JSON.parse(json_content);
+    let parsedStyleList = null;
     try {
-        if (parse_json.objectList == null) return;
-        parse_json = parse_json.objectList;
+        if (parsedObjectList.objectList == null) return;
+        parsedStyleList = parsedObjectList.styleList;
+        parsedObjectList = parsedObjectList.objectList;
     } catch (e) {
         return;
     }
 
-    for (const object of parse_json) {
+    for (const style of parsedStyleList.header) {
+        container.addStyle(new Style(style.property, style.value), "header");
+    }
+    for (const style of parsedStyleList.body) {
+        container.addStyle(new Style(style.property, style.value), "body");
+    }
+    for (const style of parsedStyleList.footer) {
+        container.addStyle(new Style(style.property, style.value), "footer");
+    }
+
+    for (const object of parsedObjectList) {
         let htmlobject;
         switch (object.identifier) {
             case 'a' :
@@ -60,6 +72,16 @@ export async function pageToHTML(pageIn, container, isInEditor = false) {
     }
 
     let new_page = pageIn.objectList;
+
+    for (const style of pageIn.styleList.header) {
+        container.parentElement.querySelector("header").style.cssText += style.getProperty+":"+style.getValue+";";
+    }
+    for (const style of pageIn.styleList.body) {
+        container.parentElement.querySelector("main").style.cssText += style.getProperty+":"+style.getValue+";";
+    }
+    for (const style of pageIn.styleList.footer) {
+        container.parentElement.querySelector("footer").style.cssText += style.getProperty+":"+style.getValue+";";
+    }
 
     for (const object of new_page) {
         switch (object.identifier) {
