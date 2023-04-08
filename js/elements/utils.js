@@ -5,6 +5,7 @@ import {Link} from "./link.js";
 import {Picture} from "./image.js";
 import {Button} from "./button.js";
 import {PDFView} from "./pdfView.js";
+import {Style} from "./style.js";
 
 export function jsonToPage(json_content, container) {
 
@@ -17,31 +18,36 @@ export function jsonToPage(json_content, container) {
     }
 
     for (const object of parse_json) {
+        let htmlobject;
         switch (object.identifier) {
             case 'a' :
-                let link = new Link(object.text,object.link);
-                container.addObject = link;
+                htmlobject = new Link(object.text,object.link);
+                container.addObject = htmlobject;
                 break;
             case 'p' :
-                let para = new Paragraph(object.text);
-                container.addObject = para;
+                htmlobject = new Paragraph(object.text);
+                container.addObject = htmlobject;
                 break;
             case 'title' :
-                let title = new Title(object.text,object.titleLevel);
-                container.addObject = title;
+                htmlobject = new Title(object.text,object.titleLevel);
+                container.addObject = htmlobject;
                 break;
             case 'img' :
-                let img = new Picture(object.imgLink,object.alt);
-                container.addObject = img;
+                htmlobject = new Picture(object.imgLink,object.alt);
+                container.addObject = htmlobject;
                 break;
             case 'button' :
-                let button = new Button(object.text);
-                container.addObject = button;
+                htmlobject = new Button(object.text);
+                container.addObject = htmlobject;
                 break;
             case 'pdfView' :
-                let pdf = new PDFView(object.pdfLink);
-                container.addObject = pdf;
+                htmlobject = new PDFView(object.pdfLink);
+                container.addObject = htmlobject;
                 break;
+        }
+
+        for (const style of object.styleList) {
+            htmlobject.addStyleStyle = new Style(style.property, style.value);
         }
     }
 }
@@ -62,11 +68,8 @@ export async function pageToHTML(pageIn, container, isInEditor = false) {
                 node_link.setAttribute("href", object.link);
                 node_link.textContent = object.text;
                 node_link.setAttribute("id", new_page.indexOf(object));
-                if (isInEditor) {
-                    node_link.onclick = (e) => {
-                        editor.modifElement(e.target);
-                    }
-                }
+                for (const style of object.getStyleList) node_link.style.cssText += style.getProperty + ":" + style.getValue + ";";
+                if (isInEditor) node_link.onclick = (e) => editor.modifElement(e.target);
                 container.appendChild(node_link);
                 container.appendChild(document.createElement("br"));
                 break;
@@ -74,23 +77,16 @@ export async function pageToHTML(pageIn, container, isInEditor = false) {
                 let node_paragraph = document.createElement(object.identifier);
                 node_paragraph.textContent = object.text;
                 node_paragraph.setAttribute("id", new_page.indexOf(object));
-                if (isInEditor) {
-                    node_paragraph.onclick = (e) => {
-                        editor.modifElement(e.target);
-                    }
-                }
+                for (const style of object.getStyleList) node_paragraph.style.cssText += style.getProperty + ":" + style.getValue + ";";
+                if (isInEditor) node_paragraph.onclick = (e) => editor.modifElement(e.target);
                 container.appendChild(node_paragraph);
                 break;
             case 'title' :
                 let node_title = document.createElement("h" + object.titleLevel);
                 node_title.textContent = object.text;
                 node_title.setAttribute("id", new_page.indexOf(object));
-                if (isInEditor) {
-                    //const a = document.createElement("a");
-                    node_title.onclick = (e) => {
-                        editor.modifElement(e.target);
-                    }
-                }
+                for (const style of object.getStyleList) node_title.style.cssText += style.getProperty + ":" + style.getValue + ";";
+                if (isInEditor) node_title.onclick = (e) => editor.modifElement(e.target);
                 container.appendChild(node_title);
                 break;
             case 'img' :
@@ -98,11 +94,8 @@ export async function pageToHTML(pageIn, container, isInEditor = false) {
                 node_img.setAttribute("src", object.imgLink);
                 node_img.setAttribute("alt", object.alt);
                 node_img.setAttribute("id", new_page.indexOf(object));
-                if (isInEditor) {
-                    node_img.onclick = (e) => {
-                        editor.modifElement(e.target);
-                    }
-                }
+                for (const style of object.getStyleList) node_img.style.cssText += style.getProperty + ":" + style.getValue + ";";
+                if (isInEditor) node_img.onclick = (e) => editor.modifElement(e.target);
                 container.appendChild(node_img);
                 container.appendChild(document.createElement("br"));
                 break;
@@ -110,11 +103,8 @@ export async function pageToHTML(pageIn, container, isInEditor = false) {
                 let node_button = document.createElement(object.identifier);
                 node_button.textContent = object.text;
                 node_button.setAttribute("id", new_page.indexOf(object));
-                if (isInEditor) {
-                    node_button.onclick = (e) => {
-                        editor.modifElement(e.target);
-                    }
-                }
+                for (const style of object.getStyleList) node_button.style.cssText += style.getProperty + ":" + style.getValue + ";";
+                if (isInEditor) node_button.onclick = (e) => editor.modifElement(e.target);
                 container.appendChild(node_button);
                 container.appendChild(document.createElement("br"));
                 break;
@@ -124,11 +114,8 @@ export async function pageToHTML(pageIn, container, isInEditor = false) {
                 node_pdf.setAttribute("height", "1000vh");
                 node_pdf.setAttribute("width", "100%");
                 node_pdf.setAttribute("id", new_page.indexOf(object));
-                if (isInEditor) {
-                    node_pdf.onclick = (e) => {
-                        editor.modifElement(e.target);
-                    }
-                }
+                for (const style of object.getStyleList) node_pdf.style.cssText += style.getProperty + ":" + style.getValue + ";";
+                if (isInEditor) node_pdf.onclick = (e) => editor.modifElement(e.target);
                 container.appendChild(node_pdf);
                 container.appendChild(document.createElement("br"));
                 break;
