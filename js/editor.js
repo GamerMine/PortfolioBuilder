@@ -976,6 +976,7 @@ export function modifElement(element) {
     if(element.nodeName.includes("H") || element.nodeName === "P"){
         let lblTexte = document.createElement("div");
         let textareaTexte = document.createElement("textarea");
+        let btnModifier = document.createElement("button");
         let btnSupprimer = document.createElement("button");
 
         lblTexte.setAttribute("class", "lbl")
@@ -985,8 +986,21 @@ export function modifElement(element) {
         textareaTexte.setAttribute("name", "texte");
         textareaTexte.setAttribute("rows", "10");
         textareaTexte.setAttribute("style", "resize: none;");
-        textareaTexte.innerHTML = element.innerText;
+        textareaTexte.value = element.innerText;
 
+        btnModifier.setAttribute("class", "button");
+        btnModifier.setAttribute("id", "btn-edit");
+        btnModifier.setAttribute("type", "button");
+        btnModifier.innerHTML = "Modifier le texte";
+        btnModifier.addEventListener("click", async () => {
+            page.objectList.at(element.id).text = textareaTexte.value;
+            console.log(page.objectList.at(element.id).text)
+            emptyIframe();
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
+            await saveActualContent();
+            toolsBase();
+        }, {once: true});
 
         btnSupprimer.setAttribute("class", "button");
         btnSupprimer.setAttribute("id", "btn-delete");
@@ -1003,6 +1017,7 @@ export function modifElement(element) {
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(textareaTexte);
+        divSelect.appendChild(btnModifier);
         divSelect.appendChild(btnSupprimer);
 
         let btnAnnuler = document.createElement("button");
@@ -1053,6 +1068,7 @@ export function modifElement(element) {
     else if(element.nodeName === "A"){
         let lblTexte = document.createElement("div");
         let inputTexte = document.createElement("input");
+        let btnModifier = document.createElement("button");
         let btnSupprimer = document.createElement("button");
 
         lblTexte.setAttribute("class", "lbl")
@@ -1062,6 +1078,19 @@ export function modifElement(element) {
         inputTexte.setAttribute("id", "texte");
         inputTexte.setAttribute("name", "texte");
         inputTexte.value = element.innerText;
+
+        btnModifier.setAttribute("class", "button");
+        btnModifier.setAttribute("id", "btn-edit");
+        btnModifier.setAttribute("type", "button");
+        btnModifier.innerHTML = "Modifier le texte";
+        btnModifier.addEventListener("click", async () => {
+            page.objectList.at(element.id).text = inputTexte.value;
+            emptyIframe();
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
+            await saveActualContent();
+            toolsBase();
+        }, {once: true});
 
         btnSupprimer.setAttribute("class", "button");
         btnSupprimer.setAttribute("id", "btn-delete");
@@ -1078,6 +1107,7 @@ export function modifElement(element) {
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(inputTexte);
+        divSelect.appendChild(btnModifier);
         divSelect.appendChild(btnSupprimer);
 
         let btnAnnuler = document.createElement("button");
