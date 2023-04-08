@@ -77,7 +77,8 @@ export async function pageToHTML(pageIn, container, isInEditor = false) {
         container.parentElement.querySelector("header").style.cssText += style.getProperty+":"+style.getValue+";";
     }
     for (const style of pageIn.styleList.body) {
-        container.parentElement.querySelector("main").style.cssText += style.getProperty+":"+style.getValue+";";
+        console.log(container.parentElement.querySelector("main").parentElement);
+        container.parentElement.querySelector("main").parentElement.style.cssText += style.getProperty+":"+style.getValue+";";
     }
     for (const style of pageIn.styleList.footer) {
         container.parentElement.querySelector("footer").style.cssText += style.getProperty+":"+style.getValue+";";
