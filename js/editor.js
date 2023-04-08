@@ -80,7 +80,7 @@ async function showPortfolioHome() {
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
             current_name = "homecontent";
             iframe.contentWindow.document.querySelectorAll("a").forEach(elt => {
-                elt.setAttribute("class", "disable");
+                elt.setAttribute("href", "#");
                 console.log(elt);
             });
             iframe.onload = () => {};
@@ -109,7 +109,7 @@ async function showPortfolioAbout() {
             jsonToPage(response.content, page);
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
             current_name = "aboutcontent";
-            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
             iframe.onload = () => {};
         }
     } catch (e) {
@@ -171,6 +171,7 @@ async function showPortfolioSkillList() {
                 btn.innerText = "Competence " + skill.id;
                 btn.onclick = async () => {
                     const content = await getPageContent("Competence-" + skill.id);
+                    current_name = "Competence-"+skill.id;
                     loadPage(content);
                 };
                 iframe.contentWindow.document.getElementById("list-skill").appendChild(btn);
@@ -196,7 +197,7 @@ function loadPage(content) {
         page.empty();
         jsonToPage(content, page);
         await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
-        iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+        iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
         iframe.onload = () => {};
     }
 }
@@ -312,6 +313,7 @@ async function toolsProject() {
         const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_PROJECT");
         let content = await getPageContent("Projet-" + JSON.parse(resp).id);
         loadPage(content);
+        current_name = "Projet-"+JSON.parse(resp).id;
         toolsBase();
     }, false);
 
@@ -397,6 +399,7 @@ async function toolsSkill() {
         const resp = await request("GET", URL_BASE+"server/sendData.php?command=NEW_SKILL");
         let content = await getPageContent("Competence-" + JSON.parse(resp).id);
         loadPage(content);
+        current_name = "Competence-"+JSON.parse(resp).id;
         toolsBase();
     }, false);
 
@@ -449,7 +452,7 @@ function toolsBase() {
     divBottom.appendChild(btnAjouterElement);
 
 
-    document.getElementById("btn-add").addEventListener("click", modifTools, false);
+    document.getElementById("btn-add").addEventListener("click", modifTools, {once: true});
 }
 
 let lblAjout = document.createElement("div");
@@ -510,12 +513,12 @@ function modifTools() {
 
     divBottom.appendChild(btnRetour);
 
-    btnRetour.addEventListener("click", toolsBase, false);
+    btnRetour.addEventListener("click", toolsBase, {once: true});
 
-    btnTxt.addEventListener("click", toolsText, false);
-    btnImg.addEventListener("click", toolsImage, false);
-    btnLink.addEventListener("click", toolsLien, false);
-    btnCv.addEventListener("click", toolsCV, false);
+    btnTxt.addEventListener("click", toolsText, {once: true});
+    btnImg.addEventListener("click", toolsImage, {once: true});
+    btnLink.addEventListener("click", toolsLien, {once: true});
+    btnCv.addEventListener("click", toolsCV, {once: true});
 
 }
 
@@ -609,7 +612,7 @@ function toolsText() {
     divBottom.appendChild(btnAjoutText);
     divBottom.appendChild(btnRetour2);
 
-    btnRetour2.addEventListener("click", modifTools, false);
+    btnRetour2.addEventListener("click", modifTools, {once: true});
     btnAjoutText.addEventListener("click", () => {
         emptyIframe();
         if (select.value === "paragraphe") {
@@ -622,7 +625,7 @@ function toolsText() {
             inputTexte.value = "";
         }
         saveActualContent();
-    }, false);
+    }, {once: true});
 }
 
 
@@ -681,9 +684,13 @@ function toolsImage() {
     divBottom.appendChild(btnAjoutImage);
     divBottom.appendChild(btnRetour2);
 
-    btnRetour2.addEventListener("click", modifTools, false);
+    btnRetour2.addEventListener("click", modifTools, {once: true});
     btnAjoutImage.addEventListener("click", async () => {
-        if (!inputImage.value == "") {
+        if (document.getElementById("choose_img").files.length > 0) {
+            if (document.getElementById("choose_img").files[0].size > 2097152) {
+                alert("Le fichier est trop volumineux !");
+                return;
+            }
             const formData = new FormData();
             formData.append("file", document.getElementById("choose_img").files[0]);
 
@@ -705,7 +712,7 @@ function toolsImage() {
         } else {
             console.warn("No file selected"); //TODO : an error message box
         }
-    }, false);
+    });
 }
 
 
@@ -865,20 +872,22 @@ function toolsLien() {
     divBottom.appendChild(btnAjoutLien);
     divBottom.appendChild(btnRetour2);
 
-    btnRetour2.addEventListener("click", modifTools, false);
-    btnAjoutLien.addEventListener("click", () => {
+    btnRetour2.addEventListener("click", modifTools, {once: true});
+    btnAjoutLien.addEventListener("click", async () => {
         emptyIframe();
         if (text === "Internet") {
             page.addObject = new Link(inputTexteLien.value, inputInternet.value);
-            pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
             inputInternet.value = "";
             inputTexteLien.value = "";
         } else if (text === "Portfolio") {
             page.addObject = new Link(inputTexteLien.value, "javascript:goToPage('" + selectPortfolio.options[selectPortfolio.selectedIndex].value + "');");
-            pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
         }
         saveActualContent();
-    }, false)
+    }, {once: true})
 }
 
 let lblCV = document.createElement("div");
@@ -917,9 +926,13 @@ function toolsCV() {
     divBottom.appendChild(btnAjoutCV);
     divBottom.appendChild(btnRetour2);
 
-    btnRetour2.addEventListener("click", modifTools, false);
+    btnRetour2.addEventListener("click", modifTools, {once: true});
     btnAjoutCV.addEventListener("click", async () => {
         if (document.getElementById("choose-cv").files.length > 0) {
+            if (document.getElementById("choose-cv").files[0].size > 2097152) {
+                alert("Le fichier est trop volumineux !");
+                return;
+            }
             const formData = new FormData();
             formData.append("file", document.getElementById("choose-cv").files[0]);
 
@@ -942,7 +955,7 @@ function toolsCV() {
         } else {
             console.warn("No file selected"); //TODO: an error message popup
         }
-    }, false);
+    });
 }
 
 
@@ -971,6 +984,7 @@ export function modifElement(element) {
         textareaTexte.setAttribute("id", "texte");
         textareaTexte.setAttribute("name", "texte");
         textareaTexte.setAttribute("rows", "10");
+        textareaTexte.setAttribute("style", "resize: none;");
         textareaTexte.innerHTML = element.innerText;
 
 
@@ -978,14 +992,14 @@ export function modifElement(element) {
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer le texte";
-        btnSupprimer.onclick = async () => {
-            page.delObject = page.objectList.at(element.id);
+        btnSupprimer.addEventListener("click", async () => {
+            page.delObject = parseInt(element.id);
             emptyIframe();
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
-            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
             await saveActualContent();
             toolsBase();
-        }
+        }, {once: true});
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(textareaTexte);
@@ -997,9 +1011,9 @@ export function modifElement(element) {
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
         btnAnnuler.innerHTML = "Annuler";
-        btnAnnuler.onclick = () => {
+        btnAnnuler.addEventListener("click", () => {
             toolsBase();
-        }
+        }, {once: true});
 
         divBottom.appendChild(btnAnnuler);
     }
@@ -1011,22 +1025,25 @@ export function modifElement(element) {
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer l'image";
-        btnSupprimer.onclick = async () => {
-            page.delObject = page.objectList.at(element.id);
+        btnSupprimer.addEventListener("click", async () => {
+            let filename = page.objectList.at(element.id).imgLink.split("\/");
+            filename = filename[filename.length - 1];
+            page.delObject = parseInt(element.id);
+            await request("GET", URL_BASE+"server/sendData.php?command=DELETE_FILE&file="+filename);
             emptyIframe();
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
-            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
             await saveActualContent();
             toolsBase();
-        }
+        }, {once: true});
 
         btnAnnuler.setAttribute("class", "button");
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
         btnAnnuler.innerHTML = "Annuler";
-        btnAnnuler.onclick = () => {
+        btnAnnuler.addEventListener("click", () => {
             toolsBase();
-        }
+        }, {once: true});
 
         divSelect.appendChild(btnSupprimer);
 
@@ -1044,20 +1061,20 @@ export function modifElement(element) {
         inputTexte.setAttribute("type", "text");
         inputTexte.setAttribute("id", "texte");
         inputTexte.setAttribute("name", "texte");
-        inputTexte.innerHTML = element.innerText;
+        inputTexte.value = element.innerText;
 
         btnSupprimer.setAttribute("class", "button");
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer le texte";
-        btnSupprimer.onclick = async () => {
-            page.delObject = page.objectList.at(element.id);
+        btnSupprimer.addEventListener("click", async () => {
+            page.delObject = parseInt(element.id);
             emptyIframe();
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
-            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
             await saveActualContent();
             toolsBase();
-        }
+        }, {once: true});
 
         divSelect.appendChild(lblTexte);
         divSelect.appendChild(inputTexte);
@@ -1069,9 +1086,9 @@ export function modifElement(element) {
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
         btnAnnuler.innerHTML = "Annuler";
-        btnAnnuler.onclick = () => {
+        btnAnnuler.addEventListener("click", () => {
             toolsBase();
-        }
+        }, {once: true});
 
         divBottom.appendChild(btnAnnuler);
     }
@@ -1083,22 +1100,25 @@ export function modifElement(element) {
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer l'image";
-        btnSupprimer.onclick = async () => {
-            page.delObject = page.objectList.at(element.id);
+        btnSupprimer.addEventListener("click", async () => {
+            let filename = page.objectList.at(element.id).pdfLink.split("\/");
+            filename = filename[filename.length - 1];
+            page.delObject = parseInt(element.id);
+            await request("GET", URL_BASE+"server/sendData.php?command=DELETE_FILE&file="+filename);
             emptyIframe();
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
-            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+            iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
             await saveActualContent();
             toolsBase();
-        }
+        }, {once: true});
 
         btnAnnuler.setAttribute("class", "button");
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
         btnAnnuler.innerHTML = "Annuler";
-        btnAnnuler.onclick = () => {
+        btnAnnuler.addEventListener("click",  () => {
             toolsBase();
-        }
+        }, {once: true});
 
         divSelect.appendChild(btnSupprimer);
 
@@ -1116,7 +1136,7 @@ function emptyIframe() {
 async function saveActualContent()
 {
     let dataJson = JSON.stringify(page);
-    iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("class", "disable"));
+    iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
     iframe.contentWindow.document.querySelectorAll("button").forEach(elt => elt.setAttribute("class", "disable"));
     await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
 }

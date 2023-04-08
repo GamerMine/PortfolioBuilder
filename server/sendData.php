@@ -33,6 +33,11 @@ switch ($sentCommand) {
         $data = array("connected" => true, "link" => "upload/".$filename);
         break;
     }
+    case "DELETE_FILE": {
+        $filename = $_GET["file"];
+        $status = unlink("upload/".$filename);
+        break;
+    }
     case "SEND_CONTENT":{
         if(!isset($_SESSION["mail"]))
         {

@@ -13,12 +13,9 @@ export class HTMLPage{
         this.objectList = [];
     }
 
-    set delObject(gotten_object)
+    set delObject(object_id)
     {
-        for (let i = 0; i < this.objectList.length; i++) {
-            if (this.objectList[i] === gotten_object) {
-                console.log(this.objectList.splice(i, i));
-            }
-        }
+        if (object_id === 0) this.objectList.shift();
+        else this.objectList.splice(object_id, 1);
     }
 }
