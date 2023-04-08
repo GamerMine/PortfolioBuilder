@@ -8,6 +8,13 @@ document.getElementById("img-settings").onclick = settingsGeneraux;
 let lblStyleG = document.createElement("div");
 lblStyleG.innerHTML = "Style Général";
 
+let btnQuitter = document.createElement("button");
+
+btnQuitter.setAttribute("class", "button");
+btnQuitter.setAttribute("id", "btn-quitter");
+btnQuitter.setAttribute("type", "button");   
+btnQuitter.innerHTML = "Quitter"; 
+
 
 function settingsGeneraux()
 {
@@ -29,18 +36,7 @@ function settingsGeneraux()
         divBottom.removeChild(divBottom.firstChild);
     }
 
-    let sepa = document.createElement("hr");
-
-    let btnQuitter = document.createElement("button");
-
-    btnQuitter.setAttribute("class", "button");
-    btnQuitter.setAttribute("id", "btn-quitter");
-    btnQuitter.setAttribute("type", "button");   
-    btnQuitter.innerHTML = "Quitter"; 
-
-
     divSelect.appendChild(lblStyleG);
-    divSelect.appendChild(sepa);
     divSelect.appendChild(btnQuitter);
 
     btnQuitter.addEventListener('click', (event) => 
