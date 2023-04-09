@@ -39,33 +39,14 @@ switch ($sentCommand) {
         $status = unlink("upload/".$filename);
         break;
     }
-    case "SEND_CONTENT":{
+    case "PREPARE_SEND_CONTENT":{
         if(!isset($_SESSION["mail"]))
         {
             $data = array("connected" => false);
             break;
         }
 
-        if(strtolower($_GET["name"])=="homecontent")
-        {
-            $db->setHomeContent($_SESSION["mail"],$_GET["content"]);
-            break;
-        }
-        else if(strpos(strtolower($_GET["name"]), "projet")!==false)
-        {
-            $id = explode("-", $_GET["name"]);
-            $db->setProjectContent($_SESSION["mail"],$_GET["content"],$id[1]);
-            break;
-        }
-        else if(strpos(strtolower($_GET["name"]), "competence")!==false)
-        {
-            $id = explode("-", $_GET["name"]);
-            $db->setSkillContent($_SESSION["mail"],$_GET["content"],$id[1]);
-            break;
-        }
-        else if (strtolower($_GET["name"]) == "aboutcontent") {
-            $db->setInfoContent($_SESSION["mail"],$_GET["content"]);
-        }
+        $_SESSION["name"] = $_GET["name"];
     }
     case "NEW_PROJECT":
     {

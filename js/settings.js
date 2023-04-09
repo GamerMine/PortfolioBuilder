@@ -1,4 +1,4 @@
-import {page} from "./editor.js";
+import {page, saveActualContent} from "./editor.js";
 import {Style} from "./elements/style.js";
 import {HTMLPage} from "./elements/htmlPage.js";
 
@@ -70,7 +70,7 @@ export function settingsGeneraux()
     let header = iframe.contentWindow.document.querySelector("header");
     let footer = iframe.contentWindow.document.querySelector("footer");
 
-    btnValidate.addEventListener("click", () => {
+    btnValidate.addEventListener("click", async () => {
         body.style.backgroundColor = colorPickerBG.value;
         header.style.backgroundColor = colorPickerHF.value;
         footer.style.backgroundColor = colorPickerHF.value;
@@ -83,6 +83,7 @@ export function settingsGeneraux()
         page.addStyle(new Style("color", colorPickerTextHF.value), "header");
         page.addStyle(new Style("color", colorPickerTextHF.value), "footer");
 
+        await saveActualContent();
     });
 
 
@@ -126,12 +127,14 @@ export function settingsGeneraux()
     divSelect.appendChild(btnQuitter);
     divSelect.appendChild(divStyleGeneral);
 
+    console.log(divSelect);
+
     btnQuitter.addEventListener('click', (event) => 
     {
         window.location.href = "../index.html";
     });
 
-}   
+}
 
 export function rgbToHex(rgb){
     rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);

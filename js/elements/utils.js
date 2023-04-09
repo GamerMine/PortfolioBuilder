@@ -77,7 +77,6 @@ export async function pageToHTML(pageIn, container, isInEditor = false) {
         container.parentElement.querySelector("header").style.cssText += style.getProperty+":"+style.getValue+";";
     }
     for (const style of pageIn.styleList.body) {
-        console.log(container.parentElement.querySelector("main").parentElement);
         container.parentElement.querySelector("main").parentElement.style.cssText += style.getProperty+":"+style.getValue+";";
     }
     for (const style of pageIn.styleList.footer) {
@@ -251,6 +250,38 @@ export function sendFile(url, formData) {
                 });
             }
             request.send(formData);
+        } catch (e) {
+            reject({
+                status: request.status,
+                statusText: request.statusText
+            });
+        }
+    })
+}
+
+export function sendJSON(url, jsonData) {
+    return new Promise(function (resolve, reject) {
+        const request = new XMLHttpRequest();
+        try {
+            request.open("POST", url);
+            request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            request.onload = () => {
+                if (request.status >= 200 && request.status < 300) {
+                    resolve(request.response);
+                } else {
+                    reject({
+                        status: request.status,
+                        statusText: request.statusText
+                    });
+                }
+            }
+            request.onerror = () => {
+                reject({
+                    status: request.status,
+                    statusText: request.statusText
+                });
+            }
+            request.send(jsonData);
         } catch (e) {
             reject({
                 status: request.status,

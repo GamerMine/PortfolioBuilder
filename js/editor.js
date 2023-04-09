@@ -1,6 +1,6 @@
 import {URL_BASE} from "./constants.js";
 import {HTMLPage} from "./elements/htmlPage.js";
-import {jsonToPage, pageToHTML, request, sendFile} from "./elements/utils.js";
+import {jsonToPage, pageToHTML, request, sendFile, sendJSON} from "./elements/utils.js";
 import {Paragraph} from "./elements/paragraph.js";
 import {Title} from "./elements/title.js";
 import {Link} from "./elements/link.js";
@@ -60,11 +60,11 @@ async function submitInformation() {
     }
 
     await request("GET", URL_BASE + "server/sendData.php?command=SEND_INFO&title=" + titleField.value + "&name=" + nameField.value + "&surname=" + surnameField.value);
-    console.log(URL_BASE + "server/sendData.php?command=SEND_INFO&title=" + titleField.value + "&name=" + nameField.value + "&surname=" + surnameField.value);
 }
 
 async function showPortfolioHome() {
     const resp = await request("GET", URL_BASE + "server/requestData.php?command=GET_CONTENT&name=homecontent&visibility=editor");
+    console.log(resp);
     try {
         const response = JSON.parse(resp);
 
@@ -84,7 +84,6 @@ async function showPortfolioHome() {
             current_name = "homecontent";
             iframe.contentWindow.document.querySelectorAll("a").forEach(elt => {
                 elt.setAttribute("href", "#");
-                console.log(elt);
             });
             iframe.onload = () => {};
         }
@@ -969,7 +968,13 @@ export function modifElement(element) {
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
 
-    console.log(element.nodeName);
+    while (divSelect.firstChild) {
+        divSelect.removeChild(divSelect.firstChild);
+    }
+
+    while (divBottom.firstChild) {
+        divBottom.removeChild(divBottom.firstChild);
+    }
 
     if(element.nodeName.includes("H") || element.nodeName === "P"){
         let divStyleElem = document.createElement("div");
@@ -1043,8 +1048,6 @@ export function modifElement(element) {
         cbBold.checked = false;
         if (page.objectList.at(element.id).getStyleFromProperty("font-weight") != null ){
             if (page.objectList.at(element.id).getStyleFromProperty("font-weight").value !== "normal"){
-                console.log('bold est true');
-                console.log(page.objectList.at(element.id).getStyleFromProperty("font-weight").value);
                 cbBold.checked = true;
             }
         }
@@ -1081,9 +1084,11 @@ export function modifElement(element) {
             }else{
                 if(page.objectList.at(element.id).getStyleFromProperty("background-color") != null){
                     page.objectList.at(element.id).getStyleFromProperty("background-color").value = "transparent";
+                } else {
+                    page.objectList.at(element.id).addStyleStyle = new Style("background-color", "transparent");
                 }
             }
-            
+
             // Text color implements
             if(page.objectList.at(element.id).getStyleFromProperty("color") == null){
                 page.objectList.at(element.id).addStyleStyle = new Style("color", colorPickerText.value);
@@ -1099,8 +1104,10 @@ export function modifElement(element) {
                     page.objectList.at(element.id).getStyleFromProperty("font-weight").value = "bold";
                 }
             }else{
-                if (page.objectList.at(element.id).getStyleFromProperty("font-weight") != null ){
+                if (page.objectList.at(element.id).getStyleFromProperty("font-weight") == null ){
                     page.objectList.at(element.id).addStyleStyle = new Style("font-weight", "normal");
+                } else {
+                    page.objectList.at(element.id).getStyleFromProperty("font-weight").value = "normal";
                 }
             }
 
@@ -1112,14 +1119,17 @@ export function modifElement(element) {
                     page.objectList.at(element.id).getStyleFromProperty("font-style").value = "italic";
                 }
             }else{
-                if (page.objectList.at(element.id).getStyleFromProperty("font-style") != null ){
+                if (page.objectList.at(element.id).getStyleFromProperty("font-style") == null ){
                     page.objectList.at(element.id).addStyleStyle = new Style("font-style", "normal");
+                } else {
+                    page.objectList.at(element.id).getStyleFromProperty("font-style").value = "normal";
                 }
             }
 
             emptyIframe();
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
             iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
+            console.log("ICI");
             await saveActualContent();
             toolsBase();
         }, {once: true});
@@ -1162,11 +1172,11 @@ export function modifElement(element) {
         divStyleElem.appendChild(divBG);
         divStyleElem.appendChild(divFont);
         divStyleElem.appendChild(divOption);
-        
+
         divSelect.appendChild(divStyleElem);
-        
+
         let btnAnnuler = document.createElement("button");
-        
+
         btnAnnuler.setAttribute("class", "button");
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
@@ -1174,7 +1184,7 @@ export function modifElement(element) {
         btnAnnuler.addEventListener("click", () => {
             toolsBase();
         }, {once: true});
-        
+
         divBottom.appendChild(btnAnnuler);
     }
     else if(element.nodeName === "IMG"){
@@ -1308,10 +1318,13 @@ function emptyIframe() {
         iframe_to_change.removeChild(iframe_to_change.lastChild);
     }
 }
-async function saveActualContent()
+export async function saveActualContent()
 {
     let dataJson = JSON.stringify(page);
     iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
     iframe.contentWindow.document.querySelectorAll("button").forEach(elt => elt.setAttribute("class", "disable"));
-    await request("GET", URL_BASE + "server/sendData.php?command=SEND_CONTENT&name="+current_name+"&content=" + dataJson);
+    await request("GET", URL_BASE + "server/sendData.php?command=PREPARE_SEND_CONTENT&name="+current_name);
+    const req = await sendJSON(URL_BASE + "server/saveContent.php", dataJson);
+    console.log(req);
+
 }
