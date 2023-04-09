@@ -30,4 +30,21 @@ export class HTMLPage{
     get getStyleList() {
         return this.styleList;
     }
+
+    /**
+     * Gets the Style instance associated to the property string and element string
+     * If not found returns null
+     *
+     * @param property
+     * @param element can be "header", "body" or "footer
+     * @returns {Style|null}
+     */
+    getStyleFromProperty(property, element) {
+        for (const style of this.objectList[element]) {
+            if (style.getProperty === property) {
+                return style;
+            }
+        }
+        return null;
+    }
 }
