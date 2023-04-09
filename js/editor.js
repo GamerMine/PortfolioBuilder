@@ -968,14 +968,6 @@ export function modifElement(element) {
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
 
-    while (divSelect.firstChild) {
-        divSelect.removeChild(divSelect.firstChild);
-    }
-
-    while (divBottom.firstChild) {
-        divBottom.removeChild(divBottom.firstChild);
-    }
-
     if(element.nodeName.includes("H") || element.nodeName === "P"){
         let divStyleElem = document.createElement("div");
         divStyleElem.id = "style-element";
