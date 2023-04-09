@@ -115,6 +115,12 @@ footer ul {
 	justify-content: space-between;
 }
 
+.spaced{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 #bottom {
 	display: flex;
 	justify-content: space-around;
@@ -186,6 +192,92 @@ footer ul {
 .div-list ul li button:hover{
 	filter: brightness(75%);
 }
+
+/*--MODIFICATION--*/
+#style-general, 
+#style-element{
+	display: flex;
+	flex-direction: column;
+}
+
+#style-general h3, 
+#style-element h3{
+	border-bottom: solid gray 2px;
+}
+
+#style-general p, 
+#style-element p{
+	margin: 0;
+	text-align: left;
+	width: fit-content;
+}
+
+#style-general input[type=color], 
+#style-element input[type=color]{
+	background-color: transparent;
+	border: none;
+	height: 35px;
+	width: 35px;
+	cursor: pointer;
+}
+
+#style-general input[type=color]::-webkit-color-swatch, 
+#style-element input[type=color]::-webkit-color-swatch {
+	border-radius: 50%;
+}
+
+#cb-color-background ~ input{
+	display: none;
+}
+
+#cb-color-background:checked ~ input{
+	display: block;
+	width: 29px;
+	height: 29px;
+}
+
+#cb-bold,
+#cb-italic{
+	display: none;
+}
+
+#lbl-bold,
+#lbl-italic{
+	background-color: white;
+	border: double gray 3px;
+	border-radius: .5em;
+	height: 30px;
+	width: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#lbl-bold{
+	font-weight: bold;
+}
+
+#lbl-italic{
+	font-family: serif;
+	font-style: italic;
+}
+
+#lbl-bold:hover,
+#lbl-italic:hover{
+	cursor: pointer;
+	filter: brightness(85%);
+}
+
+#cb-bold:checked + label#lbl-bold,
+#cb-italic:checked + label#lbl-italic{
+	border: solid 3px gray;
+}
+
+
+.m-top{
+	margin-top: 20px;
+}
+
 
 /*----------*/
 /*--POPUPS--*/
@@ -347,8 +439,24 @@ img:hover {
 	rotate: -45deg;
 }
 
+.red{
+	background-color: rgb(255, 48, 48);
+	border: solid 1px rgb(255, 48, 48);
+	border-radius: .5em;
+	color: white;
+}
 
+.green{
+	background-color: rgb(72, 175, 56);
+	border: solid 1px rgb(72, 175, 56);
+	border-radius: .5em;
+	color: white;
+}
 
+.red:hover,
+.green:hover{
+	filter: brightness(75%);
+}
 /*----------*/
 /*MEDIAQUERY*/
 /*----------*/

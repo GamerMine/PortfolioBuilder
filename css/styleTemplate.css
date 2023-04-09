@@ -48,7 +48,7 @@ header ul.nav {
 }
 
 header ul li a{
-	color: black;
+	color: currentColor;
 	text-decoration: none;
 }
 header ul li a:hover{
@@ -200,15 +200,17 @@ main iframe{
 		right: 0;
 		display: none;
 		bottom: -168px;
-		background-color: gray;
+		background-color:inherit;
 		border-bottom: solid 3px gray;
 		width: fit-content;
 		z-index: 10;
 	}
 
 	header ul.nav li{
-		background-color: white;
+		background-color: inherit;
 		padding: 10px 5px;
+		border: solid 3px gray;
+		border-bottom: none;
 	}
 
 	header ul.nav li a{

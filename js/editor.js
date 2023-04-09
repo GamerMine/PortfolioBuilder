@@ -7,8 +7,10 @@ import {Link} from "./elements/link.js";
 import {PDFView} from "./elements/pdfView.js";
 import {Picture} from "./elements/image.js";
 import {getPageContent} from "./main.js";
+import {settingsGeneraux, rgbToHex, hex} from "./settings.js";
+import {Style} from "./elements/style.js";
 
-let page = new HTMLPage();
+export let page = new HTMLPage();
 const iframe = document.getElementById("portfolio-preview");
 let current_name="";
 
@@ -560,7 +562,7 @@ titre5.innerHTML = "Titre 5";
 paragraphe.setAttribute("value", "paragraphe");
 paragraphe.innerHTML = "Paragraphe";
 
-let lblTexte = document.createElement("div");
+let lblTexte = document.createElement("p");
 let inputTexte = document.createElement("textarea");
 
 inputTexte.setAttribute("id", "text-input");
@@ -961,22 +963,43 @@ function toolsCV() {
 
 
 export function modifElement(element) {
+
+    settingsGeneraux();
+
     let divSelect = document.getElementById("btnselect");
     let divBottom = document.getElementById("bottom");
-
-    while (divSelect.firstChild) {
-        divSelect.removeChild(divSelect.firstChild);
-    }
-
-    while (divBottom.firstChild) {
-        divBottom.removeChild(divBottom.firstChild);
-    }
 
     console.log(element.nodeName);
 
     if(element.nodeName.includes("H") || element.nodeName === "P"){
-        let lblTexte = document.createElement("div");
+        let divStyleElem = document.createElement("div");
+        divStyleElem.id = "style-element";
+
+        let lblStyle = document.createElement("h3");
+        lblStyle.textContent = "Style";
+
+        divStyleElem.appendChild(lblStyle);
+
+        let lblTexte = document.createElement("p");
         let textareaTexte = document.createElement("textarea");
+
+        let divTextColor = document.createElement("div");
+        let lblTextColor = document.createElement("p");
+        let colorPickerText = document.createElement("input");
+
+        let divBG = document.createElement("div");
+        let lblColorBG = document.createElement("p");
+        let cbColorBG = document.createElement("input");
+        let colorPickerBG = document.createElement("input");
+
+        let divFont = document.createElement("div");
+        let lblFont = document.createElement("p");
+        let cbBold = document.createElement("input");
+        let lblBold = document.createElement("label");
+        let cbItalic = document.createElement("input");
+        let lblItalic = document.createElement("label");
+
+        let divOption = document.createElement("div");
         let btnModifier = document.createElement("button");
         let btnSupprimer = document.createElement("button");
 
@@ -985,17 +1008,115 @@ export function modifElement(element) {
 
         textareaTexte.setAttribute("id", "texte");
         textareaTexte.setAttribute("name", "texte");
-        textareaTexte.setAttribute("rows", "10");
+        textareaTexte.setAttribute("rows", "5");
         textareaTexte.setAttribute("style", "resize: none;");
         textareaTexte.value = element.innerText;
 
-        btnModifier.setAttribute("class", "button");
+        divTextColor.classList.add("spaced");
+        lblTextColor.textContent = "Couleur du texte :";
+        colorPickerText.type = "color";
+        colorPickerText.id = "color-picker-background";
+        if (page.objectList.at(element.id).getStyleFromProperty("color") != null ){
+            colorPickerText.value = page.objectList.at(element.id).getStyleFromProperty("color").value
+        }
+
+        divBG.classList.add("spaced");
+        lblColorBG.textContent = "Couleur de font :";
+        cbColorBG.id = "cb-color-background";
+        cbColorBG.type = "checkbox";
+        colorPickerBG.type = "color";
+        colorPickerBG.id = "color-picker-background";
+        if (page.objectList.at(element.id).getStyleFromProperty("background-color") != null ){
+            if (page.objectList.at(element.id).getStyleFromProperty("background-color").value !== "transparent"){
+                cbColorBG.checked = true;
+                colorPickerBG.value = page.objectList.at(element.id).getStyleFromProperty("background-color").value
+            }
+        }
+
+        divFont.classList.add("spaced");
+        lblFont.textContent = "Police :";
+        cbBold.id = "cb-bold";
+        cbBold.type = "checkbox";
+        lblBold.id = "lbl-bold";
+        lblBold.setAttribute("for", "cb-bold");
+        lblBold.textContent = "B";
+        cbBold.checked = false;
+        if (page.objectList.at(element.id).getStyleFromProperty("font-weight") != null ){
+            if (page.objectList.at(element.id).getStyleFromProperty("font-weight").value !== "normal"){
+                console.log('bold est true');
+                console.log(page.objectList.at(element.id).getStyleFromProperty("font-weight").value);
+                cbBold.checked = true;
+            }
+        }
+
+        cbItalic.id = "cb-italic";
+        cbItalic.type = "checkbox";
+        lblItalic.id = "lbl-italic";
+        lblItalic.setAttribute("for", "cb-italic");
+        lblItalic.textContent = "I";
+        cbItalic.checked = false;
+        if (page.objectList.at(element.id).getStyleFromProperty("font-style") != null ){
+            if (page.objectList.at(element.id).getStyleFromProperty("font-style").value !== "normal"){
+                cbItalic.checked = true;
+            }
+        }
+
+
+        divOption.setAttribute("class", "spaced m-top");
+
+        btnModifier.setAttribute("class", "green");
         btnModifier.setAttribute("id", "btn-edit");
         btnModifier.setAttribute("type", "button");
-        btnModifier.innerHTML = "Modifier le texte";
+        btnModifier.innerHTML = "Valider";
         btnModifier.addEventListener("click", async () => {
             page.objectList.at(element.id).text = textareaTexte.value;
-            console.log(page.objectList.at(element.id).text)
+
+            // Bakcground color implements
+            if( cbColorBG.checked ){
+                if (page.objectList.at(element.id).getStyleFromProperty("background-color") == null){
+                    page.objectList.at(element.id).addStyleStyle = new Style("background-color", colorPickerBG.value);
+                }else{
+                    page.objectList.at(element.id).getStyleFromProperty("background-color").value = colorPickerBG.value;
+                }
+            }else{
+                if(page.objectList.at(element.id).getStyleFromProperty("background-color") != null){
+                    page.objectList.at(element.id).getStyleFromProperty("background-color").value = "transparent";
+                }
+            }
+            
+            // Text color implements
+            if(page.objectList.at(element.id).getStyleFromProperty("color") == null){
+                page.objectList.at(element.id).addStyleStyle = new Style("color", colorPickerText.value);
+            }else{
+                page.objectList.at(element.id).getStyleFromProperty("color").value = colorPickerText.value;
+            }
+
+            // Bold implements
+            if(cbBold.checked){
+                if (page.objectList.at(element.id).getStyleFromProperty("font-weight") == null ){
+                    page.objectList.at(element.id).addStyleStyle = new Style("font-weight", "bold");
+                }else{
+                    page.objectList.at(element.id).getStyleFromProperty("font-weight").value = "bold";
+                }
+            }else{
+                if (page.objectList.at(element.id).getStyleFromProperty("font-weight") != null ){
+                    page.objectList.at(element.id).addStyleStyle = new Style("font-weight", "normal");
+                }
+            }
+
+            // Italic implements
+            if(cbItalic.checked){
+                if (page.objectList.at(element.id).getStyleFromProperty("font-style") == null ){
+                    page.objectList.at(element.id).addStyleStyle = new Style("font-style", "italic");
+                }else{
+                    page.objectList.at(element.id).getStyleFromProperty("font-style").value = "italic";
+                }
+            }else{
+                if (page.objectList.at(element.id).getStyleFromProperty("font-style") != null ){
+                    page.objectList.at(element.id).addStyleStyle = new Style("font-style", "normal");
+                }
+            }
+
             emptyIframe();
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
             iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
@@ -1003,10 +1124,10 @@ export function modifElement(element) {
             toolsBase();
         }, {once: true});
 
-        btnSupprimer.setAttribute("class", "button");
+        btnSupprimer.setAttribute("class", "red");
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
-        btnSupprimer.innerHTML = "Supprimer le texte";
+        btnSupprimer.innerHTML = "Supprimer";
         btnSupprimer.addEventListener("click", async () => {
             page.delObject = parseInt(element.id);
             emptyIframe();
@@ -1016,13 +1137,36 @@ export function modifElement(element) {
             toolsBase();
         }, {once: true});
 
-        divSelect.appendChild(lblTexte);
-        divSelect.appendChild(textareaTexte);
+        divTextColor.appendChild(lblTextColor);
+        divTextColor.appendChild(colorPickerText);
+
+        divBG.appendChild(lblColorBG);
+        divBG.appendChild(colorPickerBG);
+        divBG.appendChild(cbColorBG);
+
+        divFont.appendChild(lblFont);
+        divFont.appendChild(cbBold);
+        divFont.appendChild(lblBold);
+        divFont.appendChild(cbItalic);
+        divFont.appendChild(lblItalic);
+
         divSelect.appendChild(btnModifier);
         divSelect.appendChild(btnSupprimer);
 
-        let btnAnnuler = document.createElement("button");
+        divOption.appendChild(btnModifier);
+        divOption.appendChild(btnSupprimer);
 
+        divStyleElem.appendChild(lblTexte);
+        divStyleElem.appendChild(textareaTexte);
+        divStyleElem.appendChild(divTextColor);
+        divStyleElem.appendChild(divBG);
+        divStyleElem.appendChild(divFont);
+        divStyleElem.appendChild(divOption);
+        
+        divSelect.appendChild(divStyleElem);
+        
+        let btnAnnuler = document.createElement("button");
+        
         btnAnnuler.setAttribute("class", "button");
         btnAnnuler.setAttribute("id", "btn-cancel");
         btnAnnuler.setAttribute("type", "button");
@@ -1030,14 +1174,14 @@ export function modifElement(element) {
         btnAnnuler.addEventListener("click", () => {
             toolsBase();
         }, {once: true});
-
+        
         divBottom.appendChild(btnAnnuler);
     }
     else if(element.nodeName === "IMG"){
         let btnSupprimer = document.createElement("button");
         let btnAnnuler = document.createElement("button");
 
-        btnSupprimer.setAttribute("class", "button");
+        btnSupprimer.setAttribute("class", "red");
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer l'image";
@@ -1067,7 +1211,7 @@ export function modifElement(element) {
 
     }
     else if(element.nodeName === "A"){
-        let lblTexte = document.createElement("div");
+        let lblTexte = document.createElement("p");
         let inputTexte = document.createElement("input");
         let btnModifier = document.createElement("button");
         let btnSupprimer = document.createElement("button");
@@ -1080,7 +1224,7 @@ export function modifElement(element) {
         inputTexte.setAttribute("name", "texte");
         inputTexte.value = element.innerText;
 
-        btnModifier.setAttribute("class", "button");
+        btnModifier.setAttribute("class", "green");
         btnModifier.setAttribute("id", "btn-edit");
         btnModifier.setAttribute("type", "button");
         btnModifier.innerHTML = "Modifier le texte";
@@ -1093,7 +1237,7 @@ export function modifElement(element) {
             toolsBase();
         }, {once: true});
 
-        btnSupprimer.setAttribute("class", "button");
+        btnSupprimer.setAttribute("class", "red");
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer le texte";
@@ -1127,7 +1271,7 @@ export function modifElement(element) {
         let btnSupprimer = document.createElement("button");
         let btnAnnuler = document.createElement("button");
 
-        btnSupprimer.setAttribute("class", "button");
+        btnSupprimer.setAttribute("class", "red");
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
         btnSupprimer.innerHTML = "Supprimer l'image";
