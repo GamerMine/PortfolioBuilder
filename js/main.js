@@ -176,7 +176,7 @@ export async function showPortfolioSkillList() {
 
         for (const skill of responsePageList.skill) {
             const btn = document.createElement("button");
-            btn.innerText = "Projet " + skill.id;
+            btn.innerText = "Competence " + skill.id;
             btn.onclick = async () => {
                 loadPage("Competence-"+skill.id, result[1]);
             };
