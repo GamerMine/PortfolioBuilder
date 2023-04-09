@@ -225,16 +225,19 @@ footer ul {
 #style-element input[type=color]::-webkit-color-swatch {
 	border-radius: 50%;
 }
-
-#cb-color-background ~ input{
-	display: none;
-}
-
-#cb-color-background:checked ~ input{
-	display: block;
+#cb-color-background{
 	width: 29px;
 	height: 29px;
 }
+
+#cb-color-background + input[type=color]{
+	display: none;
+}
+
+#cb-color-background:checked + input[type=color]{
+	display: block;
+}
+
 
 #cb-bold,
 #cb-italic{
