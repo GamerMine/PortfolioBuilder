@@ -58,6 +58,7 @@ async function submitInformation() {
     }
 
     await request("GET", URL_BASE + "server/sendData.php?command=SEND_INFO&title=" + titleField.value + "&name=" + nameField.value + "&surname=" + surnameField.value);
+    console.log(URL_BASE + "server/sendData.php?command=SEND_INFO&title=" + titleField.value + "&name=" + nameField.value + "&surname=" + surnameField.value);
 }
 
 async function showPortfolioHome() {
@@ -202,6 +203,13 @@ function loadPage(content) {
     }
 }
 
+let lblTitre = document.createElement("div");
+let btnHome = document.createElement("button");
+let btnProject = document.createElement("button");
+let btnSkill = document.createElement("button");
+let btnApropos = document.createElement("button");
+
+
 async function fillUserInfo() {
     const user_info = await request("GET", URL_BASE + "server/requestData.php?command=GET_USER_INFO");
     const user_info_json = JSON.parse(user_info);
@@ -209,18 +217,11 @@ async function fillUserInfo() {
     const surname = user_info_json.info[0].surname;     //Get user's surname
     const name = user_info_json.info[0].name;           //Get user's name
     const mail = user_info_json.info[0].mail;           //Get user's mail
+    lblTitre.innerHTML = user_info_json.info[0].title;
 
     iframe.contentWindow.document.getElementById("name").innerText = name + " " + surname;
     iframe.contentWindow.document.getElementById("mail").innerText = mail;
 }
-
-let lblTitre = document.createElement("div");
-let btnHome = document.createElement("button");
-let btnProject = document.createElement("button");
-let btnSkill = document.createElement("button");
-let btnApropos = document.createElement("button");
-
-lblTitre.innerHTML = "Titre";
 
 btnHome.setAttribute("class", "button");
 btnHome.setAttribute("id", "btn-home");

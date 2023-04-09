@@ -71,7 +71,7 @@ class Database
 
     public function getUserInfo($mail) : array
     {
-        $stmt = $this->connection->prepare("SELECT name, surname, mail  FROM info WHERE mail=?");
+        $stmt = $this->connection->prepare("SELECT name, surname, mail, title FROM info WHERE mail=?");
         $stmt->execute([$mail]);
 
         return $stmt->fetchAll();
@@ -144,11 +144,11 @@ class Database
         $stmt = $this->connection->prepare("SELECT a.mail FROM info JOIN account a on a.mail = info.mail WHERE a.mail = ?");
         $stmt->execute([$mail]);
         if (!sizeof($stmt->fetchAll(PDO::FETCH_ASSOC))) {
-            $stmt = $this->connection->prepare("INSERT INTO info(mail, content, homecontent, license, cv, name, surname) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$mail, "null", "null", "null", "null", $name, $surname]);
+            $stmt = $this->connection->prepare("INSERT INTO info(mail, content, homecontent, license, cv, name, surname, title) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$mail, "null", "null", "null", "null", $name, $surname, $title]);
         } else {
-            $stmt = $this->connection->prepare("UPDATE info SET name = ?, surname = ? WHERE mail = ?");
-            $stmt->execute([$name, $surname, $mail]);
+            $stmt = $this->connection->prepare("UPDATE info SET name = ?, surname = ?, title = ? WHERE mail = ?");
+            $stmt->execute([$name, $surname, $title, $mail]);
         }
     }
 

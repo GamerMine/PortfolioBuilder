@@ -26,6 +26,7 @@ switch ($sentCommand) {
 
         $data = array("connected" => true);
         $db->setUserInfo($_GET["title"], $_GET["name"], $_GET["surname"], $_SESSION["mail"]);
+        break;
     }
     case "SAVE_FILE":{
         $filename = generateUUID(openssl_random_pseudo_bytes(16));
