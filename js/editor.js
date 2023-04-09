@@ -1361,7 +1361,7 @@ export function modifElement(element) {
         btnSupprimer.setAttribute("class", "red");
         btnSupprimer.setAttribute("id", "btn-delete");
         btnSupprimer.setAttribute("type", "button");
-        btnSupprimer.innerHTML = "Supprimer le texte";
+        btnSupprimer.innerHTML = "Supprimer";
         btnSupprimer.addEventListener("click", async () => {
             page.delObject = parseInt(element.id);
             emptyIframe();
@@ -1388,7 +1388,7 @@ export function modifElement(element) {
         divOption.appendChild(btnSupprimer);
 
         divStyleElem.appendChild(lblTexte);
-        divStyleElem.appendChild(textareaTexte);
+        divStyleElem.appendChild(inputTexte);
         divStyleElem.appendChild(divTextColor);
         divStyleElem.appendChild(divBG);
         divStyleElem.appendChild(divFont);
