@@ -75,7 +75,7 @@ async function showPortfolioHome() {
         iframe.src = "../template.html";
         iframeParent.appendChild(iframe);
 
-        iframe.onload = async () => {
+        iframe.addEventListener("load", async () => {
             await fillUserInfo();
 
             page.empty();
@@ -85,8 +85,7 @@ async function showPortfolioHome() {
             iframe.contentWindow.document.querySelectorAll("a").forEach(elt => {
                 elt.setAttribute("href", "#");
             });
-            iframe.onload = () => {};
-        }
+        }, {once: true});
     } catch (e) {
         console.log(e)
     }
@@ -104,7 +103,7 @@ async function showPortfolioAbout() {
         iframe.src = "../template.html";
         iframeParent.appendChild(iframe);
 
-        iframe.onload = async () => {
+        iframe.addEventListener("load", async () => {
             await fillUserInfo();
 
             page.empty();
@@ -112,8 +111,7 @@ async function showPortfolioAbout() {
             await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
             current_name = "aboutcontent";
             iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
-            iframe.onload = () => {};
-        }
+        }, {once: true});
     } catch (e) {
         console.log(e)
     }
@@ -131,7 +129,7 @@ async function showPortfolioProjectList() {
         iframe.src = "../templateProject.html";
         iframeParent.appendChild(iframe);
 
-        iframe.onload = async () => {
+        iframe.addEventListener("load", async () => {
             await fillUserInfo();
 
             for (const project of response.project) {
@@ -145,8 +143,7 @@ async function showPortfolioProjectList() {
                 iframe.contentWindow.document.getElementById("list-project").appendChild(btn);
             }
             iframe.contentWindow.document.querySelectorAll("button").forEach(elt => elt.setAttribute("class", "disable"));
-            iframe.onload = () => {};
-        }
+        }, {once: true});
 
     } catch (e) {
 
@@ -165,7 +162,7 @@ async function showPortfolioSkillList() {
         iframe.src = "../templateSkill.html";
         iframeParent.appendChild(iframe);
 
-        iframe.onload = async () => {
+        iframe.addEventListener("load", async () => {
             await fillUserInfo();
 
             for (const skill of response.skill) {
@@ -179,9 +176,7 @@ async function showPortfolioSkillList() {
                 iframe.contentWindow.document.getElementById("list-skill").appendChild(btn);
             }
             iframe.contentWindow.document.querySelectorAll("button").forEach(elt => elt.setAttribute("class", "disable"));
-            iframe.onload = () => {
-            };
-        }
+        }, {once: true});
 
     } catch (e) {
 
@@ -193,15 +188,14 @@ function loadPage(content) {
     iframe.remove();
     iframe.src = "../template.html";
     iframeParent.appendChild(iframe);
-    iframe.onload = async () => {
+    iframe.addEventListener("load", async () => {
         await fillUserInfo();
 
         page.empty();
         jsonToPage(content, page);
         await pageToHTML(page, iframe.contentWindow.document.getElementById("content"), true);
         iframe.contentWindow.document.querySelectorAll("a").forEach(elt => elt.setAttribute("href", "#"));
-        iframe.onload = () => {};
-    }
+    }, {once: true});
 }
 
 let lblTitre = document.createElement("div");
@@ -714,7 +708,7 @@ function toolsImage() {
         } else {
             console.warn("No file selected"); //TODO : an error message box
         }
-    });
+    }, {once: true});
 }
 
 
@@ -957,7 +951,7 @@ function toolsCV() {
         } else {
             console.warn("No file selected"); //TODO: an error message popup
         }
-    });
+    }, {once: true});
 }
 
 

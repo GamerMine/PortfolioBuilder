@@ -77,14 +77,38 @@ export function settingsGeneraux()
         header.style.color = colorPickerTextHF.value;
         footer.style.color = colorPickerTextHF.value;
 
-        page.addStyle(new Style("background-color", colorPickerBG.value), "body");
-        page.addStyle(new Style("background-color", colorPickerHF.value), "header");
-        page.addStyle(new Style("background-color", colorPickerHF.value), "footer");
-        page.addStyle(new Style("color", colorPickerTextHF.value), "header");
-        page.addStyle(new Style("color", colorPickerTextHF.value), "footer");
+        if (page.getStyleFromProperty("background-color", "body") == null) {
+            page.addStyle(new Style("background-color", colorPickerBG.value), "body");
+        } else {
+            page.getStyleFromProperty("background-color", "body").value = colorPickerBG.value;
+        }
+
+        if (page.getStyleFromProperty("background-color", "header") == null) {
+            page.addStyle(new Style("background-color", colorPickerHF.value), "header");
+        } else {
+            page.getStyleFromProperty("background-color", "header").value = colorPickerHF.value;
+        }
+
+        if (page.getStyleFromProperty("background-color", "footer") == null) {
+            page.addStyle(new Style("background-color", colorPickerHF.value), "footer");
+        } else {
+            page.getStyleFromProperty("background-color", "footer").value = colorPickerHF.value;
+        }
+
+        if (page.getStyleFromProperty("color", "header") == null) {
+            page.addStyle(new Style("color", colorPickerTextHF.value), "header");
+        } else {
+            page.getStyleFromProperty("color", "header").value = colorPickerTextHF.value;
+        }
+
+        if (page.getStyleFromProperty("color", "footer") == null) {
+            page.addStyle(new Style("color", colorPickerTextHF.value), "footer");
+        } else {
+            page.getStyleFromProperty("color", "footer").value = colorPickerTextHF.value;
+        }
 
         await saveActualContent();
-    });
+    }, {once: true});
 
 
     cursor.style.left = "";
@@ -132,7 +156,7 @@ export function settingsGeneraux()
     btnQuitter.addEventListener('click', (event) => 
     {
         window.location.href = "../index.html";
-    });
+    }, {once: true});
 
 }
 

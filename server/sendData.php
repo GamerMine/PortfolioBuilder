@@ -47,6 +47,7 @@ switch ($sentCommand) {
         }
 
         $_SESSION["name"] = $_GET["name"];
+        break;
     }
     case "NEW_PROJECT":
     {
